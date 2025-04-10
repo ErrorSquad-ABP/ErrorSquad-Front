@@ -17,6 +17,7 @@
   
   <div>
     <img src="https://img.shields.io/badge/Projeto-ABP_2025.1-blue?style=for-the-badge"/>
+    <img src="https://img.shields.io/badge/Curso-1º_DSM-green?style=for-the-badge"/>
     <img src="https://img.shields.io/badge/Sprint-1_▶️-orange?style=for-the-badge"/>
     <img src="https://img.shields.io/badge/Mobile_First-✔️-success?style=for-the-badge"/>
   </div>
@@ -26,25 +27,27 @@
 
 Interface web responsiva para visualização de horários acadêmicos da FATEC Jacareí. Desenvolvida seguindo o conceito Mobile First, com foco em usabilidade e experiência do usuário.
 
-  ### ⚡ Principais Features
-  - Visualização interativa de horários
-- Mapa interativo de ambientes
-- Sistema de filtros dinâmicos
-- Exportação de relatórios
-- Layout responsivo e adaptativo
-- Interface otimizada para mobile
+### 🎯 Objetivo
+Desenvolver um sistema web para que a comunidade acadêmica possa consultar os horários das aulas por curso, ambiente, turno (diurno e noturno) e turma (ex. 1DSM, 2DSM, 1Geo).
 
-### 🎯 Requisitos da Interface
-- **RNF01:** Mapa interativo de salas com visualização por turno
-- **RNF02:** Design responsivo e consistente em todos os dispositivos
-- **RF04:** Sistema de exportação de relatórios em PDF
+### ⚡ Requisitos Funcionais
+- **RF01:** Ingestão de dados a partir de arquivo CSV
+- **RF02:** Gerenciamento de dados (CRUD) via interface
+- **RF03:** Validação de regras de alocação
+- **RF04:** Exportação de relatórios em PDF
 - **RF05:** Consultas dinâmicas (turma/turno/professor)
 
-  ### 📋 Regras de Negócio
-- Validação de conflitos de horários
-- Consistência na exibição de dados
-- Atualização em tempo real
-- Feedback visual de ações
+### 🎨 Requisitos Não Funcionais
+- **RNF01:** Mapa interativo de salas com visualização por turno
+- **RNF02:** Design responsivo e consistente em todos os dispositivos
+
+### 📋 Restrições de Projeto
+- Prototipação e validação no Figma
+- HTML, CSS e JavaScript para frontend
+- PostgreSQL para banco de dados
+- JavaScript para servidor
+- Documentação no GitHub
+- Trello para gestão de tarefas
 
 ## ⚙️ Stack Frontend
 
@@ -61,16 +64,46 @@ Interface web responsiva para visualização de horários acadêmicos da FATEC J
 
 ### DevTools
 - **Git/GitHub** - Versionamento de código
-- **GitHub Projects** - Gestão ágil (Kanban)
+- **Trello** - Gestão ágil (Scrum)
 - **VS Code** - Ambiente de desenvolvimento
 
-## 📅 Cronograma Frontend
+## 📁 Estrutura do Projeto
 
-| Sprint | Período | Entregas |
-|--------|---------|----------|
-| Sprint 1 | 24/03 - 14/04 | - Prototipação (Figma)<br>- Layout base responsivo<br>- Mapa interativo inicial |
-| Sprint 2 | 16/04 - 14/05 | - Sistema de filtros<br>- Integração backend<br>- Exportação PDF |
-| Sprint 3 | 16/05 - 09/06 | - Refinamentos UI/UX<br>- Testes e correções<br>- Documentação final |
+```
+frontend/
+├── assets/
+│   ├── css/      # Estilos e temas
+│   ├── fonts/    # Fontes personalizadas
+│   ├── img/      # Imagens e ícones
+│   ├── js/       # Scripts JavaScript
+│   └── vendors/  # Bibliotecas externas
+├── pages/
+│   ├── mapa.html         # Visualização do mapa
+│   ├── dashboard.html    # Painel principal
+│   ├── grade.html        # Grade de horários
+│   ├── login.html        # Autenticação
+│   └── ...              # Outras páginas
+├── config/              # Configurações
+├── includes/           # Componentes reutilizáveis
+└── index.html          # Página inicial
+```
+
+## 📅 Cronograma
+
+| Data | Evento |
+|------|---------|
+| 18/03/2025 | Kick-off (20h00) |
+| 18/03/2025 | Data limite para apresentação da planilha de avaliação |
+| 24/03/2025 | Início da Sprint 1 |
+| 14/04/2025 | Envio do vídeo da Review Sprint 1 |
+| 15/04/2025 | Review da Sprint 1 |
+| 16/04/2025 | Início da Sprint 2 |
+| 14/05/2025 | Envio do vídeo da Review Sprint 2 |
+| 15/05/2025 | Review da Sprint 2 |
+| 16/05/2025 | Início da Sprint 3 |
+| 09/06/2025 | Envio do vídeo da Review Sprint 3 |
+| 10/06/2025 | Review da Sprint 3 |
+| 11/06/2025 | Apresentação final do projeto |
 
 ## 📥 Como Executar o Projeto
 
@@ -174,6 +207,7 @@ npm start
                             </a>
                             <a href="https://www.linkedin.com/in/felipe-ferreira-pacheco-621443347/">
                                 <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white"/>
+                            </a>
                         </td>
                     </tr>
                     <tr>
