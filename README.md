@@ -18,8 +18,9 @@
   <div>
     <img src="https://img.shields.io/badge/Projeto-ABP_2025.1-blue?style=for-the-badge"/>
     <img src="https://img.shields.io/badge/Curso-1º_DSM-green?style=for-the-badge"/>
-    <img src="https://img.shields.io/badge/Sprint-1_▶️-orange?style=for-the-badge"/>
-    <img src="https://img.shields.io/badge/Mobile_First-✔️-success?style=for-the-badge"/>
+    <img src="https://img.shields.io/badge/Sprint-1_concluída-success?style=for-the-badge&logo=clockify&logoColor=white"/>
+    <img src="https://img.shields.io/badge/Interface-Responsiva-4a90e2?style=for-the-badge&logo=figma&logoColor=white"/>
+    <img src="https://img.shields.io/badge/Status-Funcional-success?style=for-the-badge"/>
   </div>
 </div>
 
