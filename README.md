@@ -1,3 +1,5 @@
+# Repositório de Frontend - Interface Web de Horários Acadêmicos
+
 <div align="center">
   <h1>
     <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=30&duration=3000&pause=1000&color=4A90E2&center=true&vCenter=true&repeat=true&width=1000&lines=Interface+Web+de+Hor%C3%A1rios+Acad%C3%AAmicos+%7C+Frontend+%F0%9F%92%BB" alt="Typing SVG" />
@@ -16,123 +18,367 @@
   <br>
   
   <div>
-    <img src="https://img.shields.io/badge/Projeto-ABP_2025.1-blue?style=for-the-badge"/>
-    <img src="https://img.shields.io/badge/Curso-1º_DSM-green?style=for-the-badge"/>
-    <img src="https://img.shields.io/badge/Sprint-1_concluída-success?style=for-the-badge&logo=clockify&logoColor=white"/>
-    <img src="https://img.shields.io/badge/Interface-Responsiva-4a90e2?style=for-the-badge&logo=figma&logoColor=white"/>
-    <img src="https://img.shields.io/badge/Status-Funcional-success?style=for-the-badge"/>
+    <img src="https://img.shields.io/badge/Status-Em_Desenvolvimento-blue?style=for-the-badge&logo=clockify&logoColor=white"/>
+    <img src="https://img.shields.io/badge/Sprint_1-Concluída-success?style=for-the-badge"/>
+    <img src="https://img.shields.io/badge/Design_System-Implementado-success?style=for-the-badge&logo=figma&logoColor=white"/>
+    <img src="https://img.shields.io/badge/Interface-Responsiva-4a90e2?style=for-the-badge"/>
   </div>
+
+  <p align="center">
+    <a href="#-visão-geral">
+      <img src="https://img.shields.io/badge/📝_Visão_Geral-4a90e2?style=for-the-badge"/>
+    </a>
+    &nbsp;
+    <a href="#%EF%B8%8F-design-e-ux">
+      <img src="https://img.shields.io/badge/🎨_Design_e_UX-4a90e2?style=for-the-badge"/>
+    </a>
+    &nbsp;
+    <a href="#-tecnologias">
+      <img src="https://img.shields.io/badge/🛠️_Tecnologias-4a90e2?style=for-the-badge"/>
+    </a>
+    &nbsp;
+    <a href="#-estrutura-do-projeto">
+      <img src="https://img.shields.io/badge/📂_Estrutura-4a90e2?style=for-the-badge"/>
+    </a>
+    &nbsp;
+    <a href="#-equipe">
+      <img src="https://img.shields.io/badge/👥_Equipe-4a90e2?style=for-the-badge"/>
+    </a>
+  </p>
 </div>
 
-## 📱 Visão Geral
+<hr>
 
-Interface web responsiva para visualização de horários acadêmicos da FATEC Jacareí. Desenvolvida seguindo o conceito Mobile First, com foco em usabilidade e experiência do usuário.
+## 📝 Visão Geral
 
-### 🎯 Objetivo
-Desenvolver um sistema web para que a comunidade acadêmica possa consultar os horários das aulas por curso, ambiente, turno (diurno e noturno) e turma (ex. 1DSM, 2DSM, 1Geo).
+O **ErrorSquad-Front** é a interface gráfica do sistema de gestão de horários acadêmicos da FATEC Jacareí, desenvolvida pela equipe Error Squad como parte do projeto de Aprendizagem Baseada em Projetos (ABP) do 1º semestre de 2025.
 
-### ⚡ Requisitos Funcionais
-- **RF01:** Ingestão de dados a partir de arquivo CSV
-- **RF02:** Gerenciamento de dados (CRUD) via interface
-- **RF03:** Validação de regras de alocação
-- **RF04:** Exportação de relatórios em PDF
-- **RF05:** Consultas dinâmicas (turma/turno/professor)
+### O Problema
 
-### 🎨 Requisitos Não Funcionais
-- **RNF01:** Mapa interativo de salas com visualização por turno
-- **RNF02:** Design responsivo e consistente em todos os dispositivos
+A comunidade acadêmica (alunos, professores e funcionários) da FATEC Jacareí enfrenta desafios significativos relacionados ao acesso e visualização de horários das aulas:
 
-### 📋 Restrições de Projeto
-- Prototipação e validação no Figma
-- HTML, CSS e JavaScript para frontend
-- PostgreSQL para banco de dados
-- JavaScript para servidor
-- Documentação no GitHub
-- Trello para gestão de tarefas
+- Informações dispersas em documentos impressos ou e-mails
+- Falta de um meio centralizado de consulta
+- Dificuldade em acompanhar alterações nos horários
+- Ausência de visualização espacial dos ambientes e suas ocupações
+- Acesso limitado em dispositivos móveis
 
-## ⚙️ Stack Frontend
+### Nossa Solução
 
-### Tecnologias Core
-- **HTML5** - Estruturação semântica do conteúdo
-- **CSS3** - Estilização e responsividade
-- **JavaScript** - Lógica e interatividade
-- **Express** - Servidor de desenvolvimento
+Desenvolvemos uma interface web moderna, intuitiva e responsiva que permite:
 
-### UI/UX
-- **Figma** - Prototipação e design system
-- **Mobile First** - Metodologia de desenvolvimento
-- **Responsividade** - Breakpoints adaptativos
+- **Consulta dinâmica de horários** por múltiplos critérios (curso, ambiente, turno e turma)
+- **Visualização espacial interativa** dos ambientes da instituição
+- **Experiência adaptada a dispositivos** desktop e móveis
+- **Acesso rápido e intuitivo** a informações críticas
+- **Exportação de dados** em formato PDF para uso offline
 
-### DevTools
-- **Git/GitHub** - Versionamento de código
-- **Trello** - Gestão ágil (Scrum)
-- **VS Code** - Ambiente de desenvolvimento
+### Diferenciais do Projeto
 
-## 📁 Estrutura do Projeto
+- **Mobile First**: Design concebido inicialmente para dispositivos móveis
+- **Acessibilidade**: Conformidade com diretrizes WCAG 2.1 nível AA
+- **Performance**: Otimização para carregamento rápido mesmo em conexões lentas
+- **Usabilidade**: Interface baseada em testes com usuários reais
+- **Manutenibilidade**: Código modular com padrões de desenvolvimento claros
+
+## 🎨 Design e UX
+
+### Metodologia e Prototipação
+
+O design da interface foi desenvolvido através de um processo centrado no usuário:
+
+1. **Research**: Entrevistas com alunos, professores e staff para entender necessidades
+2. **Wireframing**: Esboços de baixa fidelidade para validação de conceitos
+3. **Prototipação**: Desenvolvimento de protótipos interativos no Figma
+4. **Testes de Usabilidade**: Avaliação com usuários reais
+5. **Implementação**: Codificação fiel ao design aprovado
+
+### 📐 Design System e Protótipo
+
+<div align="center">
+  <a href="https://www.figma.com/design/979HLFTPByEUm9zcip3t2L/frontend-ABP?node-id=0-1&p=f&t=KkWdtxNO08WmIedq-0" target="_blank">
+    <img src="https://img.shields.io/badge/Figma-Acessar_Protótipo_Completo-F24E1E?style=for-the-badge&logo=figma&logoColor=white"/>
+  </a>
+</div>
+
+Criamos um design system completo para garantir consistência visual e experiência unificada através de todas as interfaces do sistema. O protótipo no Figma foi desenvolvido com foco na experiência do usuário final, garantindo clareza visual, navegação lógica, acessibilidade e facilidade de uso em qualquer dispositivo.
+
+#### 🎨 Paleta de Cores
+
+| Cor | Hexadecimal | Uso |
+|-----|-------------|-----|
+| Azul Primário | `#4A90E2` | Elementos principais, botões, links |
+| Azul Escuro | `#2C3E50` | Textos, cabeçalhos, rodapés |
+| Cinza Claro | `#F5F7FA` | Fundos, áreas de conteúdo |
+| Vermelho | `#E74C3C` | Alertas, erros, ocupação de salas |
+| Verde | `#2ECC71` | Sucesso, disponibilidade de ambientes |
+
+A paleta predominante em tons de azul, branco e cinza foi escolhida para transmitir seriedade, organização e profissionalismo, além de garantir bom contraste e legibilidade.
+
+#### 🖋 Tipografia
+
+- **Família principal**: Inter (sans-serif)
+- **Headings**: Inter Bold (16px - 32px)
+- **Corpo de texto**: Inter Regular (14px - 16px)
+- **Elementos de UI**: Inter Medium (14px)
+
+Uso de tamanhos hierárquicos para títulos, subtítulos e texto fluido, criando ritmo visual e facilitando a leitura e compreensão das informações.
+
+#### 🖼️ Iconografia
+
+Sistema de ícones simples e funcionais utilizados para:
+- Menus e navegação
+- Indicadores de status (ocupação/disponibilidade)
+- Ações interativas (exportar, filtrar, pesquisar)
+- Elementos de feedback
+
+#### 📱 Responsividade
+
+O layout se adapta fluidamente a diferentes tamanhos de tela:
+- **Mobile**: 320px - 767px (menu hamburger, layout vertical)
+- **Tablet**: 768px - 1023px (adaptação intermediária)
+- **Desktop**: 1024px+ (menu horizontal, mais densidade de informação)
+
+### 🗺️ Arquitetura de Navegação
+
+O sistema é dividido em páginas principais com navegação centralizada:
+
+- **Desktop**: Menu superior horizontal fixo
+- **Mobile**: Menu hamburger expansível
+
+Cada seção foi projetada com base em princípios de usabilidade, acessibilidade e hierarquia visual.
+
+### 📱 Interfaces Principais
+
+| Tela | Funcionalidade | Características |
+|------|----------------|-----------------|
+| **Home** | Entrada e navegação principal | Título destacado, introdução ao sistema, botões de acesso rápido |
+| **Login** | Autenticação de usuários | Formulário simplificado, recuperação de senha, validação em tempo real |
+| **Consulta** | Busca por critérios específicos | Filtros por turma/professor/ambiente, resultados estruturados |
+| **Grade de Horários** | Visualização de cronogramas | Filtros dinâmicos, visualização semanal, exportação |
+| **Mapa Interativo** | Visualização espacial dos ambientes | Planta baixa navegável, status de ocupação por cor, detalhes em overlay |
+| **Relatórios** | Exportação de dados | Filtros por período/professor/ambiente, prévia, exportação PDF |
+
+### 💡 Diferenciais de UX Implementados
+
+- **Responsividade completa**: Adaptação fluida a qualquer tamanho de tela sem perda de conteúdo
+- **Usabilidade aprimorada**: Design baseado nas heurísticas de Nielsen para navegação intuitiva
+- **Mapa interativo realista**: Visualização espacial com status em tempo real e detalhes contextuais
+- **Exportação visual**: Pré-visualização de relatórios antes da exportação em PDF
+- **Escalabilidade**: Interfaces modulares preparadas para expansão de funcionalidades
+
+### 📱 Versão Mobile
+
+A versão mobile foi cuidadosamente projetada com:
+
+- **Layout adaptado**: Reorganização vertical com maior espaçamento para touch
+- **Navegação simplificada**: Menu hamburger e navegação contextual
+- **Mapa otimizado**: Visualização ajustada para telas menores com interação por toque
+- **Formulários verticais**: Campos e controles reorganizados para melhor usabilidade
+- **Touch-friendly**: Elementos dimensionados adequadamente para interação por toque
+
+## 🛠️ Tecnologias
+
+### Stack Principal
+
+O frontend foi desenvolvido utilizando tecnologias modernas e padrões da web:
+
+- **HTML5**: Marcação semântica para melhor acessibilidade e SEO
+- **CSS3**: Estilos responsivos com flexbox e grid
+- **JavaScript**: Interatividade e manipulação do DOM
+- **Express**: Servidor leve para desenvolvimento
+
+### Ferramentas e Metodologias
+
+| Categoria | Ferramentas/Técnicas | Finalidade |
+|-----------|----------------------|------------|
+| **UI/UX** | Figma | Prototipação e Design System |
+| **Desenvolvimento** | VS Code | Editor de código |
+| **Versionamento** | Git/GitHub | Controle de versão e colaboração |
+| **Metodologia** | Mobile First | Priorização da experiência móvel |
+| **Performance** | Lazy Loading | Carregamento otimizado de recursos |
+| **Organização** | BEM (CSS) | Nomenclatura estruturada de classes |
+
+### Práticas de Desenvolvimento
+
+- **HTML Semântico**: Uso adequado de tags para melhor acessibilidade
+- **CSS Modular**: Estilos organizados por componentes para evitar conflitos
+- **JavaScript Modular**: Funções e componentes separados por responsabilidade
+- **Compatibilidade**: Suporte aos principais navegadores (Chrome, Firefox, Safari, Edge)
+- **Progressive Enhancement**: Funcionalidade básica garantida mesmo sem JavaScript
+
+## 📂 Estrutura do Projeto
+
+O código do frontend segue uma organização modular, facilitando manutenção e escalabilidade:
 
 ```
 frontend/
-├── assets/
-│   ├── css/      # Estilos e temas
-│   ├── fonts/    # Fontes personalizadas
-│   ├── img/      # Imagens e ícones
-│   ├── js/       # Scripts JavaScript
-│   └── vendors/  # Bibliotecas externas
-├── pages/
-│   ├── mapa.html         # Visualização do mapa
-│   ├── dashboard.html    # Painel principal
-│   ├── grade.html        # Grade de horários
-│   ├── login.html        # Autenticação
-│   └── ...              # Outras páginas
-├── config/              # Configurações
-├── includes/           # Componentes reutilizáveis
-└── index.html          # Página inicial
+├── assets/                   # Recursos estáticos
+│   ├── css/                  # Estilos
+│   │   ├── base/             # Estilos base (reset, variáveis, tipografia)
+│   │   ├── components/       # Estilos de componentes reutilizáveis
+│   │   ├── layout/           # Estilos de layout (grid, containers)
+│   │   ├── pages/            # Estilos específicos de páginas
+│   │   └── main.css          # Arquivo principal que importa os demais
+│   ├── fonts/                # Fontes personalizadas
+│   ├── img/                  # Imagens e ícones
+│   │   ├── icons/            # Ícones do sistema
+│   │   ├── layout/           # Imagens de layout
+│   │   └── maps/             # Imagens do mapa interativo
+│   ├── js/                   # Scripts JavaScript
+│   │   ├── components/       # Componentes JS reutilizáveis
+│   │   ├── pages/            # Scripts específicos de páginas
+│   │   ├── utils/            # Funções utilitárias
+│   │   └── main.js           # Script principal
+│   └── vendors/              # Bibliotecas de terceiros (se necessário)
+├── pages/                    # Páginas HTML
+│   ├── index.html            # Página inicial
+│   ├── login.html            # Tela de login
+│   ├── dashboard.html        # Dashboard principal
+│   ├── grade.html            # Visualização de grade horária
+│   ├── mapa.html             # Mapa interativo
+│   ├── editar_grade.html     # Edição de grade (área administrativa)
+│   ├── editar_mapa.html      # Edição de mapa (área administrativa)
+│   └── 404.html              # Página de erro
+├── config/                   # Configurações do frontend
+│   ├── api_endpoints.js      # Endpoints da API
+│   ├── auth_config.js        # Configurações de autenticação
+│   └── config.js             # Configurações gerais
+├── includes/                 # Componentes HTML reutilizáveis
+│   ├── header.html           # Cabeçalho comum
+│   ├── footer.html           # Rodapé comum
+│   ├── navbar.html           # Barra de navegação
+│   └── sidebar.html          # Barra lateral
+└── index.html                # Página de entrada principal
 ```
 
-## 📅 Cronograma
+### Componentes Principais
 
-| Data | Evento |
-|------|---------|
-| 18/03/2025 | Kick-off (20h00) |
-| 18/03/2025 | Data limite para apresentação da planilha de avaliação |
-| 24/03/2025 | Início da Sprint 1 |
-| 14/04/2025 | Envio do vídeo da Review Sprint 1 |
-| 15/04/2025 | Review da Sprint 1 |
-| 16/04/2025 | Início da Sprint 2 |
-| 14/05/2025 | Envio do vídeo da Review Sprint 2 |
-| 15/05/2025 | Review da Sprint 2 |
-| 16/05/2025 | Início da Sprint 3 |
-| 09/06/2025 | Envio do vídeo da Review Sprint 3 |
-| 10/06/2025 | Review da Sprint 3 |
-| 11/06/2025 | Apresentação final do projeto |
+#### 1. Navegação e Layout
 
-## 📥 Como Executar o Projeto
+- **Header**: Cabeçalho com logo, navegação principal e acesso rápido
+- **Footer**: Rodapé com informações de contato, links úteis e copyright
+- **Navbar**: Barra de navegação responsiva com menu hamburguer em dispositivos móveis
+- **Sidebar**: Painel lateral para filtros e navegação contextual
+
+#### 2. Visualizações Principais
+
+- **Grade de Horários**: Tabela interativa com visualização de aulas por período
+- **Mapa Interativo**: Representação visual dos ambientes com status de ocupação
+- **Filtros Dinâmicos**: Controles para personalização das consultas
+- **Exportação PDF**: Módulo para geração de relatórios exportáveis
+
+#### 3. Formulários e Controles
+
+- **Login**: Formulário de autenticação com validação em tempo real
+- **Busca Avançada**: Interface para consultas complexas
+- **Seletores**: Controles para escolha de curso, turma, período e ambiente
+- **Feedback**: Componentes para notificações e mensagens ao usuário
+
+## ⚙️ Instalação e Execução
 
 ### Pré-requisitos
 
-- **Node.js**: [Baixe aqui](https://nodejs.org/)
-- **Git**: [Baixe aqui](https://git-scm.com/)
-- **Editor de Código**: Recomendado [Visual Studio Code](https://code.visualstudio.com/)
+Para executar o frontend em ambiente de desenvolvimento, você precisará de:
 
-### Passos para Execução
+- **Node.js**: v16.x ou superior - [Download](https://nodejs.org/)
+- **Git**: Para clonar o repositório - [Download](https://git-scm.com/)
+- **Navegador moderno**: Chrome, Firefox, Safari ou Edge
+
+### Passos para Instalação
 
 ```bash
 # Clone o repositório
-git clone https://github.com/ErrorSquad-ABP/error-squad-front.git
+git clone https://github.com/ErrorSquad-ABP/ErrorSquad-Front.git
 
-# Entre na pasta do projeto
-cd error-squad-front
+# Navegue até o diretório do projeto
+cd ErrorSquad-Front
 
 # Instale as dependências
-npm install express
+npm install
 
 # Inicie o servidor de desenvolvimento
 npm start
 ```
 
----
+Após iniciar o servidor, acesse `http://localhost:3000` em seu navegador.
 
-## 👥 Nossa Equipe
+### Configuração para Produção
+
+Para ambientes de produção, gere arquivos otimizados:
+
+```bash
+# Criar build de produção
+npm run build
+
+# Os arquivos serão gerados na pasta /dist
+```
+
+## 🧪 Testes e Qualidade
+
+### Testes Implementados
+
+- **Cross-browser**: Compatibilidade com Chrome, Firefox, Safari e Edge
+- **Responsividade**: Funcionamento em diferentes tamanhos de tela
+- **Acessibilidade**: Conformidade com WCAG 2.1 nível AA
+- **Performance**: Otimização de carregamento e renderização
+
+### Ferramentas de Qualidade
+
+- **Lighthouse**: Análise de performance, acessibilidade e SEO
+- **HTML Validator**: Conformidade com padrões W3C
+- **CSS Validator**: Validação de estilos e detecção de erros
+
+## 📱 Adaptação Mobile
+
+O projeto segue o paradigma Mobile First, com atenção especial à experiência em dispositivos portáteis:
+
+### Estratégias Implementadas
+
+- **Layouts Fluidos**: Uso de unidades relativas (%, rem, vh/vw)
+- **Media Queries**: Pontos de quebra específicos para diferentes dispositivos
+- **Touch Interface**: Elementos dimensionados adequadamente para interação por toque
+- **Economia de Dados**: Otimização de imagens e recursos carregados
+- **Offline Capabilities**: Funcionalidades básicas mesmo sem conexão contínua
+
+### Visualizações Específicas para Mobile
+
+- **Menu Compacto**: Sistema de navegação simplificado e otimizado
+- **Cards Verticais**: Reorganização de conteúdo para fluxo vertical
+- **Form Factors**: Adaptações específicas para smartphones e tablets
+- **Touch Gestures**: Suporte a gestos como swipe para navegação em tabelas
+
+## 🔄 Integração com Backend
+
+O frontend comunica-se com o backend [ErrorSquad-Server](https://github.com/ErrorSquad-ABP/ErrorSquad-Server) através de uma API REST:
+
+### Padrões de Integração
+
+- **Fetch API**: Requisições assíncronas padronizadas
+- **JSON**: Formato de intercâmbio de dados
+- **JWT**: Autenticação via tokens (quando aplicável)
+- **Endpoints**: Configurados no arquivo `config/api_endpoints.js`
+
+### Fluxo de Dados
+
+1. **Solicitação de Dados**: Frontend requisita informações ao backend
+2. **Processamento**: Backend consulta banco de dados e processa a solicitação
+3. **Resposta**: Frontend recebe e renderiza os dados na interface
+4. **Manipulação Local**: Caching e gerenciamento de estado quando necessário
+
+## 📊 Status do Projeto
+
+| Status | Fase | Detalhes |
+|--------|------|----------|
+| ✅ | Definição UI/UX | Design system e protótipos aprovados |
+| ✅ | Estrutura Base | Arquitetura frontend implementada |
+| ✅ | Componentes Core | Elementos principais desenvolvidos |
+| ✅ | Páginas Principais | Implementação das telas essenciais |
+| ⏳ | Integração API | Conexão com endpoints em andamento |
+| ⏳ | Testes Finais | Validação de funcionalidades e correções |
+| ⏳ | Entrega | Documentação e polimento finais |
+
+## 👥 Equipe
 
 <div align="center">
     <table>
@@ -236,8 +482,6 @@ npm start
         </tr>
     </table>
 </div>
-
----
 
 ## 👨‍🏫 Coordenação e Orientação
 
