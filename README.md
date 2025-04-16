@@ -103,26 +103,84 @@ O design da interface foi desenvolvido através de um processo centrado no usuá
 
 Criamos um design system completo para garantir consistência visual e experiência unificada através de todas as interfaces do sistema. O protótipo no Figma foi desenvolvido com foco na experiência do usuário final, garantindo clareza visual, navegação lógica, acessibilidade e facilidade de uso em qualquer dispositivo.
 
+## 🎨 Protótipos no Figma
+
+### Versões Desktop e Mobile
+O projeto conta com interfaces projetadas para diferentes dispositivos, garantindo uma experiência consistente em qualquer plataforma.
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center"><b>Desktop</b></td>
+      <td align="center"><b>Mobile</b></td>
+    </tr>
+    <tr>
+      <td><img src="https://raw.githubusercontent.com/ErrorSquad-ABP/ErrorSquad-Front/main/FIGMA/desktop/GRADE-DE-AULAS.jpeg" width="400"/></td>
+      <td><img src="https://raw.githubusercontent.com/ErrorSquad-ABP/ErrorSquad-Front/main/FIGMA/mobile/Android%20Compact%20-%201.png" width="200"/></td>
+    </tr>
+  </table>
+</div>
+
+### Telas Principais
+
+#### Dashboard e Login
+<div align="center">
+  <table>
+    <tr>
+      <td align="center"><b>Tela Inicial</b></td>
+      <td align="center"><b>Login</b></td>
+    </tr>
+    <tr>
+      <td><img src="https://raw.githubusercontent.com/ErrorSquad-ABP/ErrorSquad-Front/main/FIGMA/desktop/LANDINGPAGE.jpeg.jpeg" width="400"/></td>
+      <td><img src="https://raw.githubusercontent.com/ErrorSquad-ABP/ErrorSquad-Front/main/FIGMA/desktop/LOGIN.jpeg.jpeg" width="400"/></td>
+    </tr>
+  </table>
+</div>
+
+#### Grade de Aulas
+<div align="center">
+  <table>
+    <tr>
+      <td align="center"><b>Grade Geral</b></td>
+      <td align="center"><b>Grade por Curso (DSM)</b></td>
+    </tr>
+    <tr>
+      <td><img src="https://raw.githubusercontent.com/ErrorSquad-ABP/ErrorSquad-Front/main/FIGMA/desktop/Grade%20de%20Aulas%20dropdown.jpeg" width="400"/></td>
+      <td><img src="https://raw.githubusercontent.com/ErrorSquad-ABP/ErrorSquad-Front/main/FIGMA/desktop/Grade%20de%20Aulas%20DSM.jpeg" width="400"/></td>
+    </tr>
+  </table>
+</div>
+
+#### Mapa Interativo
+<div align="center">
+  <table>
+    <tr>
+      <td align="center"><b>Mapa Térreo</b></td>
+      <td align="center"><b>Mapa 1° Andar</b></td>
+    </tr>
+    <tr>
+      <td><img src="https://raw.githubusercontent.com/ErrorSquad-ABP/ErrorSquad-Front/main/FIGMA/desktop/MAPATERREO.jpeg.jpeg" width="400"/></td>
+      <td><img src="https://raw.githubusercontent.com/ErrorSquad-ABP/ErrorSquad-Front/main/FIGMA/desktop/MAPA1ANDAR.jpeg.jpeg" width="400"/></td>
+    </tr>
+  </table>
+</div>
+
 #### 🎨 Paleta de Cores
 
 | Cor | Hexadecimal | Uso |
 |-----|-------------|-----|
-| Azul Primário | `#4A90E2` | Elementos principais, botões, links |
-| Azul Escuro | `#2C3E50` | Textos, cabeçalhos, rodapés |
-| Cinza Claro | `#F5F7FA` | Fundos, áreas de conteúdo |
-| Vermelho | `#E74C3C` | Alertas, erros, ocupação de salas |
-| Verde | `#2ECC71` | Sucesso, disponibilidade de ambientes |
-
-A paleta predominante em tons de azul, branco e cinza foi escolhida para transmitir seriedade, organização e profissionalismo, além de garantir bom contraste e legibilidade.
+| Cinza Escuro | `#333333` | Cabeçalhos, barra de navegação |
+| Vermelho | `#a81211` | Botões principais, elementos de destaque |
+| Cinza Claro | `#c7c7c7` | Background, áreas de conteúdo |
+| Branco | `#ffffff` | Textos sobre fundos escuros |
+| Preto | `#000000` | Bordas, textos principais |
 
 #### 🖋 Tipografia
 
-- **Família principal**: Inter (sans-serif)
-- **Headings**: Inter Bold (16px - 32px)
-- **Corpo de texto**: Inter Regular (14px - 16px)
-- **Elementos de UI**: Inter Medium (14px)
-
-Uso de tamanhos hierárquicos para títulos, subtítulos e texto fluido, criando ritmo visual e facilitando a leitura e compreensão das informações.
+- **Família principal**: Verdana (sans-serif)
+- **Headings**: Verdana Bold (15px - 60px)
+- **Corpo de texto**: Verdana Regular (14px - 16px)
+- **Elementos de UI**: Verdana Regular (15px - 30px)
 
 #### 🖼️ Iconografia
 
@@ -213,43 +271,42 @@ O código do frontend segue uma organização modular, facilitando manutenção 
 
 ```
 frontend/
-├── assets/                   # Recursos estáticos
-│   ├── css/                  # Estilos
-│   │   ├── base/             # Estilos base (reset, variáveis, tipografia)
-│   │   ├── components/       # Estilos de componentes reutilizáveis
-│   │   ├── layout/           # Estilos de layout (grid, containers)
-│   │   ├── pages/            # Estilos específicos de páginas
-│   │   └── main.css          # Arquivo principal que importa os demais
-│   ├── fonts/                # Fontes personalizadas
-│   ├── img/                  # Imagens e ícones
-│   │   ├── icons/            # Ícones do sistema
-│   │   ├── layout/           # Imagens de layout
-│   │   └── maps/             # Imagens do mapa interativo
-│   ├── js/                   # Scripts JavaScript
-│   │   ├── components/       # Componentes JS reutilizáveis
-│   │   ├── pages/            # Scripts específicos de páginas
-│   │   ├── utils/            # Funções utilitárias
-│   │   └── main.js           # Script principal
-│   └── vendors/              # Bibliotecas de terceiros (se necessário)
-├── pages/                    # Páginas HTML
-│   ├── index.html            # Página inicial
-│   ├── login.html            # Tela de login
-│   ├── dashboard.html        # Dashboard principal
-│   ├── grade.html            # Visualização de grade horária
-│   ├── mapa.html             # Mapa interativo
-│   ├── editar_grade.html     # Edição de grade (área administrativa)
-│   ├── editar_mapa.html      # Edição de mapa (área administrativa)
-│   └── 404.html              # Página de erro
-├── config/                   # Configurações do frontend
-│   ├── api_endpoints.js      # Endpoints da API
-│   ├── auth_config.js        # Configurações de autenticação
-│   └── config.js             # Configurações gerais
-├── includes/                 # Componentes HTML reutilizáveis
-│   ├── header.html           # Cabeçalho comum
-│   ├── footer.html           # Rodapé comum
-│   ├── navbar.html           # Barra de navegação
-│   └── sidebar.html          # Barra lateral
-└── index.html                # Página de entrada principal
+├── index.html               # Página principal
+├── assets/                  # Recursos estáticos
+│   ├── css/                 # Estilos
+│   │   ├── main.css         # Estilos principais
+│   │   ├── admin.css        # Estilos administrativos
+│   │   └── responsive.css   # Estilos responsivos
+│   ├── fonts/               # Fontes personalizadas
+│   ├── img/                 # Imagens e recursos gráficos
+│   │   ├── background.png   # Imagem de fundo
+│   │   ├── grade_de_aulas.png # Imagem da grade
+│   │   ├── logo.png         # Logo da aplicação
+│   │   ├── mapa_interativo.png # Imagem do mapa
+│   │   └── icons/           # Ícones do sistema
+│   ├── js/                  # Scripts JavaScript
+│   │   ├── admin.js         # Lógica administrativa
+│   │   ├── api.js           # Integração com API
+│   │   └── ...              # Outros scripts
+│   └── vendors/             # Bibliotecas de terceiros
+├── config/                  # Configurações
+│   ├── api_endpoints.js     # Endpoints da API
+│   ├── auth_config.js       # Configurações de autenticação
+│   └── config.js            # Configurações gerais
+├── includes/                # Componentes reutilizáveis
+│   ├── footer.html          # Rodapé
+│   ├── header.html          # Cabeçalho
+│   ├── navbar.html          # Barra de navegação
+│   └── sidebar.html         # Barra lateral
+└── pages/                   # Páginas específicas
+    ├── 404.html             # Página de erro
+    ├── dashboard.html       # Painel principal
+    ├── editar_grade.html    # Edição da grade
+    ├── editar_mapa.html     # Edição do mapa
+    ├── grade.html           # Visualização da grade
+    ├── index.html           # Página inicial
+    ├── login.html           # Tela de login
+    └── mapa.html            # Visualização do mapa
 ```
 
 ### Componentes Principais
