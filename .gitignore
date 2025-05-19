@@ -1,1 +1,7 @@
 Images/*
+
+# Arquivo de variáveis de ambiente
+.env
+
+# Pastas Bibliotecas node
+node_modules/
