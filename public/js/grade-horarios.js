@@ -4,7 +4,7 @@ if (typeof IRONGATE === 'function') {
 }
 
 // Importar funções da API
-import { fetchGradeData, getToken, getAdminId, uploadCSV, filtrarDocentes } from './fetchfunctions/fetchGrade.js';
+import { fetchGradeData, getToken, getAdminId, uploadCSV, filtrarDocentes } from './fetchFunctions/fetchGrade.js';
 
 document.addEventListener('DOMContentLoaded', function() {
     // Adicionar link para o CSS
