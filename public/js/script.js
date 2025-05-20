@@ -244,6 +244,30 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     });
+
+    document.querySelectorAll('.breadcrumb-item a[data-protected-link]').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+           
+            // Remove a classe active de todos os links
+            document.querySelectorAll('.breadcrumb-item a').forEach(item => item.classList.remove('active'));
+            
+            // Adiciona a classe active ao link clicado
+            this.classList.add('active');
+            
+            // Navega para a página correspondente
+            const page = this.getAttribute('data-page');
+            if (page) {
+                window.location.href = page;
+            }
+            
+            // Fecha o menu móvel
+            if (window.innerWidth <= 768) {
+                DOM.sidebar.classList.remove("active");
+            }
+        });
+    });
+
     
     // Manipulação dos botões administrativos
     if (DOM.adminButtons) {
