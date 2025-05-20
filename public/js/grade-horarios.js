@@ -835,7 +835,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             const loadingToast = showLoadingToast('Realizando troca...');
 
                             try {
-                                const resp = await fetch(`${API_URL}/admin/${getAdminId()}/grade`, {
+                                const resp = await fetch(`http://localhost:3001/admin/${getAdminId()}/grade`, {
                                     method: 'PUT',
                                     headers: {
                                         'Content-Type': 'application/json',
@@ -899,6 +899,27 @@ document.addEventListener('DOMContentLoaded', function() {
         // Salvar o estado após preencher a grade
         salvarEstadoGrade();
     }
+
+const socket = io("http://localhost:3001"); // Substitua pela URL do seu backend
+
+// Listeners para eventos de conexão/erro
+socket.on("connect", () => {
+  console.log("Conectado ao Socket.IO! ID:", socket.id);
+});
+
+socket.on("disconnect", () => {
+  console.log("Desconectado do Socket.IO");
+});
+
+socket.on("connect_error", (err) => {
+  console.error("Erro de conexão:", err);
+});
+
+// Listener específico para o evento grade_updated
+socket.on("grade_updated", (data) => {
+  console.log("Evento grade_updated recebido!", data);
+  
+});
 
     // Função para exportar grade para CSV
     async function exportarParaCSV() {
