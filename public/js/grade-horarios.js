@@ -918,7 +918,6 @@ socket.on("connect_error", (err) => {
 // Listener específico para o evento grade_updated
 socket.on("grade_updated", (data) => {
   console.log("Evento grade_updated recebido!", data);
-  
 });
 
     // Função para exportar grade para CSV
