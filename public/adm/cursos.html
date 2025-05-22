@@ -75,8 +75,7 @@
                 </div>
 
                 <div class="sidebar-item">
-                    <a data-protected-link data-page="/cursos"
-                        class="active">
+                    <a data-protected-link data-page="/cursos">
                         <i class="fas fa-graduation-cap"></i>
                         <span>Cursos</span>
                     </a>
@@ -290,6 +289,7 @@
         <script src="../js/notifications.js"></script>
         <!-- Proteção de rota -->
         <script src="../js/auth-guard.js"></script>
+        <script src="../js/navigation.js"></script>
         <script>
     document.querySelectorAll('a[data-protected-link]').forEach(link => {
         const page = link.getAttribute('data-page');

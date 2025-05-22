@@ -9,6 +9,12 @@ document.addEventListener("DOMContentLoaded", function() {
     const adminCards = document.querySelectorAll('.admin-card');
     const actionButtons = document.querySelectorAll('.admin-actions button');
     const userProfile = document.getElementById('userProfile');
+    const userAvatar = document.getElementById('user-avatar');
+    const userName = document.getElementById('user-name');
+    const userEmail = document.getElementById('user-email');
+    const changeAvatarBtn = document.getElementById('change-avatar-btn');
+    const changeNameForm = document.getElementById('change-name-form');
+    const changePasswordForm = document.getElementById('change-password-form');
     
     // Criar overlay para fechar o dropdown
     const overlay = document.createElement('div');
@@ -193,4 +199,90 @@ document.addEventListener("DOMContentLoaded", function() {
     
     // Inicializar a página
     verificarPermissoesAdmin();
+
+    // Carregar dados do usuário
+    loadUserData();
+
+    // Event Listeners
+    changeAvatarBtn.addEventListener('click', handleAvatarChange);
+    changeNameForm.addEventListener('submit', handleNameChange);
+    changePasswordForm.addEventListener('submit', handlePasswordChange);
+
+    // Funções
+    function loadUserData() {
+        // Aqui você deve implementar a lógica para carregar os dados do usuário do backend
+        // Por enquanto, vamos usar dados mockados
+        const mockUser = {
+            name: 'Administrador',
+            email: 'admin@fatec.sp.gov.br',
+            avatar: '../image/default-avatar.svg'
+        };
+
+        userName.textContent = mockUser.name;
+        userEmail.textContent = mockUser.email;
+        userAvatar.src = mockUser.avatar;
+    }
+
+    function handleAvatarChange() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        
+        input.onchange = function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    userAvatar.src = e.target.result;
+                    // Aqui você deve implementar a lógica para enviar a nova imagem para o backend
+                    showToast('Avatar atualizado com sucesso!', 'success');
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+
+        input.click();
+    }
+
+    function handleNameChange(e) {
+        e.preventDefault();
+        const newName = document.getElementById('new-name').value;
+        
+        // Aqui você deve implementar a lógica para enviar o novo nome para o backend
+        userName.textContent = newName;
+        showToast('Nome atualizado com sucesso!', 'success');
+        changeNameForm.reset();
+    }
+
+    function handlePasswordChange(e) {
+        e.preventDefault();
+        const currentPassword = document.getElementById('current-password').value;
+        const newPassword = document.getElementById('new-password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
+
+        if (newPassword !== confirmPassword) {
+            showToast('As senhas não coincidem!', 'error');
+            return;
+        }
+
+        // Aqui você deve implementar a lógica para enviar a nova senha para o backend
+        showToast('Senha atualizada com sucesso!', 'success');
+        changePasswordForm.reset();
+    }
+
+    // Sidebar toggle
+    const collapseBtn = document.getElementById('collapse-btn');
+    const container = document.querySelector('.container');
+    
+    collapseBtn.addEventListener('click', () => {
+        container.classList.toggle('collapsed');
+    });
+
+    // Menu toggle para mobile
+    const menuToggle = document.getElementById('toggle-menu');
+    const sidebar = document.querySelector('.sidebar');
+    
+    menuToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+    });
 }); 
