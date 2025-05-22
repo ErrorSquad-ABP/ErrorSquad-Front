@@ -1,4 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Função para normalizar o caminho da página
+    function normalizePath(path) {
+        if (path === '/' || path === '/home' || path === '/home.html' || path.endsWith('/adm/home.html')) {
+            return '/home';
+        }
+        // Remove .html do final, se existir
+        return path.replace('.html', '');
+    }
+
     // Função para atualizar a seleção da sidebar
     function updateSidebarSelection() {
         // Remove a classe active de todos os links
@@ -7,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // Obtém o caminho atual
-        const currentPath = window.location.pathname;
+        const currentPath = normalizePath(window.location.pathname);
         
         // Encontra o link correspondente ao caminho atual
         const currentLink = document.querySelector(`.sidebar-item a[data-page="${currentPath}"]`);
