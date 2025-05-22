@@ -2,7 +2,7 @@
   "name": "errorsquadabp-front",
   "version": "1.0.0",
   "description": "Este é um projeto de exemplo que demonstra a implementação de um site utilizando as melhores práticas de desenvolvimento web. Este repositório serve como um esqueleto/modelo para o projeto ABP da faculdade.",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node public/server.js",

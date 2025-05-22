@@ -6,8 +6,9 @@ if (typeof IRONGATE === 'function') {
 // Importar funções da API
 import { fetchGradeData, getToken, getAdminId, uploadCSV, filtrarDocentes } from './fetchfunctions/fetchGrade.js';
 import { useState } from './useState.js';
+const socket = io("http://localhost:3001");
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Adicionar link para o CSS
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -376,7 +377,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Ao submeter, envia PUT para o backend
-        form.onsubmit = async function(e) {
+        form.onsubmit = async function (e) {
             e.preventDefault();
             const id = cell.getAttribute('data-id-periodo');
             if (!id) {
@@ -413,7 +414,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (!resp.ok) throw new Error('Erro ao salvar no banco');
 
                 // Encontrar a cor do docente selecionado
-                const docenteSelecionado = gradeData.value.docente.find(d => 
+                const docenteSelecionado = gradeData.value.docente.find(d =>
                     d.nome && d.nome.trim().toLowerCase() === selectDocente.value.trim().toLowerCase()
                 );
                 const corDocente = docenteSelecionado?.cor || '#ffffff';
@@ -440,7 +441,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         };
         // Botão cancelar
-        modal.querySelector('#fechar-modal').onclick = function() {
+        modal.querySelector('#fechar-modal').onclick = function () {
             modal.style.display = 'none';
         };
     }
@@ -556,7 +557,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             docentesTable.innerHTML = '';
-            
+
             if (docentesFiltrados.length > 0) {
                 docentesFiltrados.forEach(docente => {
                     const corDocente = (docente.cor && docente.cor.toLowerCase() !== '#ffffff') ? docente.cor : '#ffffff';
@@ -618,12 +619,12 @@ document.addEventListener('DOMContentLoaded', function() {
             const siglaCurso = String(periodo.sigla_curso || '').toUpperCase().trim();
             const nivelSemestre = String(periodo.nivel_semestre || '').trim();
             const nomeTurno = String(periodo.nome_turno || '').toLowerCase().trim();
-            
+
             // Verificar cada condição separadamente para debug
             const cursoMatch = siglaCurso === cursoSelecionado;
             const nivelMatch = nivelSemestre === nivelSelecionado;
             const turnoMatch = nomeTurno === turnoSelecionado;
-            
+
             const match = cursoMatch && nivelMatch && turnoMatch;
 
             // Log detalhado apenas para períodos que têm pelo menos uma correspondência
@@ -642,7 +643,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     match
                 });
             }
-           
+
             return match;
         });
 
@@ -751,7 +752,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         e.dataTransfer.setData('text/plain', '');
                         window.draggedCell = cell;
                         cell.classList.add('dragging');
-                        
+
                         // Adicionar cursor personalizado
                         document.body.style.cursor = 'grabbing';
                     };
@@ -856,15 +857,15 @@ document.addEventListener('DOMContentLoaded', function() {
                                     // Adicionar animação de swap
                                     origem.classList.add('swap-animation');
                                     destino.classList.add('swap-animation');
-                                    
+
                                     showSuccessToast('Troca realizada com sucesso!');
-                                    
+
                                     // Remover animação após 500ms
                                     setTimeout(async () => {
                                         origem.classList.remove('swap-animation');
                                         destino.classList.remove('swap-animation');
                                         console.log('Buscando dados atualizados após troca...');
-                                        await buscarDadosGrade();
+                                        //await buscarDadosGrade();
                                         console.log('Dados atualizados:', gradeData);
                                     }, 500);
                                 } else {
@@ -882,7 +883,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             } catch (err) {
                                 // Remover toast de carregamento em caso de erro
                                 if (loadingToast) loadingToast.remove();
-                                
+
                                 console.error('Erro completo:', err);
                                 showErrorToast('Erro de conexão ao trocar células!');
                             }
@@ -893,6 +894,28 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
 
+        //webSocket event
+        socket.on("grade_updated", (data) => {
+            
+            console.log("Evento grade_updated recebido!", data, data.card1.id, data.card2.id);
+            
+            setTimeout(() => {
+            // Seleciona os elementos azul e verde
+            const elemento1 = document.querySelector(`td[data-id-periodo="${data.card1.id}"]`)
+            const elemento2 = document.querySelector(`td[data-id-periodo="${data.card2.id}"]`);
+            console.log('testtt',elemento1)
+            console.log('testtt',elemento2)
+
+            // Clona os elementos
+            const clone1 = elemento1.cloneNode(true);
+            const clone2 = elemento2.cloneNode(true);
+
+            // Troca os elementos no DOM
+            elemento1.replaceWith(clone2);
+            elemento2.replaceWith(clone1);
+            }, 100); 
+        });
+
         // Atualizar a lista de docentes
         atualizarListaDocentes();
 
@@ -900,25 +923,6 @@ document.addEventListener('DOMContentLoaded', function() {
         salvarEstadoGrade();
     }
 
-const socket = io("http://localhost:3001"); // Substitua pela URL do seu backend
-
-// Listeners para eventos de conexão/erro
-socket.on("connect", () => {
-  console.log("Conectado ao Socket.IO! ID:", socket.id);
-});
-
-socket.on("disconnect", () => {
-  console.log("Desconectado do Socket.IO");
-});
-
-socket.on("connect_error", (err) => {
-  console.error("Erro de conexão:", err);
-});
-
-// Listener específico para o evento grade_updated
-socket.on("grade_updated", (data) => {
-  console.log("Evento grade_updated recebido!", data);
-});
 
     // Função para exportar grade para CSV
     async function exportarParaCSV() {
@@ -928,8 +932,8 @@ socket.on("grade_updated", (data) => {
             const turnoSelecionado = document.querySelector('.btn-secondary:nth-child(3)').value;
 
             // Filtrar os períodos
-            const periodosFiltrados = gradeData.value.periodos.filter(periodo => 
-                periodo.sigla_curso === cursoSelecionado && 
+            const periodosFiltrados = gradeData.value.periodos.filter(periodo =>
+                periodo.sigla_curso === cursoSelecionado &&
                 periodo.nivel_semestre === nivelSelecionado &&
                 periodo.nome_turno.toLowerCase() === turnoSelecionado
             );
@@ -946,11 +950,11 @@ socket.on("grade_updated", (data) => {
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             const url = URL.createObjectURL(blob);
-            
+
             link.setAttribute('href', url);
             link.setAttribute('download', `grade_${cursoSelecionado}_${nivelSelecionado}_${turnoSelecionado}.csv`);
             link.style.visibility = 'hidden';
-            
+
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
