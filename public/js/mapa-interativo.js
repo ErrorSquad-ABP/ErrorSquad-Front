@@ -626,6 +626,39 @@ function fecharPopupGlobal() {
     if (overlay) overlay.classList.remove('ativo');
 }
 
+// Exporta o PDF do andar atual
+function setupPdfExport() {
+  const btn = document.getElementById('exportar-pdf');
+  if (!btn) return;
+
+  btn.addEventListener('click', () => {
+    // O container que queremos “fotografar”
+    const elemento = document.getElementById('map-content');
+
+    // Opções do html2pdf
+    const opt = {
+      margin:       5,                     // mm de margem
+      filename:     `mapa-andar-${currentFloor}.pdf`,
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2 },          // maior resolução
+      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
+    };
+
+    // Gera e baixa
+    html2pdf().set(opt).from(elemento).save();
+  });
+}
+
+// logo após definir setupEventListeners e loadFloorMap…
+document.addEventListener('DOMContentLoaded', () => {
+  loadFloorMap(0);
+  setupEventListeners();
+  setupPdfExport();         // <— ative nossa função aqui
+  initializeSearch();
+  criarOverlayPopup();
+});
+
+
 // Remover o listener global de clique fora
 window._popupClickOutsideListenerAdded = false;
 // (Se quiser garantir, pode remover o eventListener, mas como só adiciona se não existir, basta não usar mais) 
