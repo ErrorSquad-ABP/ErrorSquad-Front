@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - FATEC</title>
+    <link rel="icon" type="image/x-icon" href="../image/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="../image/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../image/favicon-16x16.png">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/notifications.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar de navegação -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo" id="collapse-btn" style="cursor: pointer;">
+                    <img src="../image/CPS-removebg-preview.png" alt="Logo CPS">
+                </div>
+            </div>
+            
+            <div class="sidebar-item">
+                <a data-protected-link data-page="/home">
+                    <i class="fas fa-home"></i>
+                    <span>Início</span>
+                </a>
+            </div>
+
+            <div class="sidebar-item">
+                <a data-protected-link data-page="/docentes">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <span>Docentes</span>
+                </a>
+            </div>
+
+            <div class="sidebar-item">
+                <a data-protected-link data-page="/grade">
+                    <i class="fas fa-book"></i>
+                    <span>Grade de Horários</span>
+                </a>
+            </div>
+
+            <div class="sidebar-item">
+                <a data-protected-link data-page="/mapa-interativo">
+                    <i class="fas fa-door-open"></i>
+                    <span>Mapa Interativo</span>
+                </a>
+            </div>
+
+            <div class="sidebar-item">
+                <a data-protected-link data-page="/semestres">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Semestres</span>
+                </a>
+            </div>
+
+            <div class="sidebar-item">
+                <a data-protected-link data-page="/disciplinas">
+                    <i class="fas fa-laptop-code"></i>
+                    <span>Disciplinas</span>
+                </a>
+            </div>
+
+            <div class="sidebar-item">
+                <a data-protected-link data-page="/cursos">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Cursos</span>
+                </a>
+            </div>
+
+            <!-- Sidebar ADM simplificado -->
+            <div class="sidebar-item">
+                <a href="#" class="sidebar-link" id="adm-link">
+                    <i class="fas fa-user-shield"></i>
+                    <span>Admin</span>
+                </a>
+            </div>
+            <div class="sidebar-item">
+                <button type="button" class="sidebar-link text-danger" id="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Sair</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Conteúdo principal -->
+        <main class="main-content">
+            <header class="topbar">
+                <div class="logo-container">
+                    <img src="../image/Fatec-removebg-preview.png" alt="FATEC" class="header-logo">
+                </div>
+                
+                <div class="header-actions">
+                    <div class="notification-container">
+                        <button class="notification-btn" title="Notificações">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-count">0</span>
+                        </button>
+                        <div class="notification-dropdown">
+                            <div class="notification-list">
+                                <!-- As notificações serão inseridas dinamicamente aqui -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button id="toggle-menu" class="menu-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </header>
+
+            <div class="breadcrumb">
+                <div class="breadcrumb-item active">
+                    <i class="fas fa-user-shield"></i> &nbsp; Admin
+                </div>
+            </div>
+
+            <!-- Área de conteúdo administrativo -->
+            <div class="admin-container">
+                <div class="profile-section">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            <img src="../image/default-avatar.svg" alt="Avatar do usuário" id="user-avatar">
+                            <button class="change-avatar-btn" id="change-avatar-btn">
+                                <i class="fas fa-camera"></i>
+                            </button>
+                        </div>
+                        <div class="profile-info">
+                            <h2 id="user-name">Nome do Usuário</h2>
+                            <p id="user-email">email@fatec.sp.gov.br</p>
+                        </div>
+                    </div>
+
+                    <div class="profile-actions">
+                        <div class="action-card">
+                            <h3><i class="fas fa-user-edit"></i> Alterar Nome</h3>
+                            <form id="change-name-form" class="profile-form">
+                                <div class="form-group">
+                                    <label for="new-name">Novo Nome</label>
+                                    <input type="text" id="new-name" name="new-name" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Salvar
+                                </button>
+                            </form>
+                        </div>
+
+                        <div class="action-card">
+                            <h3><i class="fas fa-key"></i> Alterar Senha</h3>
+                            <form id="change-password-form" class="profile-form">
+                                <div class="form-group">
+                                    <label for="current-password">Senha Atual</label>
+                                    <input type="password" id="current-password" name="current-password" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="new-password">Nova Senha</label>
+                                    <input type="password" id="new-password" name="new-password" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="confirm-password">Confirmar Nova Senha</label>
+                                    <input type="password" id="confirm-password" name="confirm-password" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Salvar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/admin.js"></script>
+    <script src="../js/navigation.js"></script>
+</body>
+</html> 

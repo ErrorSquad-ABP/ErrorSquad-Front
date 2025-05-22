@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="../css/notifications.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -23,54 +24,53 @@
             </div>
             
             <div class="sidebar-item">
-                    <a data-protected-link data-page="/home">
-                        <i class="fas fa-home"></i>
-                        <span>Início</span>
-                    </a>
-                </div>
+                <a data-protected-link data-page="/home" href="/home" class="sidebar-link">
+                    <i class="fas fa-home"></i>
+                    <span>Início</span>
+                </a>
+            </div>
 
-                <div class="sidebar-item">
-                    <a data-protected-link data-page="/docentes">
-                        <i class="fas fa-chalkboard-teacher"></i>
-                        <span>Docentes</span>
-                    </a>
-                </div>
+            <div class="sidebar-item">
+                <a data-protected-link data-page="/docentes" class="sidebar-link">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <span>Docentes</span>
+                </a>
+            </div>
 
-                <div class="sidebar-item">
-                    <a data-protected-link data-page="/grade">
-                        <i class="fas fa-book"></i>
-                        <span>Grade de Horários</span>
-                    </a>
-                </div>
+            <div class="sidebar-item">
+                <a data-protected-link data-page="/grade" class="sidebar-link">
+                    <i class="fas fa-book"></i>
+                    <span>Grade de Horários</span>
+                </a>
+            </div>
 
-                <div class="sidebar-item">
-                    <a data-protected-link data-page="/mapa-interativo">
-                        <i class="fas fa-door-open"></i>
-                        <span>Mapa Interativo</span>
-                    </a>
-                </div>
+            <div class="sidebar-item">
+                <a data-protected-link data-page="/mapa-interativo" class="sidebar-link">
+                    <i class="fas fa-door-open"></i>
+                    <span>Mapa Interativo</span>
+                </a>
+            </div>
 
-                <div class="sidebar-item">
-                    <a data-protected-link data-page="/semestres">
-                        <i class="fas fa-calendar-alt"></i>
-                        <span>Semestres</span>
-                    </a>
-                </div>
+            <div class="sidebar-item">
+                <a data-protected-link data-page="/semestres" class="sidebar-link">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Semestres</span>
+                </a>
+            </div>
 
-                <div class="sidebar-item">
-                    <a data-protected-link data-page="/disciplinas">
-                        <i class="fas fa-laptop-code"></i>
-                        <span>Disciplinas</span>
-                    </a>
-                </div>
+            <div class="sidebar-item">
+                <a data-protected-link data-page="/disciplinas" class="sidebar-link">
+                    <i class="fas fa-laptop-code"></i>
+                    <span>Disciplinas</span>
+                </a>
+            </div>
 
-                <div class="sidebar-item">
-                    <a data-protected-link data-page="/cursos"
-                        class="active">
-                        <i class="fas fa-graduation-cap"></i>
-                        <span>Cursos</span>
-                    </a>
-                </div>
+            <div class="sidebar-item">
+                <a data-protected-link data-page="/cursos" class="sidebar-link">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Cursos</span>
+                </a>
+            </div>
 
             <!-- Sidebar ADM simplificado -->
             <div class="sidebar-item">
@@ -281,11 +281,6 @@
     <script src="../js/auth-guard.js"></script>
     <script type="module" src="../js/script.js"></script>
     <script src="../js/notifications.js"></script>
-    <script>
-    document.querySelectorAll('a[data-protected-link]').forEach(link => {
-        const page = link.getAttribute('data-page');
-        link.href = `/public/adm/${page}`;
-    });
-    </script>
+    <script src="../js/navigation.js"></script>
 </body>
 </html>

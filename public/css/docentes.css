@@ -644,3 +644,9 @@ input[type="text"][id$="-hex"]:focus {
     color: #fff;
     background: rgba(255,0,0,0.08);
 } 
+
+.text-danger {
+    color: var(--danger);
+    font-size: 1rem;
+    margin-top: 0.5rem;
+}
