@@ -4,11 +4,12 @@ if (typeof IRONGATE === 'function') {
 }
 
 // Importar funções da API
-import { fetchGradeData, getToken, getAdminId, uploadCSV, filtrarDocentes } from './fetchfunctions/fetchGrade.js';
+import { fetchGradeData, getToken, getAdminId, uploadCSV, filtrarDocentes } from './fetchFunctions/fetchGrade.js';
 import { useState } from './useState.js';
   // URL base da API
 const API_URL = 'https://errorsquad-server.onrender.com';
 const socket = io(API_URL);
+
 
 document.addEventListener('DOMContentLoaded', function () {
     // Adicionar link para o CSS
