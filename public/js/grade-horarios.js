@@ -6,7 +6,9 @@ if (typeof IRONGATE === 'function') {
 // Importar funções da API
 import { fetchGradeData, getToken, getAdminId, uploadCSV, filtrarDocentes } from './fetchFunctions/fetchGrade.js';
 import { useState } from './useState.js';
-const socket = io("http://localhost:3001");
+  // URL base da API
+const API_URL = 'https://errorsquad-server.onrender.com';
+const socket = io(API_URL);
 
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -58,8 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Verificar o token imediatamente ao carregar a página
     verificarToken();
 
-    // URL base da API
-    const API_URL = 'https://errorsquad-server.onrender.com';
+  
 
     // Objeto para armazenar os dados da grade
     let gradeData = useState({
@@ -837,7 +838,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             const loadingToast = showLoadingToast('Realizando troca...');
 
                             try {
-                                const resp = await fetch(`http://localhost:3001/admin/${getAdminId()}/grade`, {
+                                const resp = await fetch(`${API_URL}/admin/${getAdminId()}/grade`, {
                                     method: 'PUT',
                                     headers: {
                                         'Content-Type': 'application/json',

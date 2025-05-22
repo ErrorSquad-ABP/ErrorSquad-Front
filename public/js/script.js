@@ -2,14 +2,14 @@
 if (typeof IRONGATE === 'function') {
     IRONGATE();
 }
-
+const API_URL = 'https://errorsquad-server.onrender.com';
 /**
  * Script para o Painel Administrativo da FATEC
  */
 document.addEventListener("DOMContentLoaded", function () {
 
     function initializeWebSocket() {
-        const socket = io("http://localhost:3001"); // Substitua pela URL do seu backend
+        const socket = io(API_URL); // Substitua pela URL do seu backend
 
         // Listeners para eventos de conexão/erro
         socket.on("connect", () => {
