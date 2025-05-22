@@ -2,11 +2,30 @@
 if (typeof IRONGATE === 'function') {
     IRONGATE();
 }
-
+const API_URL = 'https://errorsquad-server.onrender.com';
 /**
  * Script para o Painel Administrativo da FATEC
  */
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
+
+    function initializeWebSocket() {
+        const socket = io(API_URL); // Substitua pela URL do seu backend
+
+        // Listeners para eventos de conexão/erro
+        socket.on("connect", () => {
+            console.log("Conectado ao Socket.IO! ID:", socket.id);
+        });
+
+        socket.on("disconnect", () => {
+            console.log("Desconectado do Socket.IO");
+        });
+
+        socket.on("connect_error", (err) => {
+            console.error("Erro de conexão:", err);
+        }); 
+    }
+
+    initializeWebSocket();
     // Cache de elementos DOM
     const DOM = {
         container: document.querySelector(".container"),
@@ -72,13 +91,13 @@ document.addEventListener("DOMContentLoaded", function() {
             const date = new Date(dateStr);
             return date.toLocaleDateString('pt-BR');
         },
-        
+
         sanitizeHTML: (str) => {
             const temp = document.createElement('div');
             temp.textContent = str;
             return temp.innerHTML;
         },
-        
+
         validateForm: (formData) => {
             const errors = [];
             // Implementar validação específica para cada tipo de entidade
@@ -93,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 DOM.breadcrumb.textContent = text;
             }
         },
-        
+
         toggleLoading: (show) => {
             const loader = document.querySelector('.loader');
             if (loader) {
@@ -107,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function() {
         getEntity: (entityName, id) => {
             return mockData[entityName]?.find(item => item.id === id);
         },
-        
+
         updateEntity: (entityName, id, data) => {
             const index = mockData[entityName]?.findIndex(item => item.id === id);
             if (index !== -1) {
@@ -116,7 +135,7 @@ document.addEventListener("DOMContentLoaded", function() {
             }
             return false;
         },
-        
+
         deleteEntity: (entityName, id) => {
             const index = mockData[entityName]?.findIndex(item => item.id === id);
             if (index !== -1) {
@@ -132,17 +151,17 @@ document.addEventListener("DOMContentLoaded", function() {
         handleEdit: (entityId) => {
             state.currentEntityId = entityId;
             const entity = DataManager.getEntity(state.currentEntity, entityId);
-            
+
             if (entity) {
                 DOM.formContainer.classList.add('active');
                 createEntityForm(true);
                 console.error('Erro ao editar:', utils.sanitizeHTML(entity.nome));
             }
         },
-        
+
         handleDelete: (entityId) => {
             const entity = DataManager.getEntity(state.currentEntity, entityId);
-            
+
             if (entity) {
                 const confirmDelete = confirm(`Tem certeza que deseja excluir ${utils.sanitizeHTML(entity.nome)}?`);
                 if (confirmDelete) {
@@ -169,92 +188,92 @@ document.addEventListener("DOMContentLoaded", function() {
             DOM.container.classList.add('collapsed');
         }
     }
-    
+
     // Toggle do colapso da sidebar
     if (DOM.collapseBtn) {
-        DOM.collapseBtn.addEventListener("click", function() {
+        DOM.collapseBtn.addEventListener("click", function () {
             state.isCollapsed = !state.isCollapsed;
             DOM.container.classList.toggle("collapsed", state.isCollapsed);
             localStorage.setItem('sidebarCollapsed', state.isCollapsed);
         });
     }
-    
+
     // Toggle do menu lateral em dispositivos móveis
     if (DOM.menuToggle) {
-        DOM.menuToggle.addEventListener("click", function() {
+        DOM.menuToggle.addEventListener("click", function () {
             DOM.sidebar.classList.toggle("active");
         });
     }
-    
+
     // Fechar sidebar ao clicar fora dela em dispositivos móveis
-    document.addEventListener("click", function(e) {
+    document.addEventListener("click", function (e) {
         const isMobile = window.innerWidth <= 768;
-        if (isMobile && DOM.sidebar.classList.contains("active") && 
+        if (isMobile && DOM.sidebar.classList.contains("active") &&
             !e.target.closest(".sidebar") && !e.target.closest(".menu-toggle")) {
             DOM.sidebar.classList.remove("active");
         }
     });
-    
+
     // Toggle dos submenus
     if (DOM.submenuLinks) {
         DOM.submenuLinks.forEach(link => {
-            link.addEventListener("click", function(e) {
+            link.addEventListener("click", function (e) {
                 e.preventDefault();
                 this.classList.toggle("open");
             });
         });
     }
-    
+
     // Adicionar evento de logout
     const logoutBtn = document.getElementById('logout-btn');
     if (logoutBtn) {
-        logoutBtn.addEventListener('click', function() {
+        logoutBtn.addEventListener('click', function () {
             // Limpar dados do localStorage
             localStorage.removeItem('userData');
             localStorage.removeItem('token');
             localStorage.removeItem('email');
             localStorage.removeItem('senha');
             localStorage.removeItem('id');
-            
+
             // Redirecionar para a página de login
             window.location.href = '/login';
         });
     }
-    
+
     // Navegação da sidebar
     document.querySelectorAll('.sidebar-item a[data-protected-link]').forEach(link => {
-        link.addEventListener('click', function(e) {
+        link.addEventListener('click', function (e) {
             e.preventDefault();
-           
+
             // Remove a classe active de todos os links
             document.querySelectorAll('.sidebar-item a').forEach(item => item.classList.remove('active'));
-            
+
             // Adiciona a classe active ao link clicado
             this.classList.add('active');
-            
+
             // Navega para a página correspondente
             const page = this.getAttribute('data-page');
             if (page) {
                 window.location.href = page;
             }
-            
+
             // Fecha o menu móvel
             if (window.innerWidth <= 768) {
                 DOM.sidebar.classList.remove("active");
             }
         });
     });
-    
+
     // Manipulação dos botões administrativos
     if (DOM.adminButtons) {
         DOM.adminButtons.forEach(button => {
-            button.addEventListener("click", function() {
+            button.addEventListener("click", function () {
                 const entityName = this.getAttribute("data-entity");
-                
+
                 // Adicionando efeito de clique
                 this.classList.add('clicked');
                 setTimeout(() => this.classList.remove('clicked'), 200);
-                
+
                 if (entityName === 'mapas' && DOM.mapEditor) {
                     DOM.entityContainer.classList.remove('active');
                     DOM.mapEditor.classList.add('active');
@@ -267,35 +286,35 @@ document.addEventListener("DOMContentLoaded", function() {
             });
         });
     }
-    
+
     // Função para exibir a lista de entidades
     function showEntityList(entityName) {
         if (!DOM.entityContainer || !DOM.entityTitle || !DOM.entityType || !DOM.entityList) return;
-        
+
         state.currentEntity = entityName;
         DOM.entityContainer.classList.add("active");
-        
+
         // Atualizar acessos recentes
         updateRecentAccess(entityName);
-        
+
         // Atualizar o título e ícone
         let icon = 'list';
         DOM.entityType.textContent = entityName.charAt(0).toUpperCase() + entityName.slice(1);
-        
+
         // Definir ícone baseado na entidade
-        switch(entityName) {
+        switch (entityName) {
             case 'docentes': icon = 'chalkboard-teacher'; break;
             case 'semestres': icon = 'calendar-alt'; break;
             case 'salas': icon = 'door-open'; break;
             case 'disciplinas': icon = 'book'; break;
             case 'cursos': icon = 'graduation-cap'; break;
         }
-        
+
         DOM.entityTitle.innerHTML = `<i class="fas fa-${icon}"></i> Gerenciar <span id="entity-type"> ${DOM.entityType.textContent}</span>`;
-        
+
         // Limpar a lista atual
         DOM.entityList.innerHTML = "";
-        
+
         // Renderizar os cards com base no tipo de entidade
         if (mockData[entityName]) {
             mockData[entityName].forEach(item => {
@@ -303,12 +322,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 DOM.entityList.appendChild(card);
             });
         }
-        
+
         // Configurar o input de busca
         if (DOM.searchInput) {
             DOM.searchInput.placeholder = `Buscar ${DOM.entityType.textContent.toLowerCase()}...`;
         }
-        
+
         // Adicionar animação de entrada aos cards
         setTimeout(() => {
             const cards = DOM.entityList.querySelectorAll('.entity-card');
@@ -320,7 +339,7 @@ document.addEventListener("DOMContentLoaded", function() {
             });
         }, 100);
     }
-    
+
     // Função para criar um card de entidade
     function createEntityCard(entity) {
         const card = document.createElement("div");
@@ -329,7 +348,7 @@ document.addEventListener("DOMContentLoaded", function() {
         card.style.opacity = '0';
         card.style.transform = 'translateY(20px)';
         card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-        
+
         let cardContent = "";
         let iconClass = "";
         let showActions = true;
@@ -337,7 +356,7 @@ document.addEventListener("DOMContentLoaded", function() {
         let showEditButton = true;
         let showDeleteButton = true;
         let showImportButton = false;
-        
+
         // Controle de botões baseado no tipo de entidade
         switch (state.currentEntity) {
             case 'adm':
@@ -351,7 +370,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 showImportButton = true;
                 break;
         }
-        
+
         // Construir o conteúdo do card com base no tipo de entidade
         switch (state.currentEntity) {
             case "docentes":
@@ -377,15 +396,15 @@ document.addEventListener("DOMContentLoaded", function() {
                     </div>
                 `;
                 break;
-            
+
             case "semestres":
                 iconClass = "fas fa-calendar-alt";
-                const status = new Date(entity.inicio) > new Date() ? 
-                    '<span class="badge badge-info">Futuro</span>' : 
-                    (new Date(entity.fim) < new Date() ? 
-                        '<span class="badge badge-warning">Encerrado</span>' : 
+                const status = new Date(entity.inicio) > new Date() ?
+                    '<span class="badge badge-info">Futuro</span>' :
+                    (new Date(entity.fim) < new Date() ?
+                        '<span class="badge badge-warning">Encerrado</span>' :
                         '<span class="badge badge-success">Atual</span>');
-                        
+
                 cardContent = `
                     <div class="entity-card-header">
                         <h4 class="entity-title">${entity.ano}.${entity.periodo} ${status}</h4>
@@ -406,7 +425,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     </div>
                 `;
                 break;
-            
+
             case "salas":
                 iconClass = "fas fa-door-open";
                 const tipoSala = {
@@ -414,7 +433,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     sala: "Sala de Aula",
                     auditorio: "Auditório"
                 };
-                
+
                 cardContent = `
                     <div class="entity-card-header">
                         <h4 class="entity-title">${entity.nome}</h4>
@@ -439,7 +458,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     </div>
                 `;
                 break;
-                
+
             case "disciplinas":
                 iconClass = "fas fa-book";
                 cardContent = `
@@ -463,7 +482,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     </div>
                 `;
                 break;
-                
+
             case "cursos":
                 iconClass = "fas fa-graduation-cap";
                 cardContent = `
@@ -487,11 +506,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 `;
                 break;
         }
-        
+
         // Adicionar ações (editar/excluir) ao card se permitido
         if (showActions) {
             let actionsHtml = '<div class="entity-actions">';
-            
+
             // Botão de importar CSV (apenas para docentes)
             if (showImportButton) {
                 actionsHtml += `
@@ -499,7 +518,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         <i class="fas fa-file-import"></i>
                     </button>`;
             }
-            
+
             // Botão de adicionar
             if (showAddButton) {
                 actionsHtml += `
@@ -507,7 +526,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         <i class="fas fa-plus"></i>
                     </button>`;
             }
-            
+
             // Botão de editar
             if (showEditButton) {
                 actionsHtml += `
@@ -515,7 +534,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         <i class="fas fa-edit"></i>
                     </button>`;
             }
-            
+
             // Botão de excluir
             if (showDeleteButton) {
                 actionsHtml += `
@@ -523,64 +542,64 @@ document.addEventListener("DOMContentLoaded", function() {
                         <i class="fas fa-trash-alt"></i>
                     </button>`;
             }
-            
+
             actionsHtml += '</div>';
             cardContent += actionsHtml;
         }
-        
+
         card.innerHTML = cardContent;
-        
+
         // Adicionar eventos aos botões
         if (showActions) {
             // Evento de importar CSV
             const importBtn = card.querySelector(".btn-import");
             if (importBtn) {
-                importBtn.addEventListener("click", function() {
+                importBtn.addEventListener("click", function () {
                     handleImportCSV();
                 });
             }
-            
+
             // Evento de adicionar
             const addBtn = card.querySelector(".btn-add");
             if (addBtn) {
-                addBtn.addEventListener("click", function() {
+                addBtn.addEventListener("click", function () {
                     handleAdd();
                 });
             }
-            
+
             // Evento de editar
             const editBtn = card.querySelector(".btn-edit");
             if (editBtn) {
-                editBtn.addEventListener("click", function() {
+                editBtn.addEventListener("click", function () {
                     const entityId = parseInt(this.dataset.id);
                     EventHandlers.handleEdit(entityId);
                 });
             }
-            
+
             // Evento de excluir
             const deleteBtn = card.querySelector(".btn-delete");
             if (deleteBtn) {
-                deleteBtn.addEventListener("click", function() {
+                deleteBtn.addEventListener("click", function () {
                     const entityId = parseInt(this.dataset.id);
                     EventHandlers.handleDelete(entityId);
                 });
             }
         }
-        
+
         return card;
     }
-    
+
     // Função para criar o formulário dinâmico baseado no tipo de entidade
     function createEntityForm(isEdit) {
         if (!DOM.formContainer) return;
-        
+
         let formHTML = "";
         let entity = null;
-        
+
         if (isEdit && state.currentEntityId) {
             entity = DataManager.getEntity(state.currentEntity, state.currentEntityId);
         }
-        
+
         switch (state.currentEntity) {
             case "docentes":
                 formHTML = `
@@ -609,7 +628,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     </div>
                 `;
                 break;
-                
+
             case "semestres":
                 formHTML = `
                     <div class="form-group">
@@ -635,7 +654,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     </div>
                 `;
                 break;
-                
+
             case "salas":
                 formHTML = `
                     <div class="form-group">
@@ -664,7 +683,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     </div>
                 `;
                 break;
-                
+
             case "disciplinas":
                 formHTML = `
                     <div class="form-group">
@@ -704,7 +723,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     </div>
                 `;
                 break;
-                
+
             case "cursos":
                 formHTML = `
                     <div class="form-group">
@@ -730,16 +749,16 @@ document.addEventListener("DOMContentLoaded", function() {
                 `;
                 break;
         }
-        
+
         DOM.formContainer.innerHTML = formHTML;
     }
-    
+
     // Inicializar a busca
     if (DOM.searchInput) {
-        DOM.searchInput.addEventListener("input", function() {
+        DOM.searchInput.addEventListener("input", function () {
             const searchTerm = this.value.toLowerCase();
             const cards = DOM.entityList.querySelectorAll(".entity-card");
-            
+
             cards.forEach(card => {
                 const text = card.textContent.toLowerCase();
                 if (text.includes(searchTerm)) {
@@ -750,13 +769,13 @@ document.addEventListener("DOMContentLoaded", function() {
             });
         });
     }
-    
+
     // Inicializar as funções
     function init() {
         initSidebarState();
         updateDashboardStats();
         updateRecentActivities();
-        
+
         if (document.getElementById('recent-access')) {
             renderRecentAccess();
         }
@@ -824,22 +843,22 @@ document.addEventListener("DOMContentLoaded", function() {
     function updateRecentAccess(entityName) {
         // Obter acessos recentes do localStorage ou inicializar array vazio
         let recentAccess = JSON.parse(localStorage.getItem('recentAccess')) || [];
-        
+
         // Remover a entidade se já existir (para evitar duplicatas)
         recentAccess = recentAccess.filter(item => item.name !== entityName);
-        
+
         // Adicionar a nova entidade no início do array
         recentAccess.unshift({
             name: entityName,
             timestamp: new Date().getTime()
         });
-        
+
         // Manter apenas os 3 acessos mais recentes
         recentAccess = recentAccess.slice(0, 3);
-        
+
         // Salvar no localStorage
         localStorage.setItem('recentAccess', JSON.stringify(recentAccess));
-        
+
         // Atualizar a interface
         renderRecentAccess();
     }
@@ -848,12 +867,12 @@ document.addEventListener("DOMContentLoaded", function() {
     function renderRecentAccess() {
         const recentAccessContainer = document.getElementById('recent-access');
         if (!recentAccessContainer) return;
-        
+
         const recentAccess = JSON.parse(localStorage.getItem('recentAccess')) || [];
-        
+
         // Limpar o container
         recentAccessContainer.innerHTML = '';
-        
+
         // Mapear ícones para cada tipo de entidade
         const entityIcons = {
             docentes: 'chalkboard-teacher',
@@ -863,29 +882,29 @@ document.addEventListener("DOMContentLoaded", function() {
             cursos: 'graduation-cap',
             mapas: 'map-marked-alt'
         };
-        
+
         // Criar cards para cada acesso recente
         recentAccess.forEach(item => {
             const card = document.createElement('div');
             card.className = 'admin-button';
             card.dataset.entity = item.name;
-            
+
             const icon = entityIcons[item.name] || 'circle';
-            
+
             card.innerHTML = `
                 <i class="fas fa-${icon}"></i>
                 <span>${item.name.charAt(0).toUpperCase() + item.name.slice(1)}</span>
             `;
-            
+
             // Adicionar evento de clique
-            card.addEventListener('click', function() {
+            card.addEventListener('click', function () {
                 const entityName = this.getAttribute('data-entity');
                 showEntityList(entityName);
                 if (DOM.breadcrumb) {
                     DOM.breadcrumb.textContent = entityName.charAt(0).toUpperCase() + entityName.slice(1);
                 }
             });
-            
+
             recentAccessContainer.appendChild(card);
         });
     }
@@ -897,19 +916,19 @@ document.addEventListener("DOMContentLoaded", function() {
         fileInput.type = 'file';
         fileInput.accept = '.csv';
         fileInput.style.display = 'none';
-        
+
         // Adicionar ao DOM
         document.body.appendChild(fileInput);
-        
+
         // Trigger click no input
         fileInput.click();
-        
+
         // Lidar com a seleção do arquivo
-        fileInput.addEventListener('change', function(e) {
+        fileInput.addEventListener('change', function (e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     try {
                         const csvData = e.target.result;
                         processCSV(csvData);
@@ -919,7 +938,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 };
                 reader.readAsText(file);
             }
-            
+
             // Limpar input
             document.body.removeChild(fileInput);
         });
@@ -931,18 +950,18 @@ document.addEventListener("DOMContentLoaded", function() {
             // Dividir linhas
             const lines = csvData.split('\n');
             if (lines.length < 2) throw new Error('CSV inválido');
-            
+
             // Obter cabeçalhos
             const headers = lines[0].split(',').map(h => h.trim());
-            
+
             // Processar dados
             const docentes = [];
             for (let i = 1; i < lines.length; i++) {
                 if (!lines[i].trim()) continue;
-                
+
                 const values = lines[i].split(',').map(v => v.trim());
                 const docente = {};
-                
+
                 headers.forEach((header, index) => {
                     if (header === 'disciplinas') {
                         docente[header] = values[index].split(';').map(d => d.trim());
@@ -950,10 +969,10 @@ document.addEventListener("DOMContentLoaded", function() {
                         docente[header] = values[index];
                     }
                 });
-                
+
                 docentes.push(docente);
             }
-            
+
             // Adicionar docentes ao mockData
             docentes.forEach(docente => {
                 const newId = Math.max(...mockData.docentes.map(d => d.id)) + 1;
@@ -962,11 +981,11 @@ document.addEventListener("DOMContentLoaded", function() {
                     ...docente
                 });
             });
-            
+
             // Atualizar a lista
             showEntityList('docentes');
             console.warn('Docentes importados com sucesso');
-            
+
         } catch (error) {
             console.error('Erro ao processar arquivo CSV');
         }

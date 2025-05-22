@@ -5,8 +5,13 @@ if (typeof IRONGATE === 'function') {
 
 // Importar funções da API
 import { fetchGradeData, getToken, getAdminId, uploadCSV, filtrarDocentes } from './fetchFunctions/fetchGrade.js';
+import { useState } from './useState.js';
+  // URL base da API
+const API_URL = 'https://errorsquad-server.onrender.com';
+const socket = io(API_URL);
 
-document.addEventListener('DOMContentLoaded', function() {
+
+document.addEventListener('DOMContentLoaded', function () {
     // Adicionar link para o CSS
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -55,18 +60,17 @@ document.addEventListener('DOMContentLoaded', function() {
     // Verificar o token imediatamente ao carregar a página
     verificarToken();
 
-    // URL base da API
-    const API_URL = 'https://errorsquad-server.onrender.com';
+  
 
     // Objeto para armazenar os dados da grade
-    let gradeData = {
+    let gradeData = useState({
         dias: [],
         horarios: [],
         cursos: [],
         turnos: [],
         periodos: [],
         docente: []
-    };
+    });
 
     // Função para mostrar mensagem de sucesso
     function showSuccessToast(message) {
@@ -139,15 +143,16 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             const dadosGrade = await fetchGradeData();
             if (dadosGrade) {
+                console.log(dadosGrade)
                 // Atualizar o objeto gradeData com os dados recebidos
-                gradeData = {
+                gradeData = useState({
                     dias: dadosGrade.dias || [],
                     horarios: dadosGrade.horarios || [],
                     cursos: dadosGrade.cursos || [],
                     turnos: dadosGrade.turnos || [],
                     periodos: dadosGrade.periodos || [],
                     docente: dadosGrade.docente || []
-                };
+                })
 
                 console.log('Grade data atualizado:', gradeData);
                 atualizarFiltros();
@@ -194,8 +199,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Limpar e preencher o select de cursos
         cursoSelect.innerHTML = '';
-        if (gradeData.cursos && gradeData.cursos.length > 0) {
-            gradeData.cursos.forEach(curso => {
+        console.log('teste cursos', gradeData.value.cursos)
+        if (gradeData.value.cursos && gradeData.value.cursos.length > 0) {
+            gradeData.value.cursos.forEach(curso => {
                 const option = document.createElement('option');
                 option.value = curso.sigla.toUpperCase();
                 option.textContent = curso.nome;
@@ -213,7 +219,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Limpar e preencher o select de níveis
         nivelSelect.innerHTML = '';
-        const niveis = [...new Set(gradeData.periodos
+        const niveis = [...new Set(gradeData.value.periodos
             .map(p => p.nivel_semestre)
             .filter(n => n)
             .sort((a, b) => parseInt(a) - parseInt(b)))];
@@ -238,8 +244,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Limpar e preencher o select de turnos sempre com todos os turnos do backend
         turnoSelect.innerHTML = '';
-        if (gradeData.turnos && gradeData.turnos.length > 0) {
-            gradeData.turnos.forEach(turno => {
+        if (gradeData.value.turnos && gradeData.value.turnos.length > 0) {
+            gradeData.value.turnos.forEach(turno => {
                 const option = document.createElement('option');
                 option.value = turno.nome.toLowerCase();
                 option.textContent = `Período ${turno.nome}`;
@@ -373,7 +379,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Ao submeter, envia PUT para o backend
-        form.onsubmit = async function(e) {
+        form.onsubmit = async function (e) {
             e.preventDefault();
             const id = cell.getAttribute('data-id-periodo');
             if (!id) {
@@ -410,7 +416,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (!resp.ok) throw new Error('Erro ao salvar no banco');
 
                 // Encontrar a cor do docente selecionado
-                const docenteSelecionado = gradeData.docente.find(d => 
+                const docenteSelecionado = gradeData.value.docente.find(d =>
                     d.nome && d.nome.trim().toLowerCase() === selectDocente.value.trim().toLowerCase()
                 );
                 const corDocente = docenteSelecionado?.cor || '#ffffff';
@@ -437,7 +443,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         };
         // Botão cancelar
-        modal.querySelector('#fechar-modal').onclick = function() {
+        modal.querySelector('#fechar-modal').onclick = function () {
             modal.style.display = 'none';
         };
     }
@@ -529,7 +535,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const turnoSelecionado = turnoSelect.value.toLowerCase();
 
             // Verificar se gradeData existe e tem os dados necessários
-            if (!gradeData || !gradeData.docente || !gradeData.periodos) {
+            if (!gradeData || !gradeData.value.docente || !gradeData.value.periodos) {
                 const docentesTable = document.querySelector('.docentes-table tbody');
                 if (docentesTable) {
                     docentesTable.innerHTML = '<tr><td>Nenhum dado disponível</td></tr>';
@@ -539,8 +545,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Filtrar docentes usando a função do fetchGrade.js
             const docentesFiltrados = filtrarDocentes(
-                gradeData.docente,
-                gradeData.periodos,
+                gradeData.value.docente,
+                gradeData.value.periodos,
                 cursoSelecionado,
                 nivelSelecionado,
                 turnoSelecionado
@@ -553,7 +559,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             docentesTable.innerHTML = '';
-            
+
             if (docentesFiltrados.length > 0) {
                 docentesFiltrados.forEach(docente => {
                     const corDocente = (docente.cor && docente.cor.toLowerCase() !== '#ffffff') ? docente.cor : '#ffffff';
@@ -595,13 +601,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // Usar apenas dias e horários únicos
-        const diasGrade = diasUnicos(gradeData.dias || []);
+        const diasGrade = diasUnicos(gradeData.value.dias || []);
         // Ordenar os dias na ordem correta da semana
         const ordemDias = ['segunda', 'terca', 'terça', 'quarta', 'quinta', 'sexta', 'sabado', 'sábado', 'domingo'];
         diasGrade.sort((a, b) => {
             return ordemDias.indexOf(a.nome.toLowerCase()) - ordemDias.indexOf(b.nome.toLowerCase());
         });
-        let horariosGrade = horariosUnicos(gradeData.horarios || []);
+        let horariosGrade = horariosUnicos(gradeData.value.horarios || []);
 
         // Filtrar horários conforme o turno selecionado
         horariosGrade = filtrarHorariosPorTurno(horariosGrade, turnoSelecionado);
@@ -610,17 +616,17 @@ document.addEventListener('DOMContentLoaded', function() {
         montarTabelaGrade(diasGrade, horariosGrade);
 
         // Filtrar períodos pelo curso, nível e turno selecionados
-        const periodosFiltrados = gradeData.periodos.filter(periodo => {
+        const periodosFiltrados = gradeData.value.periodos.filter(periodo => {
             // Garantir que os valores sejam strings e estejam no formato correto
             const siglaCurso = String(periodo.sigla_curso || '').toUpperCase().trim();
             const nivelSemestre = String(periodo.nivel_semestre || '').trim();
             const nomeTurno = String(periodo.nome_turno || '').toLowerCase().trim();
-            
+
             // Verificar cada condição separadamente para debug
             const cursoMatch = siglaCurso === cursoSelecionado;
             const nivelMatch = nivelSemestre === nivelSelecionado;
             const turnoMatch = nomeTurno === turnoSelecionado;
-            
+
             const match = cursoMatch && nivelMatch && turnoMatch;
 
             // Log detalhado apenas para períodos que têm pelo menos uma correspondência
@@ -639,7 +645,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     match
                 });
             }
-           
+
             return match;
         });
 
@@ -667,15 +673,15 @@ document.addEventListener('DOMContentLoaded', function() {
                         console.log('Período completo:', JSON.stringify(periodo, null, 2));
 
                         // Encontrar o docente para obter a cor (case-insensitive, trim)
-                        const docente = gradeData.docente.find(d => d.nome && periodo.nome_docente && d.nome.trim().toLowerCase() === periodo.nome_docente.trim().toLowerCase());
+                        const docente = gradeData.value.docente.find(d => d.nome && periodo.nome_docente && d.nome.trim().toLowerCase() === periodo.nome_docente.trim().toLowerCase());
                         const corDocente = docente?.cor || '#ffffff';
 
                         // Encontrar o ID do dia baseado no nome
-                        const diaEncontrado = gradeData.dias.find(d => d.nome.toLowerCase() === periodo.nome_dia.toLowerCase());
+                        const diaEncontrado = gradeData.value.dias.find(d => d.nome.toLowerCase() === periodo.nome_dia.toLowerCase());
                         const diaId = diaEncontrado ? diaEncontrado.id : null;
 
                         // Encontrar o ID do horário baseado no início e fim
-                        const horarioEncontrado = gradeData.horarios.find(h => {
+                        const horarioEncontrado = gradeData.value.horarios.find(h => {
                             const hInicio = h.hr_inicio?.value || h.hr_inicio;
                             const hFim = h.hr_fim?.value || h.hr_fim;
                             const pInicio = periodo.hr_inicio?.value || periodo.hr_inicio;
@@ -748,7 +754,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         e.dataTransfer.setData('text/plain', '');
                         window.draggedCell = cell;
                         cell.classList.add('dragging');
-                        
+
                         // Adicionar cursor personalizado
                         document.body.style.cursor = 'grabbing';
                     };
@@ -853,15 +859,15 @@ document.addEventListener('DOMContentLoaded', function() {
                                     // Adicionar animação de swap
                                     origem.classList.add('swap-animation');
                                     destino.classList.add('swap-animation');
-                                    
+
                                     showSuccessToast('Troca realizada com sucesso!');
-                                    
+
                                     // Remover animação após 500ms
                                     setTimeout(async () => {
                                         origem.classList.remove('swap-animation');
                                         destino.classList.remove('swap-animation');
                                         console.log('Buscando dados atualizados após troca...');
-                                        await buscarDadosGrade();
+                                        //await buscarDadosGrade();
                                         console.log('Dados atualizados:', gradeData);
                                     }, 500);
                                 } else {
@@ -879,7 +885,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             } catch (err) {
                                 // Remover toast de carregamento em caso de erro
                                 if (loadingToast) loadingToast.remove();
-                                
+
                                 console.error('Erro completo:', err);
                                 showErrorToast('Erro de conexão ao trocar células!');
                             }
@@ -890,12 +896,35 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
 
+        //webSocket event
+        socket.on("grade_updated", (data) => {
+            
+            console.log("Evento grade_updated recebido!", data, data.card1.id, data.card2.id);
+            
+            setTimeout(() => {
+            // Seleciona os elementos azul e verde
+            const elemento1 = document.querySelector(`td[data-id-periodo="${data.card1.id}"]`)
+            const elemento2 = document.querySelector(`td[data-id-periodo="${data.card2.id}"]`);
+            console.log('testtt',elemento1)
+            console.log('testtt',elemento2)
+
+            // Clona os elementos
+            const clone1 = elemento1.cloneNode(true);
+            const clone2 = elemento2.cloneNode(true);
+
+            // Troca os elementos no DOM
+            elemento1.replaceWith(clone2);
+            elemento2.replaceWith(clone1);
+            }, 100); 
+        });
+
         // Atualizar a lista de docentes
         atualizarListaDocentes();
 
         // Salvar o estado após preencher a grade
         salvarEstadoGrade();
     }
+
 
     // Função para exportar grade para CSV
     async function exportarParaCSV() {
@@ -905,8 +934,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const turnoSelecionado = document.querySelector('.btn-secondary:nth-child(3)').value;
 
             // Filtrar os períodos
-            const periodosFiltrados = gradeData.periodos.filter(periodo => 
-                periodo.sigla_curso === cursoSelecionado && 
+            const periodosFiltrados = gradeData.value.periodos.filter(periodo =>
+                periodo.sigla_curso === cursoSelecionado &&
                 periodo.nivel_semestre === nivelSelecionado &&
                 periodo.nome_turno.toLowerCase() === turnoSelecionado
             );
@@ -923,11 +952,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             const url = URL.createObjectURL(blob);
-            
+
             link.setAttribute('href', url);
             link.setAttribute('download', `grade_${cursoSelecionado}_${nivelSelecionado}_${turnoSelecionado}.csv`);
             link.style.visibility = 'hidden';
-            
+
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -1049,7 +1078,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Preencher a tabela de horários
     const tbody = document.querySelector('.grade-table tbody');
-    gradeData.horarios.forEach((horario, index) => {
+    gradeData.value.horarios.forEach((horario, index) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>${horario.hr_inicio} às ${horario.hr_fim}</td>
