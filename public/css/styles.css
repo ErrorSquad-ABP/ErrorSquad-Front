@@ -615,6 +615,7 @@ ul {
 
 .breadcrumb-item a {
     color: var(--primary);
+    cursor: pointer;
 }
 
 .breadcrumb-item.active {
@@ -1944,6 +1945,8 @@ h1 {
     font-weight: 500;
     color: var(--text);
 }
+
+
 
 
 .text-danger {
