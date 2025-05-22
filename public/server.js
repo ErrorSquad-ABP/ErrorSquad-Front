@@ -9,5 +9,5 @@ app.use(express.static('public'));
 app.use('/', routes);
 
 app.listen(PORT || 3000, () => {
-  console.log('Servidor rodando');
+  console.log('Servidor rodando: http://localhost:3000/login');
 })
