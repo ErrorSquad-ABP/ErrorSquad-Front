@@ -117,13 +117,7 @@ async function loadFloorMap(floor) {
         
         // Adiciona eventos de clique para abrir o popup global
         mapContent.querySelectorAll('.sala, .biblioteca').forEach(el => {
-            const popup = el.querySelector('.pop-up');
-            if (popup) {
-                el.onclick = e => {
-                    e.stopPropagation();
-                    abrirPopupGlobal(popup);
-                };
-            }
+            el.addEventListener('click', (e) => {abrirModal('meu-modal')});
         });
         
     } catch (error) {
@@ -625,6 +619,48 @@ function fecharPopupGlobal() {
     const overlay = document.querySelector('.popup-overlay');
     if (overlay) overlay.classList.remove('ativo');
 }
+
+// Funções para controlar o modal
+function abrirModal(modalId) {
+    const modal = document.getElementById(modalId);
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden'; // Previne rolagem
+}
+
+function fecharModal(modalId) {
+    const modal = document.getElementById(modalId);
+    modal.classList.remove('show');
+    document.body.style.overflow = ''; // Restaura rolagem
+}
+
+// Configuração dos eventos
+document.addEventListener('DOMContentLoaded', function() {
+    // Fechar modal quando clicar no botão de fechar
+    document.querySelectorAll('.close-modal').forEach(button => {
+        button.addEventListener('click', function() {
+            const modal = this.closest('.modal');
+            fecharModal(modal.id);
+        });
+    });
+
+    // Fechar modal quando clicar fora dele
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                fecharModal(this.id);
+            }
+        });
+    });
+
+    // Fechar modal quando pressionar ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.modal.show').forEach(modal => {
+                fecharModal(modal.id);
+            });
+        }
+    });
+});
 
 // Remover o listener global de clique fora
 window._popupClickOutsideListenerAdded = false;
