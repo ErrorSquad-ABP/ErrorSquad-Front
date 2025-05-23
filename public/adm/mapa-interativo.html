@@ -11,11 +11,12 @@
     <link rel="stylesheet" href="../css/notifications.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="public/adm/js/mapa-interativo"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 </head>
-    <script src="public/adm/js/mapa-interativo"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js">
-    </script>
 <body>
     <div class="container">
         <!-- Sidebar de navegação -->
@@ -175,7 +176,7 @@
                     <h2>MAPA INTERATIVO</h2>
                     <div class="mapa-actions">
                         <button class="btn-search"><i class="fas fa-search"></i></button>
-                        <button class="btn btn-primary">
+                        <button id="exportar-pdf" class="btn btn-primary">
                             <i class="fas fa-file-export"></i>
                             Exportar PDF
                         </button>
@@ -188,12 +189,9 @@
                         </div>
                     </div>
                 </div>
-                
-                <div class="mapa-content">
+                 <div class="mapa-content">
                     <!--Limitar width dessa div-->
-                    <div class="map-content" id="map-content">
-
-                    </div>
+                    <div class="map-content" id="map-content"></div>
                 </div>
             </div>
         </main>
