@@ -317,7 +317,6 @@ document.addEventListener("DOMContentLoaded", function() {
             console.log('Resultado da criação:', result);
             
             if (result) {
-                await carregarDados();
                 fecharModalAdicionarDisciplina();
                 showToast('Disciplina adicionada com sucesso!', 'success');
                 limparFormularioDisciplina();
