@@ -24,49 +24,49 @@
             </div>
             
             <div class="sidebar-item">
-                <a data-protected-link data-page="/home">
+                <a data-protected-link data-page="/home" href="/home" class="sidebar-link">
                     <i class="fas fa-home"></i>
                     <span>Início</span>
                 </a>
             </div>
 
             <div class="sidebar-item">
-                <a data-protected-link data-page="/docentes">
+                <a data-protected-link data-page="/docentes" class="sidebar-link">
                     <i class="fas fa-chalkboard-teacher"></i>
                     <span>Docentes</span>
                 </a>
             </div>
 
             <div class="sidebar-item">
-                <a data-protected-link data-page="/grade">
+                <a data-protected-link data-page="/grade" class="sidebar-link">
                     <i class="fas fa-book"></i>
                     <span>Grade de Horários</span>
                 </a>
             </div>
 
             <div class="sidebar-item">
-                <a data-protected-link data-page="/mapa-interativo">
+                <a data-protected-link data-page="/mapa-interativo" class="sidebar-link">
                     <i class="fas fa-door-open"></i>
                     <span>Mapa Interativo</span>
                 </a>
             </div>
 
             <div class="sidebar-item">
-                <a data-protected-link data-page="/semestres">
+                <a data-protected-link data-page="/semestres" class="sidebar-link">
                     <i class="fas fa-calendar-alt"></i>
                     <span>Semestres</span>
                 </a>
             </div>
 
             <div class="sidebar-item">
-                <a data-protected-link data-page="/disciplinas">
+                <a data-protected-link data-page="/disciplinas" class="sidebar-link">
                     <i class="fas fa-laptop-code"></i>
                     <span>Disciplinas</span>
                 </a>
             </div>
 
             <div class="sidebar-item">
-                <a data-protected-link data-page="/cursos">
+                <a data-protected-link data-page="/cursos" class="sidebar-link">
                     <i class="fas fa-graduation-cap"></i>
                     <span>Cursos</span>
                 </a>
@@ -175,7 +175,19 @@
         </main>
     </div>
 
-    <script src="../js/admin.js"></script>
-    <script src="../js/navigation.js"></script>
+    <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script type="module" src="../js/script.js"></script>
+        <script src="../js/admin.js" type="module"></script>
+        <script src="../js/notifications.js"></script>
+        <!-- Proteção de rota -->
+        <script src="../js/auth-guard.js"></script>
+        <script src="../js/navigation.js"></script>
+        <script>
+    document.querySelectorAll('a[data-protected-link]').forEach(link => {
+        const page = link.getAttribute('data-page');
+        link.href = `/public/adm/${page}`;
+    });
+    </script>
 </body>
 </html> 

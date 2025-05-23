@@ -288,6 +288,8 @@ document.addEventListener("DOMContentLoaded", function() {
     };
 
     // Eventos dos modais
+    document.querySelector('#modal-adicionar-disciplina .close-modal')?.addEventListener('click', fecharModalAdicionarDisciplina);
+    document.getElementById('cancelar-adicionar')?.addEventListener('click', fecharModalAdicionarDisciplina);
     document.querySelector('#modal-editar-disciplina .close-modal').addEventListener('click', fecharModalEditarDisciplina);
     document.getElementById('cancelar-editar').addEventListener('click', fecharModalEditarDisciplina);
     document.querySelector('#modal-confirmar-delecao .close-modal').addEventListener('click', fecharModalConfirmarDelecao);
@@ -315,12 +317,9 @@ document.addEventListener("DOMContentLoaded", function() {
             console.log('Resultado da criação:', result);
             
             if (result) {
-                showToast('Disciplina adicionada com sucesso!', 'success');
                 fecharModalAdicionarDisciplina();
-                // Aguardar um momento antes de recarregar para garantir que o backend processou
-                setTimeout(() => {
-                    carregarDisciplinas();
-                }, 1000);
+                showToast('Disciplina adicionada com sucesso!', 'success');
+                limparFormularioDisciplina();
             }
         } catch (error) {
             console.error('Erro ao salvar disciplina:', error);
@@ -386,7 +385,7 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('cancelar-delecao').addEventListener('click', fecharModalConfirmarDelecao);
 
     // Event listener para o botão de adicionar
-    document.getElementById('add-disciplina').addEventListener('click', abrirModalAdicionarDisciplina);
+    document.getElementById('add-disciplina')?.addEventListener('click', abrirModalAdicionarDisciplina);
 
     // Event Listeners
     searchInput.addEventListener("input", (e) => {

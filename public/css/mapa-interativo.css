@@ -17,7 +17,7 @@
 .mapa-content {
     display: flex;
     justify-content: center;
-    align-items : center;
+    align-items: center;
 }
 
 /* Mapa interativo em si */
@@ -36,10 +36,10 @@
     grid-template-rows: repeat(10, 1fr); /* Altura das linhas */
     margin: 0;
     padding: 4px;
-  }
+}
 
-  /* Estilo das salas */
-  .sala {
+/* Estilo das salas */
+.sala {
     background-color: #f8f9fa;
     padding: 10px;
     margin: 0 2px;
@@ -53,96 +53,91 @@
     overflow: hidden;     /* esconde o conteúdo que ultrapassa */
     min-width: 0;
     min-height: 0;
-  }
+}
 
-  .sala:hover {
+.sala:hover {
     transform: scale(1.02);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
+}
 
-  .sala-comum {
+.sala-comum {
     grid-column: span 2; /* Ocupa 2 colunas */
     grid-row: span 4; /* Ocupa 4 linhas */
-  }
+}
 
-  .sala-grande {
+.sala-grande {
     grid-column: span 3; /* Ocupa 3 colunas */
     grid-row: span 4; /* Ocupa 4 linhas */
-  }
+}
 
-
-  /* Estilo do conteúdo das salas */
-  .sala .nome-sala {
+/* Estilo do conteúdo das salas */
+.sala .nome-sala {
     font-size: 1.2rem;
     font-weight: 600;
     text-align: center;
     color: #333;
     align-self: center;
-
     box-sizing: border-box;
-  }
+}
 
-  .sala .conteudo-sala {
+.sala .conteudo-sala {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-
     flex: 1;
-
     max-width: 100%;
     box-sizing: border-box;
-  }
+}
 
-  .sala .numero-sala {
+.sala .numero-sala {
     color: #555;
     margin-top: 5px;
-  }
+}
 
-    /* Estilo das bibliotecas */
-    .biblioteca {
-        background-color: #f8f9fa;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-size: 1.2rem;
-        font-weight: 600;
-        text-align: center;
-        color: #333;
-  
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-      }
-  
-      .biblioteca-parte-1 {
-        grid-column: span 3;
-        grid-row: span 2;
-        border-radius: 4px 4px 0 0;
-        margin-top: 2px;
-      }
-  
-      .biblioteca-parte-2 {
-        grid-column: span 3;
-        grid-row: span 4;
-        border-radius: 4px 0 0 4px;
-      }
-  
-      .biblioteca-parte-3 {
-        grid-column: span 3;
-        grid-row: span 4;
-        border-radius: 0 0 4px 0;
-      }
-  
-      .biblioteca:hover {
-        transform: scale(1.02);
-      }
-  
-      .grid-container:has(.biblioteca:hover) .biblioteca {
-        transform: scale(1.02); 
-      }
+/* Estilo das bibliotecas */
+.biblioteca {
+    background-color: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-align: center;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
 
-      .btn-search {
+.biblioteca-parte-1 {
+    grid-column: span 3;
+    grid-row: span 2;
+    border-radius: 4px 4px 0 0;
+    margin-top: 2px;
+}
+
+.biblioteca-parte-2 {
+    grid-column: span 3;
+    grid-row: span 4;
+    border-radius: 4px 0 0 4px;
+}
+
+.biblioteca-parte-3 {
+    grid-column: span 3;
+    grid-row: span 4;
+    border-radius: 0 0 4px 0;
+}
+
+.biblioteca:hover {
+    transform: scale(1.02);
+}
+
+.grid-container:has(.biblioteca:hover) .biblioteca {
+    transform: scale(1.02); 
+}
+
+.btn-search {
     padding: 10px 15px;
     background-color: var(--primary);
     color: white;
@@ -151,58 +146,58 @@
     cursor: pointer;
 }
 
-  
-      /* Estilo de preenchimento */
-      .preenchimento {
-        background-color: var(--conteiner-background-color);
-      }
-  
-      #vazio-superior {
-        grid-column: span 3;
-        grid-row: span 4;
-      }
-  
-      #vazio-inferior {
-        grid-column: span 2;
-        grid-row: span 4;
-      }
+/* Estilo de preenchimento */
+.preenchimento {
+    background-color: var(--conteiner-background-color);
+}
 
-      #vazio-inferior-terreo {
-        grid-column: span 3;
-        grid-row: span 4;
-      }
-  
-      #vazio-meio {
-        grid-column: span 15;
-        grid-row: span 2;
-      }
+#vazio-superior {
+    grid-column: span 3;
+    grid-row: span 4;
+}
 
-      #vazio-meio-andar-2 {
-        grid-column: span 18;
-        grid-row: span 2;
-      }
-  
-      /* Estilo das escadas */
-      .escada {
-        grid-column: span 1;
-        grid-row: span 4;
-      }
-  
-      /* Estilo dos banheiros */
-      .banheiro {
-        grid-column: span 2;
-        grid-row: span 4;
-        background-color: #f8f9fa;
-        padding: 10px;
-        margin: 0 2px;
-        border-radius: 4px;
-        font-size: 1.2rem;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #333;
-      }
+#vazio-inferior {
+    grid-column: span 2;
+    grid-row: span 4;
+}
+
+#vazio-inferior-terreo {
+    grid-column: span 3;
+    grid-row: span 4;
+}
+
+#vazio-meio {
+    grid-column: span 15;
+    grid-row: span 2;
+}
+
+#vazio-meio-andar-2 {
+    grid-column: span 18;
+    grid-row: span 2;
+}
+
+/* Estilo das escadas */
+.escada {
+    grid-column: span 1;
+    grid-row: span 4;
+}
+
+/* Estilo dos banheiros */
+.banheiro {
+    grid-column: span 2;
+    grid-row: span 4;
+    background-color: #f8f9fa;
+    padding: 10px;
+    margin: 0 2px;
+    border-radius: 4px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+}
+
 /*Estilos pagina*/
 .mapa-header {
     display: flex;
@@ -295,9 +290,9 @@
 
 .mapa-content {
     position: relative;
-    width: 100%; /* Ajuste a largura conforme necessário */
+    width: 100%;
     flex: 1;
-    min-height: 500px; /* Altura mínima para o mapa */
+    min-height: 500px;
 }
 
 /* Status badges */
@@ -551,7 +546,7 @@
 
 .btn-export-csv i {
     font-size: 16px;
-} 
+}
 
 .btn-search {
     padding: 10px 15px;
@@ -573,21 +568,14 @@
     position: absolute;
     height: 225px;
     width: var(--map-content-width);
-
     transform: translateY(-250px);
-
     z-index: 10000;
-
     background-color: brown;
-padding: 10px;
-
-border-radius: 4px;
-
-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-display: flex;
-flex-direction: column;
-
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
 }
 
 .pop-up-nome-sala {
@@ -612,7 +600,6 @@ flex-direction: column;
 .pop-up-geral-container {
     display: flex;
     flex-direction: row;
-
     flex: 1;
 }
 
@@ -622,7 +609,6 @@ flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 1em;
-
     height: 100%;
 }
 
@@ -631,7 +617,6 @@ flex-direction: column;
 }
 
 .pop-up-logo {
-    /* border-radius: 50%; */
     background-color: aqua;
     height: 100%;
     aspect-ratio: 1 / 1;
@@ -646,3 +631,53 @@ flex-direction: column;
     margin: 0 !important;
     padding: 0;
 }
+
+.text-danger {
+    color: var(--danger);
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+.adm-subitem.text-danger { 
+    color: #dc3545; 
+}
+
+.adm-subitem i { 
+    width: 20px; 
+    text-align: center; 
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    color: #f8f9fa;
+    background: none;
+    border: none;
+    text-decoration: none;
+    font-size: 1rem;
+    width: 100%;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.sidebar-link:hover,
+.sidebar-link.active {
+    color: #fff;
+    background: rgba(255,255,255,0.08);
+}
+
+.sidebar-link i {
+    width: 20px;
+    text-align: center;
+}
+
+.sidebar-link.text-danger {
+    color: #ffb3b3;
+}
+
+.sidebar-link.text-danger:hover {
+    color: #fff;
+    background: rgba(255,0,0,0.08);
+} 

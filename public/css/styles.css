@@ -615,6 +615,7 @@ ul {
 
 .breadcrumb-item a {
     color: var(--primary);
+    cursor: pointer;
 }
 
 .breadcrumb-item.active {
@@ -1945,6 +1946,50 @@ h1 {
     color: var(--text);
 }
 
+
+
+
+.text-danger {
+    color: var(--danger);
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+.adm-subitem.text-danger { color: #dc3545; }
+.adm-subitem i { width: 20px; text-align: center; }
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    color: #f8f9fa;
+    background: none;
+    border: none;
+    text-decoration: none;
+    font-size: 1rem;
+    width: 100%;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.sidebar-link:hover,
+.sidebar-link.active#adm-link {
+    color: #fff;
+    background: rgba(255,255,255,0.08);
+}
+.sidebar-link i {
+    width: 20px;
+    text-align: center;
+}
+.sidebar-link.text-danger {
+    color: #ffb3b3;
+}
+.sidebar-link.text-danger:hover {
+    color: #fff;
+    background: rgba(255,0,0,0.08);
+} 
+
 /* Estilos para a página de Admin */
 .profile-section {
     background: var(--white);
@@ -2084,4 +2129,3 @@ h1 {
         grid-template-columns: 1fr;
     }
 }
-

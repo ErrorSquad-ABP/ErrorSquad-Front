@@ -437,3 +437,37 @@
     font-weight: 500;
     color: var(--text);
 }
+
+.adm-subitem.text-danger { color: #dc3545; }
+.adm-subitem i { width: 20px; text-align: center; }
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    color: #f8f9fa;
+    background: none;
+    border: none;
+    text-decoration: none;
+    font-size: 1rem;
+    width: 100%;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+.sidebar-link:hover,
+.sidebar-link.active {
+    color: #fff;
+    background: rgba(255,255,255,0.08);
+}
+.sidebar-link i {
+    width: 20px;
+    text-align: center;
+}
+.sidebar-link.text-danger {
+    color: #ffb3b3;
+}
+.sidebar-link.text-danger:hover {
+    color: #fff;
+    background: rgba(255,0,0,0.08);
+} 
