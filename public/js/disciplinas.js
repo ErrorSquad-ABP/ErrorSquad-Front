@@ -320,6 +320,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 fecharModalAdicionarDisciplina();
                 showToast('Disciplina adicionada com sucesso!', 'success');
                 limparFormularioDisciplina();
+                carregarDisciplinas();
             }
         } catch (error) {
             console.error('Erro ao salvar disciplina:', error);
