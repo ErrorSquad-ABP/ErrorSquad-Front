@@ -1972,8 +1972,9 @@ h1 {
     cursor: pointer;
     transition: background 0.2s, color 0.2s;
 }
+
 .sidebar-link:hover,
-.sidebar-link.active {
+.sidebar-link.active#adm-link {
     color: #fff;
     background: rgba(255,255,255,0.08);
 }
