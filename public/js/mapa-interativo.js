@@ -5,7 +5,6 @@ let roomsData = {};
 let searchTimeout = null;
 let popupGlobalContainer = null;
 
-
 function setupEventListeners() {
     // Seletor de andar
     const floorSelector = document.getElementById('floor-selector');
@@ -114,7 +113,7 @@ async function loadFloorMap(floor) {
                 const roomId = el.getAttribute('data-room-id');
                 if (roomId) {
                     const roomDetails = getRoomDetails(roomId);
-                    abrirModal('meu-modal', roomDetails);
+                    abrirModal('modal', roomDetails);
                 }
             });
         });
@@ -164,19 +163,13 @@ function abrirModal(modalId, roomDetails) {
 
     // Preenche os dados da sala no modal
     if (roomDetails) {
-        const modalContent = modal.querySelector('.modal-content');
-        if (modalContent) {
-            modalContent.innerHTML = `
-                <h2>${roomDetails.name}</h2>
-                <div class="room-details">
-                    <p><strong>Disciplina:</strong> ${roomDetails.disciplina}</p>
-                    <p><strong>Docente:</strong> ${roomDetails.docente}</p>
-                    <p><strong>Curso:</strong> ${roomDetails.curso}</p>
-                    <p><strong>Nível:</strong> ${roomDetails.nivel}</p>
-                    <p><strong>Status:</strong> <span class="status-badge status-${roomDetails.status.toLowerCase()}">${roomDetails.status}</span></p>
-                </div>
-            `;
-        }
+        modalAtualizarNumeroSala(roomDetails.numero || '');
+        modalAtualizarNome(roomDetails.name || '');
+        modalAtualizarCurso(roomDetails.curso || '');
+        modalAtualizarProfessor(roomDetails.docente || '');
+        modalAtualizarDisciplina(roomDetails.disciplina || '');
+        modalAtualizarHorario(roomDetails.horario || '');
+        modalAtualizarPericu(roomDetails.periculosidade || '');
     }
 
     modal.classList.add('show');
@@ -191,45 +184,55 @@ function fecharModal(modalId) {
     document.body.style.overflow = ''; // Restaura rolagem
 }
 
-// Configuração dos eventos do modal
-document.addEventListener('DOMContentLoaded', function() {
-    // Fechar modal quando clicar no botão de fechar
-    document.querySelectorAll('.close-modal').forEach(button => {
-        button.addEventListener('click', function() {
-            const modal = this.closest('.modal');
-            fecharModal(modal.id);
-        });
-    });
+// Modal atualizar infos
+function modalAtualizarNumeroSala(numero) {
+    const modal = document.querySelector('#modal');
+    const numeroSala = modal.querySelector('.modal-numero-sala');
+    numeroSala.textContent = numero;
+}
 
-    // Fechar modal quando clicar fora dele
-    document.querySelectorAll('.modal').forEach(modal => {
-        modal.addEventListener('click', function(e) {
-            if (e.target === this) {
-                fecharModal(this.id);
-            }
-        });
-    });
+function modalAtualizarNome(nome) {
+    const modal = document.querySelector('#modal');
+    const item = modal.querySelector('.modal-nome-sala');
+    item.textContent = nome;
+}
 
-    // Fechar modal quando pressionar ESC
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            document.querySelectorAll('.modal.show').forEach(modal => {
-                fecharModal(modal.id);
-            });
-        }
-    });
-});
+function modalAtualizarCurso(curso) {
+    const modal = document.querySelector('#modal');
+    const item = modal.querySelector('.modal-curso');
+    item.textContent = curso;
+}
 
+function modalAtualizarProfessor(professor) {
+    const modal = document.querySelector('#modal');
+    const item = modal.querySelector('.modal-professor');
+    item.textContent = professor;
+}
 
+function modalAtualizarDisciplina(disciplina) {
+    const modal = document.querySelector('#modal');
+    const item = modal.querySelector('.modal-disciplina');
+    item.textContent = disciplina;
+}
+
+function modalAtualizarHorario(horario) {
+    const modal = document.querySelector('#modal');
+    const item = modal.querySelector('.modal-horario');
+    item.textContent = horario;
+}
+
+function modalAtualizarPericu(pericu) {
+    const modal = document.querySelector('#modal');
+    const item = modal.querySelector('.modal-periculosidade');
+    item.textContent = pericu;
+}
 
 // Exporta o PDF do andar atual em PAISAGEM, com cores fiéis
 function setupPdfExport() {
-    console.log('teste');
     const btn = document.getElementById('exportar-pdf');
-    if (!btn) {return console.log('teste');}
+    if (!btn) return;
   
     btn.addEventListener('click', async () => {
-            console.log("cliquei no botao")
         const elemento = document.getElementById('map-content');
         if (!elemento) return alert('Mapa não encontrado!');
     
@@ -271,8 +274,51 @@ function setupPdfExport() {
     });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+// Configuração dos eventos do modal
+document.addEventListener('DOMContentLoaded', function() {
+    // Fechar modal quando clicar no botão de fechar
+    document.querySelectorAll('.close-modal').forEach(button => {
+        button.addEventListener('click', function() {
+            const modal = this.closest('.modal');
+            fecharModal(modal.id);
+        });
+    });
+
+    document.querySelectorAll('#modal-cancelar').forEach(button => {
+        button.addEventListener('click', function() {
+            const modal = this.closest('.modal');
+            fecharModal(modal.id);
+        });
+    });
+
+    //BOTÃO DE CONFIRMAR LÓGICA AQUI
+    document.querySelectorAll('#modal-confirmar').forEach(button => {
+        button.addEventListener('click', function() {
+            const modal = this.closest('.modal');
+            // Aqui você pode adicionar a lógica para confirmar a ação
+        });
+    });
+
+    // Fechar modal quando clicar fora dele
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                fecharModal(this.id);
+            }
+        });
+    });
+
+    // Fechar modal quando pressionar ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.modal.show').forEach(modal => {
+                fecharModal(modal.id);
+            });
+        }
+    });
+
+    // Inicialização
     loadFloorMap(0);
     setupEventListeners();
     setupPdfExport();
-});
+}); 

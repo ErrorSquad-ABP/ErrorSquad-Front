@@ -200,9 +200,10 @@
 
 /*Estilos pagina*/
 .mapa-header {
+    position: relative;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    flex-direction: row;
     margin-bottom: 20px;
 }
 
@@ -671,12 +672,32 @@
     padding: 1.5rem;
     border-bottom: 1px solid #eee;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+
 }
 
 .modal-body {
+    position: relative;
     padding: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.modal-disciplina {
+    margin-bottom: 16px;
+}
+
+.modal-periculosidade {
+    background-color: #dc3545;
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 0.2em;
+    right: 1.5em;
 }
 
 .modal-footer {
@@ -685,9 +706,13 @@
     display: flex;
     justify-content: flex-end;
     gap: 1rem;
+
 }
 
 .close-modal {
+    position: absolute;
+    top: 0.1em;
+    right: 0.7em;
     background: none;
     border: none;
     font-size: 1.5rem;
@@ -701,6 +726,20 @@
 .close-modal:hover {
     color: #333;
 }
+
+.modal-numero-sala {
+    position: absolute;
+    transform: translateY(-1.3em);
+}
+
+.modal-curso {
+    position: absolute;
+    transform: translateY(2.4em);
+    background-color: white;
+    padding: 5px;
+}
+
+/*FIM MODAL*/
 
 .text-danger {
     color: var(--danger);
