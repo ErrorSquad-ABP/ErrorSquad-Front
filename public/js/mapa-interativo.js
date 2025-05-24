@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
     initializeSearch();
     criarOverlayPopup();
+    setupPdfExport();
 });
 
 function setupEventListeners() {
@@ -115,9 +116,19 @@ async function loadFloorMap(floor) {
             p.style.display = 'none';
         });
         
-        // Adiciona eventos de clique para abrir o popup global
+        // Adiciona eventos de clique para abrir o modal
         mapContent.querySelectorAll('.sala, .biblioteca').forEach(el => {
+<<<<<<< HEAD
             el.addEventListener('click', (e) => {abrirModal('modal')});
+=======
+            el.addEventListener('click', (e) => {
+                const roomId = el.getAttribute('data-room-id');
+                if (roomId) {
+                    const roomDetails = getRoomDetails(roomId);
+                    abrirModal('meu-modal', roomDetails);
+                }
+            });
+>>>>>>> cd18356aefeb5493a9e62f72bf903c42341879ea
         });
         
     } catch (error) {
@@ -145,347 +156,7 @@ function selectRoomOnMap(roomElement) {
 // Dados Mock para Teste
 function getRoomDetails(roomId) {
     const mockData = {
-        // Térreo (andar-0.html)
-        'deposito': {
-            name: 'Depósito',
-            disciplina: '-',
-            docente: '-',
-            curso: '-',
-            nivel: '-',
-            status: 'Manutenção'
-        },
-        'copa-e-reunioes': {
-            name: 'Copa e Sala de Reuniões',
-            disciplina: '-',
-            docente: '-',
-            curso: '-',
-            nivel: '-',
-            status: 'Restrita'
-        },
-        'sec-administrativa': {
-            name: 'Secretaria Admin',
-            disciplina: '-',
-            docente: '-',
-            curso: '-',
-            nivel: '-',
-            status: 'Restrita'
-        },
-        'sec-academica': {
-            name: 'Secretaria Acadêmica',
-            disciplina: '-',
-            docente: '-',
-            curso: '-',
-            nivel: '-',
-            status: 'Restrita'
-        },
-        'admin': {
-            name: 'Salas Administrativas',
-            disciplina: '-',
-            docente: '-',
-            curso: '-',
-            nivel: '-',
-            status: 'Restrita'
-        },
-        'sala-02': {
-            name: 'Laboratório de Desenho e Topografia',
-            disciplina: 'Topografia',
-            docente: 'Prof. João Silva',
-            curso: 'Engenharia Civil',
-            nivel: 'Superior',
-            status: 'Disponível'
-        },
-        'sala-04': {
-            name: 'Laboratório de Química Ambiental',
-            disciplina: 'Química Ambiental',
-            docente: 'Profa. Ana Souza',
-            curso: 'Engenharia Ambiental',
-            nivel: 'Superior',
-            status: 'Disponível'
-        },
-        'sala-01': {
-            name: 'Laboratório de Análises Ambientais',
-            disciplina: 'Análises Ambientais',
-            docente: 'Prof. Carlos Mendes',
-            curso: 'Engenharia Ambiental',
-            nivel: 'Superior',
-            status: 'Disponível'
-        },
-        'sala-03': {
-            name: 'Laboratório de Microbiologia Ambiental',
-            disciplina: 'Microbiologia',
-            docente: 'Profa. Maria Clara',
-            curso: 'Engenharia Ambiental',
-            nivel: 'Superior',
-            status: 'Disponível'
-        },
-        'lab-info-01': {
-            name: 'Laboratório de Informática 01',
-            disciplina: 'Desenvolvimento Web',
-            docente: 'Prof. João Silva',
-            curso: 'Desenvolvimento de Software Multiplataforma',
-            nivel: 'Superior Tecnológico',
-            status: 'Disponível'
-        },
-        'lab-info-02': {
-            name: 'Laboratório de Informática 02',
-            disciplina: 'Banco de Dados',
-            docente: 'Profa. Maria Santos',
-            curso: 'Desenvolvimento de Software Multiplataforma',
-            nivel: 'Superior Tecnológico',
-            status: 'Ocupada'
-        },
-        'lab-info-03': {
-            name: 'Laboratório de Informática 03',
-            disciplina: 'Programação Mobile',
-            docente: 'Prof. Carlos Oliveira',
-            curso: 'Desenvolvimento de Software Multiplataforma',
-            nivel: 'Superior Tecnológico',
-            status: 'Disponível'
-        },
-        'lab-info-04': {
-            name: 'Laboratório de Informática 04',
-            disciplina: 'Inteligência Artificial',
-            docente: 'Prof. Roberto Santos',
-            curso: 'Desenvolvimento de Software Multiplataforma',
-            nivel: 'Superior Tecnológico',
-            status: 'Ocupada'
-        },
-        'lab-info-05': {
-            name: 'Laboratório de Informática 05',
-            disciplina: 'Redes de Computadores',
-            docente: 'Profa. Ana Lima',
-            curso: 'Desenvolvimento de Software Multiplataforma',
-            nivel: 'Superior Tecnológico',
-            status: 'Disponível'
-        },
-        'lab-info-06': {
-            name: 'Laboratório de Informática 06',
-            disciplina: 'Segurança da Informação',
-            docente: 'Prof. Pedro Costa',
-            curso: 'Desenvolvimento de Software Multiplataforma',
-            nivel: 'Superior Tecnológico',
-            status: 'Manutenção'
-        },
-        'biblioteca': {
-            name: 'Biblioteca',
-            disciplina: 'Área de Estudos',
-            docente: '-',
-            curso: '-',
-            nivel: '-',
-            status: 'Disponível'
-        },
-        'secretaria': {
-            name: 'Secretaria Acadêmica',
-            disciplina: '-',
-            docente: '-',
-            curso: '-',
-            nivel: '-',
-            status: '-'
-        },
-        'coordenacao': {
-            name: 'Coordenação',
-            disciplina: '-',
-            docente: '-',
-            curso: '-',
-            nivel: '-',
-            status: '-'
-        },
-
-        // Primeiro Andar (andar-1.svg)
-        'sala-101': {
-            name: 'Sala de Aula',
-            disciplina: 'Cálculo',
-            docente: 'Prof. Ricardo Alves',
-            curso: 'Desenvolvimento de Software Multiplataforma',
-            nivel: 'Superior Tecnológico',
-            status: 'Manutenção'
-        },
-        'sala-102': {
-            name: 'Sala de Aula',
-            disciplina: 'Inglês Técnico',
-            docente: 'Profa. Sarah Johnson',
-            curso: 'Desenvolvimento de Software Multiplataforma',
-            nivel: 'Superior Tecnológico',
-            status: 'Disponível'
-        },
-        'sala-103': {
-            name: 'Sala de Aula',
-            disciplina: 'Gestão de Projetos',
-            docente: 'Prof. Marcos Paulo',
-            curso: 'Desenvolvimento de Software Multiplataforma',
-            nivel: 'Superior Tecnológico',
-            status: 'Ocupada'
-        },
-        'sala-104': {
-            name: 'Sala de Aula',
-            disciplina: 'Gestão de Projetos',
-            docente: 'Prof. Marcos Paulo',
-            curso: 'Desenvolvimento de Software Multiplataforma',
-            nivel: 'Superior Tecnológico',
-            status: 'Ocupada'
-        },
-        'sala-105': {
-            name: 'Sala de Aula',
-            disciplina: 'Gestão de Projetos',
-            docente: 'Prof. Marcos Paulo',
-            curso: 'Desenvolvimento de Software Multiplataforma',
-            nivel: 'Superior Tecnológico',
-            status: 'Ocupada'
-        },
-        'sala-106': {
-            name: 'Sala de Aula',
-            disciplina: 'Gestão de Projetos',
-            docente: 'Prof. Marcos Paulo',
-            curso: 'Desenvolvimento de Software Multiplataforma',
-            nivel: 'Superior Tecnológico',
-            status: 'Ocupada'
-        },
-        'sala-107': {
-            name: 'Sala de Aula',
-            disciplina: 'Gestão de Projetos',
-            docente: 'Prof. Marcos Paulo',
-            curso: 'Desenvolvimento de Software Multiplataforma',
-            nivel: 'Superior Tecnológico',
-            status: 'Ocupada'
-        },
-        'sala-108': {
-            name: 'Sala de Aula',
-            disciplina: 'Gestão de Projetos',
-            docente: 'Prof. Marcos Paulo',
-            curso: 'Desenvolvimento de Software Multiplataforma',
-            nivel: 'Superior Tecnológico',
-            status: 'Ocupada'
-        },
-        'sala-110': {
-            name: 'Sala Maker',
-            disciplina: 'Gestão de Projetos',
-            docente: 'Prof. Marcos Paulo',
-            curso: 'Desenvolvimento de Software Multiplataforma',
-            nivel: 'Superior Tecnológico',
-            status: 'Ocupada'
-        },
-        'lab-hardware': {
-            name: 'Laboratório de Hardware',
-            disciplina: 'Arquitetura de Computadores',
-            docente: 'Prof. Fernando Silva',
-            curso: 'Desenvolvimento de Software Multiplataforma',
-            nivel: 'Superior Tecnológico',
-            status: 'Disponível'
-        },
-        'lab-redes': {
-            name: 'Laboratório de Redes',
-            disciplina: 'Infraestrutura e Redes',
-            docente: 'Profa. Carla Santos',
-            curso: 'Desenvolvimento de Software Multiplataforma',
-            nivel: 'Superior Tecnológico',
-            status: 'Ocupada'
-        },
-        'sala-professores': {
-            name: 'Sala dos Professores',
-            disciplina: 'Área dos Docentes',
-            docente: '-',
-            curso: '-',
-            nivel: 'Docentes',
-            status: 'Disponível'
-        },
-
-        // Segundo Andar (andar-2.svg)
-        'sala-201': {
-            name: 'Sala de Áudio e Vídeo',
-            disciplina: 'Engenharia de Software',
-            docente: 'Prof. Lucas Mendes',
-            curso: 'Desenvolvimento de Software Multiplataforma',
-            nivel: 'Superior Tecnológico',
-            status: 'Ocupada'
-        },
-        'sala-202': {
-            name: 'Sala de Aula',
-            disciplina: 'Matemática Discreta',
-            docente: 'Profa. Patricia Lima',
-            curso: 'Desenvolvimento de Software Multiplataforma',
-            nivel: 'Superior Tecnológico',
-            status: 'Disponível'
-        },
-        'sala-203': {
-            name: 'Laboratório Univesp',
-            disciplina: 'Sistemas Operacionais',
-            docente: 'Prof. Gabriel Costa',
-            curso: 'Desenvolvimento de Software Multiplataforma',
-            nivel: 'Superior Tecnológico',
-            status: 'Ocupada'
-        },
-        'sala-204': {
-            name: 'Sala de Aula',
-            disciplina: 'Sistemas Operacionais',
-            docente: 'Prof. Gabriel Costa',
-            curso: 'Desenvolvimento de Software Multiplataforma',
-            nivel: 'Superior Tecnológico',
-            status: 'Ocupada'
-        },
-        'sala-205': {
-            name: 'Laboratório de Informática',
-            disciplina: 'Sistemas Operacionais',
-            docente: 'Prof. Gabriel Costa',
-            curso: 'Desenvolvimento de Software Multiplataforma',
-            nivel: 'Superior Tecnológico',
-            status: 'Ocupada'
-        },
-        'sala-206': {
-            name: 'Sala de Aula',
-            disciplina: 'Sistemas Operacionais',
-            docente: 'Prof. Gabriel Costa',
-            curso: 'Desenvolvimento de Software Multiplataforma',
-            nivel: 'Superior Tecnológico',
-            status: 'Ocupada'
-        },
-        'sala-207': {
-            name: 'Laboratório de Informática',
-            disciplina: 'Sistemas Operacionais',
-            docente: 'Prof. Gabriel Costa',
-            curso: 'Desenvolvimento de Software Multiplataforma',
-            nivel: 'Superior Tecnológico',
-            status: 'Ocupada'
-        },
-        'sala-208': {
-            name: 'Laboratório de Biologia',
-            disciplina: 'Sistemas Operacionais',
-            docente: 'Prof. Gabriel Costa',
-            curso: 'Desenvolvimento de Software Multiplataforma',
-            nivel: 'Superior Tecnológico',
-            status: 'Ocupada'
-        },
-        'sala-209': {
-            name: 'Laboratório de Informática',
-            disciplina: 'Sistemas Operacionais',
-            docente: 'Prof. Gabriel Costa',
-            curso: 'Desenvolvimento de Software Multiplataforma',
-            nivel: 'Superior Tecnológico',
-            status: 'Ocupada'
-        },
-        'sala-210': {
-            name: 'Sala de Áudio e Vídeo',
-            disciplina: 'Sistemas Operacionais',
-            docente: 'Prof. Gabriel Costa',
-            curso: 'Desenvolvimento de Software Multiplataforma',
-            nivel: 'Superior Tecnológico',
-            status: 'Ocupada'
-        },
-        'auditorio': {
-            name: 'Auditório',
-            disciplina: 'Eventos e Palestras',
-            docente: '-',
-            curso: '-',
-            nivel: '-',
-            status: 'Disponível'
-        },
-        'lab-inovacao': {
-            name: 'Laboratório de Inovação',
-            disciplina: 'Projetos Interdisciplinares',
-            docente: 'Prof. André Santos',
-            curso: 'Desenvolvimento de Software Multiplataforma',
-            nivel: 'Superior Tecnológico',
-            status: 'Disponível'
-        }
+        // ... (mantenha todo o objeto mockData existente)
     };
     
     return mockData[roomId] || {
@@ -498,142 +169,41 @@ function getRoomDetails(roomId) {
     };
 }
 
-// Configuração dos eventos
-function configurarEventos() {
-    const floorButton = document.getElementById('floorButton');
-    const floorDropdown = document.getElementById('floorDropdown');
-    
-    // Toggle do dropdown
-    floorButton.addEventListener('click', () => {
-        floorDropdown.classList.toggle('show');
-    });
-
-    // Fechar dropdown ao clicar fora
-    document.addEventListener('click', (e) => {
-        if (!floorButton.contains(e.target) && !floorDropdown.contains(e.target)) {
-            floorDropdown.classList.remove('show');
-        }
-    });
-
-    // Eventos dos itens do dropdown
-    document.querySelectorAll('.dropdown-item').forEach(item => {
-        item.addEventListener('click', (e) => {
-            const andar = e.target.dataset.floor;
-            const texto = e.target.textContent;
-            
-            // Atualiza o texto do botão
-            floorButton.innerHTML = `${texto}<i class="fas fa-chevron-down"></i>`;
-            
-            // Fecha o dropdown
-            floorDropdown.classList.remove('show');
-        });
-    });
-}
-
-// Atualiza a visualização de uma sala específica
-function updateRoomVisual(roomId) {
-    const room = document.querySelector(`[data-room-id="${roomId}"]`);
-    if (!room) return "Sala não encontrada";
-
-    const details = getRoomDetails(roomId);
-    console.log(roomId, details, room.querySelector(".status-badge"));
-    
-    // Remove classes antigas de status
-    room.querySelector(".status-badge").classList.remove('status-disponivel', 'status-ocupada', 'status-manutencao', 'status-reservada', 'status-restrita');
-    
-    // Formata status
-    const statusFormat = details.status.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    
-    // Adiciona nova classe de status
-    room.querySelector(".status-badge").classList.add(`status-${statusFormat}`);
-    room.querySelector(".status-badge").textContent = details.status;
-
-    room.querySelector(".nome-sala").textContent = details.name;
-}
-
-// Atualiza a visualização de todas as salas
-function updateAllRoomsVisual() {
-    const rooms = document.querySelectorAll('.sala');
-    rooms.forEach(room => {
-        updateRoomVisual(room.dataset.roomId);
-    });
-}
-
-// Função auxiliar para obter informações da sala
-function obterInformacoesSala(salaId) {
-    // Aqui você implementará a lógica para buscar os dados da sala no backend
-    // Por enquanto, retornamos dados de exemplo
-    return {
-        id: salaId,
-        nome: 'Sala ' + salaId,
-        tipo: 'laboratorio',
-        capacidade: 30,
-        professor: 'Prof. Silva',
-        recursos: ['projetor', 'computadores'],
-        ocupada: false
-    };
-}
-
-function criarOverlayPopup() {
-    if (!document.querySelector('.popup-overlay')) {
-        const overlay = document.createElement('div');
-        overlay.className = 'popup-overlay';
-        document.body.appendChild(overlay);
-        // Não fecha ao clicar no overlay
-    }
-}
-
-function criarPopupGlobalContainer() {
-    if (!document.getElementById('popup-global')) {
-        popupGlobalContainer = document.createElement('div');
-        popupGlobalContainer.id = 'popup-global';
-        document.body.appendChild(popupGlobalContainer);
-    } else {
-        popupGlobalContainer = document.getElementById('popup-global');
-    }
-}
-
-function abrirPopupGlobal(popupOriginal) {
-    criarPopupGlobalContainer();
-    fecharPopupGlobal();
-    // Clona o conteúdo do popup da sala
-    const popupClone = popupOriginal.cloneNode(true);
-    popupClone.classList.add('centralizado');
-    popupClone.style.display = 'flex';
-    // Adiciona botão de fechar
-    if (!popupClone.querySelector('.btn-fechar-popup')) {
-        const btn = document.createElement('button');
-        btn.className = 'btn-fechar-popup';
-        btn.innerHTML = '&times;';
-        btn.onclick = fecharPopupGlobal;
-        popupClone.appendChild(btn);
-    }
-    popupGlobalContainer.innerHTML = '';
-    popupGlobalContainer.appendChild(popupClone);
-    document.querySelector('.popup-overlay').classList.add('ativo');
-}
-
-function fecharPopupGlobal() {
-    criarPopupGlobalContainer();
-    popupGlobalContainer.innerHTML = '';
-    const overlay = document.querySelector('.popup-overlay');
-    if (overlay) overlay.classList.remove('ativo');
-}
-
 // Funções para controlar o modal
-function abrirModal(modalId) {
+function abrirModal(modalId, roomDetails) {
     const modal = document.getElementById(modalId);
+    if (!modal) return;
+
+    // Preenche os dados da sala no modal
+    if (roomDetails) {
+        const modalContent = modal.querySelector('.modal-content');
+        if (modalContent) {
+            modalContent.innerHTML = `
+                <h2>${roomDetails.name}</h2>
+                <div class="room-details">
+                    <p><strong>Disciplina:</strong> ${roomDetails.disciplina}</p>
+                    <p><strong>Docente:</strong> ${roomDetails.docente}</p>
+                    <p><strong>Curso:</strong> ${roomDetails.curso}</p>
+                    <p><strong>Nível:</strong> ${roomDetails.nivel}</p>
+                    <p><strong>Status:</strong> <span class="status-badge status-${roomDetails.status.toLowerCase()}">${roomDetails.status}</span></p>
+                </div>
+            `;
+        }
+    }
+
     modal.classList.add('show');
     document.body.style.overflow = 'hidden'; // Previne rolagem
 }
 
 function fecharModal(modalId) {
     const modal = document.getElementById(modalId);
+    if (!modal) return;
+
     modal.classList.remove('show');
     document.body.style.overflow = ''; // Restaura rolagem
 }
 
-// Configuração dos eventos
+// Configuração dos eventos do modal
 document.addEventListener('DOMContentLoaded', function() {
     // Fechar modal quando clicar no botão de fechar
     document.querySelectorAll('.close-modal').forEach(button => {
@@ -677,6 +247,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+<<<<<<< HEAD
 // Modal atualizar infos
 
 function modalAtualizarNumeroSala(numero) {
@@ -736,3 +307,51 @@ function chamarAtualizacoesModal(){
 // Remover o listener global de clique fora
 window._popupClickOutsideListenerAdded = false;
 // (Se quiser garantir, pode remover o eventListener, mas como só adiciona se não existir, basta não usar mais) 
+=======
+// Exporta o PDF do andar atual em PAISAGEM, com cores fiéis
+function setupPdfExport() {
+    const btn = document.getElementById('exportar-pdf');
+    if (!btn) return;
+  
+    btn.addEventListener('click', async () => {
+        const elemento = document.getElementById('map-content');
+        if (!elemento) return alert('Mapa não encontrado!');
+    
+        // 1) Foto em canvas
+        const canvas = await html2canvas(elemento, {
+            scale: 2,
+            useCORS: true,
+            backgroundColor: null
+        });
+        const imgData = canvas.toDataURL('image/png');
+    
+        // 2) PDF em landscape
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'landscape' });
+    
+        // 3) Margens e área útil
+        const pageW = pdf.internal.pageSize.getWidth();
+        const pageH = pdf.internal.pageSize.getHeight();
+        const margin = 10;  // mm
+        const maxW = pageW - margin * 2;
+        const maxH = pageH - margin * 2;
+    
+        // 4) Escala proporcional
+        const scaleW = maxW  / canvas.width;
+        const scaleH = maxH  / canvas.height;
+        const scale  = Math.min(scaleW, scaleH);
+        const imgW   = canvas.width  * scale;
+        const imgH   = canvas.height * scale;
+    
+        // 5) Centraliza
+        const x = (pageW - imgW) / 2;
+        const y = (pageH - imgH) / 2;
+    
+        // 6) Insere sem esticar
+        pdf.addImage(imgData, 'PNG', x, y, imgW, imgH);
+    
+        // 7) Baixa
+        pdf.save(`mapa-andar-${currentFloor}.pdf`);
+    });
+}
+>>>>>>> cd18356aefeb5493a9e62f72bf903c42341879ea
