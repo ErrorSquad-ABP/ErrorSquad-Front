@@ -5,14 +5,6 @@ let roomsData = {};
 let searchTimeout = null;
 let popupGlobalContainer = null;
 
-// Carrega o mapa inicial quando a página carregar
-document.addEventListener('DOMContentLoaded', () => {
-    loadFloorMap(0);
-    setupEventListeners();
-    initializeSearch();
-    criarOverlayPopup();
-    setupPdfExport();
-});
 
 function setupEventListeners() {
     // Seletor de andar
@@ -228,12 +220,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+
+
 // Exporta o PDF do andar atual em PAISAGEM, com cores fiéis
 function setupPdfExport() {
+    console.log('teste');
     const btn = document.getElementById('exportar-pdf');
-    if (!btn) return;
+    if (!btn) {return console.log('teste');}
   
     btn.addEventListener('click', async () => {
+            console.log("cliquei no botao")
         const elemento = document.getElementById('map-content');
         if (!elemento) return alert('Mapa não encontrado!');
     
@@ -274,3 +270,9 @@ function setupPdfExport() {
         pdf.save(`mapa-andar-${currentFloor}.pdf`);
     });
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadFloorMap(0);
+    setupEventListeners();
+    setupPdfExport();
+});
