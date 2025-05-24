@@ -117,7 +117,7 @@ async function loadFloorMap(floor) {
         
         // Adiciona eventos de clique para abrir o popup global
         mapContent.querySelectorAll('.sala, .biblioteca').forEach(el => {
-            el.addEventListener('click', (e) => {abrirModal('meu-modal')});
+            el.addEventListener('click', (e) => {abrirModal('modal')});
         });
         
     } catch (error) {
@@ -643,6 +643,21 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    document.querySelectorAll('#modal-cancelar').forEach(button => {
+        button.addEventListener('click', function() {
+            const modal = this.closest('.modal');
+            fecharModal(modal.id);
+        });
+    });
+
+    //BOTÃO DE CONFIRMAR LÓGICA AQUI
+    document.querySelectorAll('#modal-confirmar').forEach(button => {
+        button.addEventListener('click', function() {
+            const modal = this.closest('.modal');
+            // Aqui você pode adicionar a lógica para confirmar a ação
+        });
+    });
+
     // Fechar modal quando clicar fora dele
     document.querySelectorAll('.modal').forEach(modal => {
         modal.addEventListener('click', function(e) {
@@ -661,6 +676,62 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+// Modal atualizar infos
+
+function modalAtualizarNumeroSala(numero) {
+    const modal =  document.querySelector('#modal');
+    const numeroSala = modal.querySelector('.modal-numero-sala');
+
+    numeroSala.textContent = numero;
+}
+
+function modalAtualizarNome(nome) {
+    const modal =  document.querySelector('#modal');
+    const item = modal.querySelector('.modal-nome-sala');
+
+    item.textContent = nome;
+}
+
+function modalAtualizarCurso(curso) {
+    const modal =  document.querySelector('#modal');
+    const item = modal.querySelector('.modal-curso');
+
+    item.textContent = curso;
+}
+
+function modalAtualizarProfessor(professor) {
+    const modal =  document.querySelector('#modal');
+    const item = modal.querySelector('.modal-professor');
+
+    item.textContent = professor;
+}
+
+function modalAtualizarDisciplina(disciplina) {
+    const modal =  document.querySelector('#modal');
+    const item = modal.querySelector('.modal-disciplina');
+
+    item.textContent = disciplina;
+}
+
+function modalAtualizarHorario(horario) {
+    const modal =  document.querySelector('#modal');
+    const item = modal.querySelector('.modal-horario');
+
+    item.textContent = horario;
+}
+
+function modalAtualizarPericu(pericu) {
+    const modal =  document.querySelector('#modal');
+    const item = modal.querySelector('.modal-periculosidade');
+
+    item.textContent = pericu;
+}
+
+function chamarAtualizacoesModal(){
+    //chamar todas as atualizações aqui
+}
+
 
 // Remover o listener global de clique fora
 window._popupClickOutsideListenerAdded = false;
