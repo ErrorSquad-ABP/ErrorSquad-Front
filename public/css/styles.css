@@ -1871,7 +1871,7 @@ h1 {
 }
 
 .sidebar-item button#logout-btn span {
-    margin-left: 0;
+    margin-left: 0.75rem;
 }
 
 .sidebar-item a#adm-link {
@@ -1903,7 +1903,7 @@ h1 {
 }
 
 .sidebar-item a#adm-link span {
-    margin-left: 0;
+    margin-left: 0.75rem;
 }
 
 /* Ajuste para quando a sidebar está colapsada */
