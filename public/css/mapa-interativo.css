@@ -12,12 +12,14 @@
     padding: 2rem;
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 
 .mapa-content {
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 100%;
 }
 
 /* Mapa interativo em si */
@@ -196,6 +198,10 @@
     justify-content: space-between;
     flex-direction: row;
     margin-bottom: 20px;
+    width: 100%;
+    max-width: var(--map-content-width);
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .mapa-header h2 {
@@ -208,7 +214,7 @@
     display: flex;
     gap: 10px;
     align-items: center;
-    margin-right: 60px;
+    margin-right: -30px;
 }
 
 .btn-export,
