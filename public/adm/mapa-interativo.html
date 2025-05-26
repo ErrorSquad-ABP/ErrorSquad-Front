@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="../css/styles.css" />
     <link rel="stylesheet" href="../css/mapa-interativo.css" />
     <link rel="stylesheet" href="../css/salas.css" />
-    <link rel="stylesheet" href="../css/profile-dropdown.css" />
     <link rel="stylesheet" href="../css/notifications.css" />
     <link
       rel="stylesheet"
@@ -127,61 +126,6 @@
               </div>
             </div>
 
-            <div class="user-profile" id="userProfile">
-              <div class="profile-trigger">
-                <div class="user-avatar">
-                  <i class="fas fa-user"></i>
-                </div>
-                <div class="user-info">
-                  <div class="user-name">Administrador</div>
-                  <div class="user-role">Gerente do Sistema</div>
-                </div>
-                <i class="fas fa-chevron-down"></i>
-              </div>
-
-              <div class="profile-dropdown">
-                <div class="dropdown-header">
-                  <div class="user-avatar-large">
-                    <i class="fas fa-user"></i>
-                  </div>
-                  <div class="user-info-large">
-                    <div class="user-name">Administrador</div>
-                    <div class="user-email">admin@fatec.sp.gov.br</div>
-                  </div>
-                </div>
-
-                <div class="dropdown-divider"></div>
-
-                <a href="admin.html" class="dropdown-item">
-                  <i class="fas fa-shield-alt"></i>
-                  Painel Administrativo
-                </a>
-                <a href="#" class="dropdown-item">
-                  <i class="fas fa-user-cog"></i>
-                  Gerenciar Perfil
-                </a>
-                <a href="#" class="dropdown-item">
-                  <i class="fas fa-key"></i>
-                  Alterar Senha
-                </a>
-                <a href="#" class="dropdown-item">
-                  <i class="fas fa-shield-alt"></i>
-                  Permissões
-                </a>
-                <a href="#" class="dropdown-item">
-                  <i class="fas fa-history"></i>
-                  Histórico de Atividades
-                </a>
-
-                <div class="dropdown-divider"></div>
-
-                <a href="#" class="dropdown-item text-danger">
-                  <i class="fas fa-sign-out-alt"></i>
-                  Sair
-                </a>
-              </div>
-            </div>
-
             <button id="toggle-menu" class="menu-toggle">
               <i class="fas fa-bars"></i>
             </button>
@@ -202,9 +146,8 @@
           <div class="mapa-header">
             <h2>MAPA INTERATIVO</h2>
             <div class="mapa-actions">
-              <button class="btn-search"><i class="fas fa-search"></i></button>
-              <button id="exportar-pdf" class="btn btn-primary">
-                <i class="fas fa-file-export"></i>
+              <button class="btn btn-primary" id="exportar-pdf">
+                <i class="fas fa-file-pdf"></i>
                 Exportar PDF
               </button>
               <div class="floor-selector">
@@ -251,10 +194,11 @@
       </div>
     </div>
 
-    <script src="../js/script.js"></script>
+    <script type="module" src="../js/script.js"></script>
     <script src="../js/mapa-interativo.js"></script>
-    <script src="../js/profile-dropdown.js"></script>
     <script src="../js/notifications.js"></script>
+    <script src="../js/auth-guard.js"></script>
     <script src="../js/navigation.js"></script>
+    <script src="../js/export-functions.js"></script>
   </body>
 </html> 

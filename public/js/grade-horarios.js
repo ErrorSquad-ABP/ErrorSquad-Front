@@ -34,8 +34,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const agora = Date.now();
             const tempoRestante = expiracao - agora;
 
-            console.log('Tempo restante do token:', Math.floor(tempoRestante / 1000), 'segundos');
-
             // Se o token expirou ou está prestes a expirar (1 segundo)
             if (agora >= expiracao - 1000) {
                 console.log('Token expirado, redirecionando para login...');
