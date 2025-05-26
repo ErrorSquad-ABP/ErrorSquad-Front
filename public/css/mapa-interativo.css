@@ -798,7 +798,7 @@
     display: inline-block;
 }
 
-.export-dropdown .dropdown-toggle {
+.export-dropdown .btn-primary {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -816,7 +816,7 @@
     height: 40px;
 }
 
-.export-dropdown .dropdown-toggle:hover {
+.export-dropdown .btn-primary:hover {
     background-color: #1565c0;
 }
 
