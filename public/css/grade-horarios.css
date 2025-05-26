@@ -36,6 +36,8 @@
 .grade-actions {
     display: flex;
     gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 .grade-actions.botoes-csv {
@@ -932,17 +934,12 @@
 }
 
 #btn-importar-csv {
-    margin-left: 0 !important;
-    display: inline-flex;
+    margin-left: 8px !important;
+    display: inline-flex !important;
     align-items: center;
-    gap: 6px;
-    background: linear-gradient(145deg, #b71c1c, #d32f2f);
-    color: white;
-    box-shadow: 0 2px 8px rgba(183, 28, 28, 0.2);
-    border: none;
-    border-radius: 8px;
-    font-weight: 500;
-    transition: all 0.3s ease;
+    border-radius: 12px !important;
+    white-space: nowrap;
+    z-index: 1;
 }
 #btn-importar-csv:hover {
     background: linear-gradient(145deg, #d32f2f, #b71c1c);
@@ -1103,4 +1100,70 @@
 .sidebar-link.text-danger:hover {
     color: #fff;
     background: rgba(255,0,0,0.08);
+}
+
+/* Estilos do dropdown de exportação */
+.export-dropdown {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    margin: 0;
+}
+
+.export-btn {
+    margin: 0;
+    border-radius: 12px;
+    white-space: nowrap;
+    z-index: 2;
+}
+
+.export-options {
+    position: absolute;
+    top: 110%;
+    left: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: none;
+    z-index: 10;
+    min-width: 180px;
+    border: 1px solid #eee;
+    flex-direction: column;
+    padding: 4px 0;
+}
+
+.export-dropdown.active .export-options {
+    display: flex;
+    animation: fadeIn 0.2s ease;
+}
+
+.export-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px 16px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #333;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    text-align: left;
+}
+
+.export-option:hover {
+    background: #f8f9fa;
+    color: #b71c1c;
+}
+
+.export-option i {
+    width: 20px;
+    text-align: center;
+    color: #b71c1c;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 } 

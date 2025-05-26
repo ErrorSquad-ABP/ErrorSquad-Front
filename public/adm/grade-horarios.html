@@ -149,10 +149,22 @@
                             <option value="manha">Período Matutino</option>
                             <option value="tarde">Período Vespertino</option>
                         </select>
-                        <button class="btn btn-primary">
-                            <i class="fas fa-file-export"></i>
-                            Exportar CSV
-                        </button>
+                        <div class="export-dropdown">
+                            <button class="btn btn-primary export-btn">
+                                <i class="fas fa-file-export"></i>
+                                Exportar
+                            </button>
+                            <div class="export-options">
+                                <button class="export-option" data-export="csv">
+                                    <i class="fas fa-file-csv"></i>
+                                    Exportar CSV
+                                </button>
+                                <button class="export-option" data-export="pdf">
+                                    <i class="fas fa-file-pdf"></i>
+                                    Exportar PDF
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

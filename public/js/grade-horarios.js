@@ -985,7 +985,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Criar botão de importar
         const importBtn = document.createElement('button');
         importBtn.id = 'btn-importar-csv';
-        importBtn.className = 'btn btn-secondary';
+        importBtn.className = 'btn btn-primary';
         importBtn.innerHTML = '<i class="fas fa-file-arrow-up"></i> Importar CSV';
         exportBtn.parentNode.insertBefore(importBtn, exportBtn.nextSibling);
 
@@ -1031,6 +1031,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 }, 4000);
             }
         });
+
+        // Inicializar o dropdown de exportação após criar todos os botões
+        initExportDropdown();
     }
 
     // Adicionar event listeners para os filtros
@@ -1091,6 +1094,44 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Buscar dados iniciais
     buscarDadosGrade();
+
+    // Inicializar o dropdown de exportação
+    function initExportDropdown() {
+        const exportDropdown = document.querySelector('.export-dropdown');
+        const exportBtn = exportDropdown.querySelector('.export-btn');
+        const exportOptions = exportDropdown.querySelector('.export-options');
+
+        // Toggle do dropdown
+        exportBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            exportDropdown.classList.toggle('active');
+        });
+
+        // Fechar dropdown ao clicar fora
+        document.addEventListener('click', (e) => {
+            if (!exportDropdown.contains(e.target)) {
+                exportDropdown.classList.remove('active');
+            }
+        });
+
+        // Eventos dos botões de exportação
+        const exportButtons = exportDropdown.querySelectorAll('.export-option');
+        exportButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const exportType = button.getAttribute('data-export');
+                
+                if (exportType === 'csv') {
+                    exportarParaCSV();
+                } else if (exportType === 'pdf') {
+                    // Função para exportar PDF será implementada posteriormente
+                    showErrorToast('Exportação para PDF em desenvolvimento');
+                }
+                
+                exportDropdown.classList.remove('active');
+            });
+        });
+    }
 });
 
 function getAttrNum(cell, attr) {
