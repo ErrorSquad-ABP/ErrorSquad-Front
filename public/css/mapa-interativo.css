@@ -137,15 +137,6 @@
     transform: scale(1.02); 
 }
 
-.btn-search {
-    padding: 10px 15px;
-    background-color: var(--primary);
-    color: white;
-    border: none;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-}
-
 /* Estilo de preenchimento */
 .preenchimento {
     background-color: var(--conteiner-background-color);
@@ -550,21 +541,6 @@
     font-size: 16px;
 }
 
-.btn-search {
-    padding: 10px 15px;
-    background-color: var(--primary);
-    color: white;
-    border: none;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-}
-
-.btn-search:hover {
-    background: linear-gradient(45deg, var(--primary-dark), var(--primary));
-    box-shadow: 0 4px 8px rgba(227, 6, 19, 0.4);
-    transform: translateY(-2px);
-}
-
 /* Pop-up */
 .pop-up {
     position: absolute;
@@ -858,4 +834,9 @@
 .export-dropdown .dropdown-item i {
     width: 16px;
     text-align: center;
+}
+
+/* Removendo estilos do botão de busca */
+.btn-search {
+    display: none;
 } 
