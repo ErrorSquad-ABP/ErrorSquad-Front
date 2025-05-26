@@ -203,10 +203,16 @@
             <h2>MAPA INTERATIVO</h2>
             <div class="mapa-actions">
               <button class="btn-search"><i class="fas fa-search"></i></button>
-              <button id="exportar-pdf" class="btn btn-primary">
-                <i class="fas fa-file-export"></i>
-                Exportar PDF
-              </button>
+              <div class="export-dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="exportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="fas fa-file-export"></i>
+                  Exportar
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="exportDropdown">
+                  <li><a class="dropdown-item" href="#" id="exportar-pdf"><i class="fas fa-file-pdf"></i> Exportar PDF</a></li>
+                  <li><a class="dropdown-item" href="#" id="exportar-csv"><i class="fas fa-file-csv"></i> Exportar CSV</a></li>
+                </ul>
+              </div>
               <div class="floor-selector">
                 <select
                   id="floor-selector"
@@ -251,10 +257,11 @@
       </div>
     </div>
 
-    <script src="../js/script.js"></script>
+    <script type="module" src="../js/script.js"></script>
     <script src="../js/mapa-interativo.js"></script>
-    <script src="../js/profile-dropdown.js"></script>
     <script src="../js/notifications.js"></script>
+    <script src="../js/auth-guard.js"></script>
     <script src="../js/navigation.js"></script>
+    <script src="../js/export-functions.js"></script>
   </body>
 </html> 

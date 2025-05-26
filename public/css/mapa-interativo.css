@@ -789,4 +789,72 @@
 .sidebar-link.text-danger:hover {
     color: #fff;
     background: rgba(255,0,0,0.08);
+}
+
+/* Estilos para o dropdown de exportação */
+.export-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.export-dropdown .dropdown-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 14px;
+    font-weight: 500;
+    min-width: 120px;
+    height: 40px;
+}
+
+.export-dropdown .dropdown-toggle:hover {
+    background-color: #1565c0;
+}
+
+.export-dropdown .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 1000;
+    display: none;
+    min-width: 160px;
+    padding: 8px 0;
+    margin: 4px 0 0;
+    background-color: white;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,.2);
+}
+
+.export-dropdown .dropdown-menu.show {
+    display: block;
+}
+
+.export-dropdown .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    color: #212529;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.export-dropdown .dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
+.export-dropdown .dropdown-item i {
+    width: 16px;
+    text-align: center;
 } 

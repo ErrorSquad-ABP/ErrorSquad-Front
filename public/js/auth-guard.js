@@ -14,8 +14,6 @@ function parseJwt(token) {
 }
 
 function IRONGATE() {
-    console.warn('[IRONGATE] Iniciando protocolo de segurança...');
-    
     // Verificar token no localStorage
     const token = localStorage.getItem('token');
     if (!token) {
@@ -50,7 +48,6 @@ function IRONGATE() {
 
         // Armazenar ID do usuário
         localStorage.setItem('userId', decodedToken.id);
-        console.warn('[IRONGATE] Protocolo de segurança concluído com sucesso');
         
         // Iniciar monitoramento de atividade
         monitorarAtividade();
@@ -78,7 +75,7 @@ function monitorarAtividade() {
     // Verificar inatividade
     setInterval(() => {
         if (Date.now() - ultimaAtividade > tempoLimite) {
-            console.warn('[IRONGATE] Inatividade detectada. Encerrando sessão...');
+            console.error('[IRONGATE] Inatividade detectada. Encerrando sessão...');
             localStorage.removeItem('token');
             window.location.href = '/login';
         }
