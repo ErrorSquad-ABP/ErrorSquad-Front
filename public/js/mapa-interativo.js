@@ -24,29 +24,6 @@ function setupEventListeners() {
             loadFloorMap(e.target.value);
         });
     }
-
-    // Botão de busca
-    const searchBtn = document.querySelector('.btn-search');
-    if (searchBtn) {
-        searchBtn.addEventListener('click', () => {
-            const searchInput = document.createElement('input');
-            searchInput.type = 'text';
-            searchInput.placeholder = 'Buscar sala...';
-            searchInput.className = 'search-input';
-            
-            const searchContainer = document.createElement('div');
-            searchContainer.className = 'search-container';
-            searchContainer.appendChild(searchInput);
-            
-            const existingSearch = document.querySelector('.search-container');
-            if (existingSearch) {
-                existingSearch.remove();
-            } else {
-                document.querySelector('.mapa-actions').appendChild(searchContainer);
-                searchInput.focus();
-            }
-        });
-    }
 }
    async function buscarDadosMapa() {
         try {
