@@ -107,23 +107,6 @@ async function loadFloorMap(floor) {
     }
 }
 
-function selectRoomOnMap(roomElement) {
-    if (!roomElement) return;
-    
-    // Remove seleção anterior
-    const previousSelected = document.querySelector('.sala.selected');
-    if (previousSelected) {
-        previousSelected.classList.remove('selected');
-    }
-    
-    // Seleciona nova sala
-    roomElement.classList.add('selected');
-    selectedRoom = roomElement.getAttribute('data-room-id');
-    
-    // Atualiza informações da sala
-    updateRoomDetails(selectedRoom);
-}
-
 // Funções para controlar o modal
 function abrirModal(modalId, roomDetails) {
     const modal = document.getElementById(modalId);
