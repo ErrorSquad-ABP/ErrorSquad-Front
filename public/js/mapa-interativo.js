@@ -3,7 +3,6 @@ let currentFloor = 0;
 let selectedRoom = null;
 let roomsData = {};
 let searchTimeout = null;
-let popupGlobalContainer = null;
 
 // Inicializar IRONGATE
 if (typeof IRONGATE === 'function') {
@@ -53,11 +52,8 @@ function setupEventListeners() {
         try {
             const dadosMapa = await getSalasInfo();
             if (dadosMapa) {
-                getRoomDetails(dadosMapa)
-                // console.log('Grade data atualizado:', gradeData);
-                // atualizarFiltros();
-                // preencherGrade();
-                // atualizarListaDocentes();
+                roomsData =  dadosMapa;
+                console.log(roomsData);
             } else {
                 showErrorToast('Dados não encontrados na resposta da API');
             }
@@ -216,6 +212,18 @@ function abrirModal(modalId, roomDetails) {
 
     modal.classList.add('show');
     document.body.style.overflow = 'hidden'; // Previne rolagem
+}
+
+function modalAtualizarTudo(dadosMapa) {
+        if (dadosMapa) {
+        modalAtualizarNumeroSala(roomDetails.numero || '');
+        modalAtualizarNome(roomDetails.name || '');
+        modalAtualizarCurso(roomDetails.curso || '');
+        modalAtualizarProfessor(roomDetails.docente || '');
+        modalAtualizarDisciplina(roomDetails.disciplina || '');
+        modalAtualizarHorario(roomDetails.horario || '');
+        modalAtualizarPericu(roomDetails.periculosidade || '');
+    }
 }
 
 function fecharModal(modalId) {
