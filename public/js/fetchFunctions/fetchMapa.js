@@ -42,7 +42,6 @@ export async function getSalasInfo() {
         }
 
         const result = await response.json();
-        console.log('Resposta da API:', result.data[0].periodos || 'Períodos não encontrados');
         
         if (result.data && Array.isArray(result.data) && result.data.length > 0) {
             return result.data[0].periodos || 'Períodos não encontrados';

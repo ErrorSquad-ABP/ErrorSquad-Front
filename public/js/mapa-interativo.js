@@ -2,7 +2,13 @@
 let currentFloor = 0;
 let selectedRoom = null;
 let roomsData = {};
+let salasAndar = [];
 let searchTimeout = null;
+
+let roomsDataResolve;
+const roomsDataReady = new Promise((resolve) => {
+  roomsDataResolve = resolve;
+});
 
 // Inicializar IRONGATE
 if (typeof IRONGATE === 'function') {
@@ -31,7 +37,7 @@ async function buscarDadosMapa() {
         const dadosMapa = await getSalasInfo();
         if (dadosMapa) {
             roomsData =  dadosMapa;
-            console.log(roomsData);
+            roomsDataResolve();
         } else {
             showErrorToast('Dados não encontrados na resposta da API');
         }
@@ -39,6 +45,8 @@ async function buscarDadosMapa() {
         console.error('Erro ao carregar a grade:', error);
         showErrorToast('Erro ao carregar a grade de horários. Por favor, tente novamente mais tarde.');
     }
+                console.log(roomsData);
+
 }
 
         // Função para mostrar mensagem de erro
@@ -91,18 +99,37 @@ async function loadFloorMap(floor) {
         
         // Adiciona eventos de clique para abrir o modal
         mapContent.querySelectorAll('.sala, .biblioteca').forEach(el => {
+            salasAndar.push(el.getAttribute('data-room-id'))
             el.addEventListener('click', (e) => {
                 const roomId = el.getAttribute('data-room-id');
                 if (roomId) {
                     // const roomDetails = getRoomDetails(roomId);
-                    abrirModal('modal', roomDetails);
+                    abrirModal('modal', {});
                 }
             });
         });
+
+        console.log('Salas do andar atual:', salasAndar);
         
     } catch (error) {
         console.error('Erro ao carregar mapa:', error);
     }
+}
+
+async function getIdAmbiente(room) {
+    await roomsDataReady; // Espera os dados do mapa serem carregados
+    try {
+        if (roomsData[room].nome_ambiente == null) {
+            throw new Error(`Sala ${roomsData[room]} não encontrada nos dados.`);
+        }
+    } catch (error) {
+        console.error(error.message);
+        return 'Ambiente desconhecido';
+    }
+    // Se a sala existir, retorna o id do ambiente
+    const ambiente = roomsData[room].nome_ambiente;
+    console.log(ambiente.slice(-3))
+    return ambiente.slice(-3);
 }
 
 // Funções para controlar o modal
@@ -123,6 +150,7 @@ function abrirModal(modalId, roomDetails) {
 
     modal.classList.add('show');
     document.body.style.overflow = 'hidden'; // Previne rolagem
+    getIdAmbiente(0);
 }
 
 function modalAtualizarTudo(dadosMapa) {
@@ -278,9 +306,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+
+function filtroSalas() {
+    // Pegar todas as salas do anadar atual
+    // Filtrar roomsData pelos que têm no andar atual 
+}
+
     // Inicialização
     loadFloorMap(0);
     setupEventListeners();
     setupPdfExport();
-    buscarDadosMapa()
+    buscarDadosMapa();
 }); 
+
