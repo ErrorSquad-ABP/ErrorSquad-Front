@@ -25,68 +25,38 @@ function setupEventListeners() {
         });
     }
 }
-   async function buscarDadosMapa() {
-        try {
-            const dadosMapa = await getSalasInfo();
-            if (dadosMapa) {
-                roomsData =  dadosMapa;
-                console.log(roomsData);
-            } else {
-                showErrorToast('Dados não encontrados na resposta da API');
-            }
-        } catch (error) {
-            console.error('Erro ao carregar a grade:', error);
-            showErrorToast('Erro ao carregar a grade de horários. Por favor, tente novamente mais tarde.');
-        }
-    }
 
-    buscarDadosMapa()
+async function buscarDadosMapa() {
+    try {
+        const dadosMapa = await getSalasInfo();
+        if (dadosMapa) {
+            roomsData =  dadosMapa;
+            console.log(roomsData);
+        } else {
+            showErrorToast('Dados não encontrados na resposta da API');
+        }
+    } catch (error) {
+        console.error('Erro ao carregar a grade:', error);
+        showErrorToast('Erro ao carregar a grade de horários. Por favor, tente novamente mais tarde.');
+    }
+}
+
+buscarDadosMapa()
 
         // Função para mostrar mensagem de erro
-    function showErrorToast(message) {
-        const toastContainer = document.querySelector('.toast-container');
-        if (toastContainer) {
-            const toast = document.createElement('div');
-            toast.className = 'toast error';
-            toast.innerHTML = `
-                <i class="fas fa-exclamation-circle"></i>
-                <span>${message}</span>
-            `;
-            toastContainer.appendChild(toast);
-            setTimeout(() => toast.remove(), 5000);
-        }
+function showErrorToast(message) {
+    const toastContainer = document.querySelector('.toast-container');
+    if (toastContainer) {
+        const toast = document.createElement('div');
+        toast.className = 'toast error';
+        toast.innerHTML = `
+            <i class="fas fa-exclamation-circle"></i>
+            <span>${message}</span>
+        `;
+        toastContainer.appendChild(toast);
+        setTimeout(() => toast.remove(), 5000);
     }
-
-function initializeSearch() {
-    document.addEventListener('input', (e) => {
-        if (e.target.classList.contains('search-input')) {
-            if (searchTimeout) {
-                clearTimeout(searchTimeout);
-            }
-            
-            searchTimeout = setTimeout(() => {
-                const searchTerm = e.target.value.toLowerCase();
-                highlightRooms(searchTerm);
-            }, 300);
-        }
-    });
 }
-
-function highlightRooms(searchTerm) {
-    const rooms = document.querySelectorAll('.sala');
-    rooms.forEach(room => {
-        const roomName = room.querySelector('.nome-sala').textContent.toLowerCase();
-        const roomNumber = room.querySelector('.numero-sala').textContent.toLowerCase();
-        
-        if (roomName.includes(searchTerm) || roomNumber.includes(searchTerm)) {
-            room.classList.add('highlight');
-            room.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        } else {
-            room.classList.remove('highlight');
-        }
-    });
-}
-
 // CARREGAR ANDAR
 async function loadFloorMap(floor) {
     currentFloor = floor;
@@ -121,17 +91,12 @@ async function loadFloorMap(floor) {
         
         mapContent.innerHTML = svgContent;
         
-        // Oculta todos os popups ao carregar o mapa
-        mapContent.querySelectorAll('.pop-up').forEach(p => {
-            p.style.display = 'none';
-        });
-        
         // Adiciona eventos de clique para abrir o modal
         mapContent.querySelectorAll('.sala, .biblioteca').forEach(el => {
             el.addEventListener('click', (e) => {
                 const roomId = el.getAttribute('data-room-id');
                 if (roomId) {
-                    const roomDetails = getRoomDetails(roomId);
+                    // const roomDetails = getRoomDetails(roomId);
                     abrirModal('modal', roomDetails);
                 }
             });
@@ -157,18 +122,6 @@ function selectRoomOnMap(roomElement) {
     
     // Atualiza informações da sala
     updateRoomDetails(selectedRoom);
-}
-
-// Dados Mock para Teste
-function getRoomDetails(roomId) {
-return mockData[roomId] || {
-        name: roomId ? roomId.replace(/-/g, ' ').toUpperCase() : 'Sala Desconhecida',
-        disciplina: '-',
-        docente: '-',
-        curso: '-',
-        nivel: '-',
-        status: 'Disponível'
-    };
 }
 
 // Funções para controlar o modal
