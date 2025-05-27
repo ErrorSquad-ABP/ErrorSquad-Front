@@ -1137,3 +1137,59 @@ document.addEventListener('DOMContentLoaded', function () {
 function getAttrNum(cell, attr) {
     return cell && cell.hasAttribute(attr) ? Number(cell.getAttribute(attr)) : 0;
 } 
+
+// Dentro do initExportDropdown()
+button.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const exportType = button.getAttribute('data-export');
+  
+    if (exportType === 'csv') {
+      exportarParaCSV();
+    } else if (exportType === 'pdf') {
+      exportarParaPDF();  // agora ela está fora e acessível
+    }
+  
+    exportDropdown.classList.remove('active');
+  });
+
+// Função global (fora do addEventListener)
+async function exportarParaPDF() {
+    const container = document.querySelector('.grade-container');
+    if (!container) {
+      return alert('Container da grade não encontrado!');
+    }
+  
+    const canvas = await html2canvas(container, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: null
+    });
+    const imgData = canvas.toDataURL('image/png');
+  
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'landscape' });
+  
+    const margin = 10;
+    const pageW = pdf.internal.pageSize.getWidth();
+    const pageH = pdf.internal.pageSize.getHeight();
+    const maxW = pageW - margin * 2;
+    const maxH = pageH - margin * 2;
+  
+    const scaleW = maxW / canvas.width;
+    const scaleH = maxH / canvas.height;
+    const scale = Math.min(scaleW, scaleH);
+    const imgW = canvas.width * scale;
+    const imgH = canvas.height * scale;
+  
+    const x = (pageW - imgW) / 2;
+    const y = (pageH - imgH) / 2;
+  
+    pdf.addImage(imgData, 'PNG', x, y, imgW, imgH);
+  
+    const curso = document.querySelector('.btn-secondary:nth-child(1)').value;
+    const nivel = document.querySelector('.btn-secondary:nth-child(2)').value;
+    const turno = document.querySelector('.btn-secondary:nth-child(3)').value;
+    pdf.save(`grade_${curso}_${nivel}_${turno}.pdf`);
+  }
+  
+  
