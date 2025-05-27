@@ -16,7 +16,7 @@ export async function getSemestres() {
                 'Accept': 'application/json',
                 'Authorization': `Bearer ${getToken()}`
             }
-        });
+        }); 
 
         if (!response.ok) {
             if (response.status === 401) {
