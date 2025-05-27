@@ -41,8 +41,6 @@ async function buscarDadosMapa() {
     }
 }
 
-buscarDadosMapa()
-
         // Função para mostrar mensagem de erro
 function showErrorToast(message) {
     const toastContainer = document.querySelector('.toast-container');
@@ -284,4 +282,5 @@ document.addEventListener('DOMContentLoaded', function() {
     loadFloorMap(0);
     setupEventListeners();
     setupPdfExport();
+    buscarDadosMapa()
 }); 
