@@ -232,9 +232,12 @@ function setupPdfExport() {
     const btn = document.getElementById('exportar-pdf');
     if (!btn) return;
   
-    btn.addEventListener('click', async () => {
+    btn.addEventListener('click', async function exportMapa(event) {
+        event.stopImmediatePropagation();
         const elemento = document.getElementById('map-content');
-        if (!elemento) return alert('Mapa não encontrado!');
+        if (!elemento) {
+            return alert('Mapa não encontrado!');
+  }
     
         // 1) Foto em canvas
         const canvas = await html2canvas(elemento, {
