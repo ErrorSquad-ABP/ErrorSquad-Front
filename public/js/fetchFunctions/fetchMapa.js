@@ -42,10 +42,10 @@ export async function getSalasInfo() {
         }
 
         const result = await response.json();
-        console.log('Resposta da API:', result);
+        console.log('Resposta da API:', result.data[0].periodos || 'Períodos não encontrados');
         
         if (result.data && Array.isArray(result.data) && result.data.length > 0) {
-            return result.data[0];
+            return result.data[0].periodos || 'Períodos não encontrados';
         } else {
             console.error('Erro: Dados não encontrados na resposta');
             return null;

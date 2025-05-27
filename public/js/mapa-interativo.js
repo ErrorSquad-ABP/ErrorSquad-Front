@@ -53,18 +53,7 @@ function setupEventListeners() {
         try {
             const dadosMapa = await getSalasInfo();
             if (dadosMapa) {
-                console.log(dadosMapa.periodos)
                 getRoomDetails(dadosMapa)
-                // Atualizar o objeto gradeData com os dados recebidos
-                // roomDetaisl = useState({
-                //     dias: dadosGrade.dias || [],
-                //     horarios: dadosGrade.horarios || [],
-                //     cursos: dadosGrade.cursos || [],
-                //     turnos: dadosGrade.turnos || [],
-                //     periodos: dadosGrade.periodos || [],
-                //     docente: dadosGrade.docente || []
-                // })
-
                 // console.log('Grade data atualizado:', gradeData);
                 // atualizarFiltros();
                 // preencherGrade();
