@@ -99,7 +99,12 @@ async function loadFloorMap(floor) {
         
         // Adiciona eventos de clique para abrir o modal
         mapContent.querySelectorAll('.sala, .biblioteca').forEach(el => {
-            salasAndar.push(el.getAttribute('data-room-id'))
+
+            // Pega o ID de todas as salas do andar atual se for 'sala'
+            if(el.getAttribute('data-room-id').slice(0,4) === 'sala') {
+                salasAndar.push(el.getAttribute('data-room-id'));
+            }
+
             el.addEventListener('click', (e) => {
                 const roomId = el.getAttribute('data-room-id');
                 if (roomId) {
@@ -108,6 +113,7 @@ async function loadFloorMap(floor) {
                 }
             });
         });
+        filtroSalas()
 
         console.log('Salas do andar atual:', salasAndar);
         
@@ -119,18 +125,17 @@ async function loadFloorMap(floor) {
 async function getIdAmbiente(room) {
     await roomsDataReady; // Espera os dados do mapa serem carregados
     try {
-        if (roomsData[room].nome_ambiente == null) {
-            throw new Error(`Sala ${roomsData[room]} não encontrada nos dados.`);
+        if (room.nome_ambiente == null) {
+            throw new Error(`Sala ${room} não encontrada nos dados.`);
         }
     } catch (error) {
         console.error(error.message);
         return 'Ambiente desconhecido';
     }
     // Se a sala existir, retorna o id do ambiente
-    const ambiente = roomsData[room].nome_ambiente;
-    console.log(ambiente.slice(-3))
-    return ambiente.slice(-3);
-}
+    const ambiente = room.nome_ambiente;
+    return `sala-${ambiente.slice(-3).replace(/\s/g, "")}`;
+}   
 
 // Funções para controlar o modal
 function abrirModal(modalId, roomDetails) {
@@ -150,7 +155,6 @@ function abrirModal(modalId, roomDetails) {
 
     modal.classList.add('show');
     document.body.style.overflow = 'hidden'; // Previne rolagem
-    getIdAmbiente(0);
 }
 
 function modalAtualizarTudo(dadosMapa) {
@@ -307,10 +311,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
-function filtroSalas() {
-    // Pegar todas as salas do anadar atual
-    // Filtrar roomsData pelos que têm no andar atual 
-}
 
     // Inicialização
     loadFloorMap(0);
@@ -319,3 +319,23 @@ function filtroSalas() {
     buscarDadosMapa();
 }); 
 
+
+async function filtroSalas() {
+    await roomsDataReady; // Espera os dados do mapa serem carregados
+
+    let filtrado = [];
+
+    for (const id of salasAndar) {
+        for (const room of roomsData) {
+            if (room.nome_ambiente != null) {
+                const roomId = await getIdAmbiente(room); // Agora sim!
+                if (roomId == id) {
+                    filtrado.push(room);
+                }
+            }
+        }
+    }
+
+    console.log(filtrado)
+    return filtrado; // se quiser retornar as salas filtradas
+}
