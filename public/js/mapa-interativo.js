@@ -5,6 +5,18 @@ let roomsData = {};
 let searchTimeout = null;
 let popupGlobalContainer = null;
 
+// Inicializar IRONGATE
+if (typeof IRONGATE === 'function') {
+    IRONGATE();
+}
+
+import {getSalasInfo} from './fetchFunctions/fetchMapa.js';
+import { showToast } from './toast.js';
+
+  // URL base da API
+const API_URL = 'https://errorsquad-server.onrender.com';
+const socket = io(API_URL);
+
 function setupEventListeners() {
     // Seletor de andar
     const floorSelector = document.getElementById('floor-selector');
@@ -37,6 +49,51 @@ function setupEventListeners() {
         });
     }
 }
+   async function buscarDadosMapa() {
+        try {
+            const dadosMapa = await getSalasInfo();
+            if (dadosMapa) {
+                console.log(dadosMapa.periodos)
+                getRoomDetails(dadosMapa)
+                // Atualizar o objeto gradeData com os dados recebidos
+                // roomDetaisl = useState({
+                //     dias: dadosGrade.dias || [],
+                //     horarios: dadosGrade.horarios || [],
+                //     cursos: dadosGrade.cursos || [],
+                //     turnos: dadosGrade.turnos || [],
+                //     periodos: dadosGrade.periodos || [],
+                //     docente: dadosGrade.docente || []
+                // })
+
+                // console.log('Grade data atualizado:', gradeData);
+                // atualizarFiltros();
+                // preencherGrade();
+                // atualizarListaDocentes();
+            } else {
+                showErrorToast('Dados não encontrados na resposta da API');
+            }
+        } catch (error) {
+            console.error('Erro ao carregar a grade:', error);
+            showErrorToast('Erro ao carregar a grade de horários. Por favor, tente novamente mais tarde.');
+        }
+    }
+
+    buscarDadosMapa()
+
+        // Função para mostrar mensagem de erro
+    function showErrorToast(message) {
+        const toastContainer = document.querySelector('.toast-container');
+        if (toastContainer) {
+            const toast = document.createElement('div');
+            toast.className = 'toast error';
+            toast.innerHTML = `
+                <i class="fas fa-exclamation-circle"></i>
+                <span>${message}</span>
+            `;
+            toastContainer.appendChild(toast);
+            setTimeout(() => toast.remove(), 5000);
+        }
+    }
 
 function initializeSearch() {
     document.addEventListener('input', (e) => {
@@ -142,11 +199,7 @@ function selectRoomOnMap(roomElement) {
 
 // Dados Mock para Teste
 function getRoomDetails(roomId) {
-    const mockData = {
-        // ... (mantenha todo o objeto mockData existente)
-    };
-    
-    return mockData[roomId] || {
+return mockData[roomId] || {
         name: roomId ? roomId.replace(/-/g, ' ').toUpperCase() : 'Sala Desconhecida',
         disciplina: '-',
         docente: '-',
