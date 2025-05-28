@@ -46,7 +46,7 @@ router.get('/cursos', (req, res) => {
   res.sendFile(path.join(__dirname, '../adm/cursos.html'));
 });
 
-router.get('/home_guest.html', (req, res) => {
+router.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../home_guest.html'));
 });
 
