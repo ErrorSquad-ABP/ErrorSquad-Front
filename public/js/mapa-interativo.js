@@ -91,7 +91,7 @@ async function loadFloorMap(floor) {
         }
         
         const svgContent = await response.text();
-        const mapContent = document.getElementById('map-content');
+        const mapContent = await document.getElementById('map-content');
         if (!mapContent) {
             throw new Error('Elemento map-content não encontrado');
         }
@@ -99,7 +99,7 @@ async function loadFloorMap(floor) {
         mapContent.innerHTML = svgContent;
         
         // Adiciona eventos de clique para abrir o modal
-        mapContent.querySelectorAll('.sala, .biblioteca').forEach(el => {
+        mapContent.querySelectorAll('.sala').forEach(el => {
 
             // Pega o ID de todas as salas do andar atual se for 'sala'
             if(el.getAttribute('data-room-id').slice(0,4) === 'sala') {
@@ -114,10 +114,7 @@ async function loadFloorMap(floor) {
                 }
             });
         });
-        filtrarDia(await filtroSalas());
-
-        console.log('Salas do andar atual:', salasAndar);
-        
+        filtrarHorario(filtrarDia(await filtroSalas()));        
     } catch (error) {
         console.error('Erro ao carregar mapa:', error);
     }
@@ -145,13 +142,7 @@ function abrirModal(modalId, roomDetails) {
 
     // Preenche os dados da sala no modal
     if (roomDetails) {
-        modalAtualizarNumeroSala(roomDetails.numero || '');
-        modalAtualizarNome(roomDetails.name || '');
-        modalAtualizarCurso(roomDetails.curso || '');
-        modalAtualizarProfessor(roomDetails.docente || '');
-        modalAtualizarDisciplina(roomDetails.disciplina || '');
-        modalAtualizarHorario(roomDetails.horario || '');
-        modalAtualizarPericu(roomDetails.periculosidade || '');
+        modalAtualizarTudo();
     }
 
     modal.classList.add('show');
@@ -347,6 +338,43 @@ function filtrarDia(salas) {
 
     salas.forEach(sala => {
         if (sala.nome_dia == diasDaSemana[diaAtual]) {
+            filtradas.push(sala);
+        }
+    });
+
+    console.log(filtradas)
+    return filtradas
+}
+
+function converterParaMinutos(hora, minuto){
+    return hora * 60 + minuto
+}
+
+function compararHorarios(horasInicio,minutosInicio,horasFim,minutosFim) {
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+
+    const toMinuto = converterParaMinutos(hours, minutes);
+
+    const inicioToMinuto = converterParaMinutos(parseInt(horasInicio), parseInt(minutosInicio));
+
+    const fimToMinuto = converterParaMinutos(parseInt(horasFim), parseInt(minutosFim));
+
+    if (toMinuto >= inicioToMinuto && toMinuto <= fimToMinuto){
+        return true
+    }
+}
+
+function filtrarHorario(salas) {
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+
+    let filtradas = [];
+
+    salas.forEach(sala => {
+        if (compararHorarios(sala.hr_inicio.value.slice(0,2),sala.hr_inicio.value.slice(3,5),sala.hr_fim.value.slice(0,2),sala.hr_fim.value.slice(3,5))) {
             filtradas.push(sala);
         }
     });
