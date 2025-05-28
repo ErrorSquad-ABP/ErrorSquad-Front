@@ -67,6 +67,7 @@ function showErrorToast(message) {
 async function loadFloorMap(floor) {
     currentFloor = floor;
     let displayName;
+    salasAndar = [];
 
     switch(floor) {
         case '0':
@@ -113,7 +114,7 @@ async function loadFloorMap(floor) {
                 }
             });
         });
-        filtroSalas()
+        filtrarDia(await filtroSalas());
 
         console.log('Salas do andar atual:', salasAndar);
         
@@ -328,14 +329,28 @@ async function filtroSalas() {
     for (const id of salasAndar) {
         for (const room of roomsData) {
             if (room.nome_ambiente != null) {
-                const roomId = await getIdAmbiente(room); // Agora sim!
+                const roomId = await getIdAmbiente(room);
                 if (roomId == id) {
                     filtrado.push(room);
                 }
             }
         }
     }
-
-    console.log(filtrado)
     return filtrado; // se quiser retornar as salas filtradas
+}
+
+function filtrarDia(salas) {
+    const diaAtual = new Date().getDay();
+    const diasDaSemana = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+
+    let filtradas = [];
+
+    salas.forEach(sala => {
+        if (sala.nome_dia == diasDaSemana[diaAtual]) {
+            filtradas.push(sala);
+        }
+    });
+
+    console.log(filtradas)
+    return filtradas
 }

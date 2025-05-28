@@ -18,7 +18,7 @@ export async function getSalasInfo() {
         }
 
         console.log('Buscando dados da grade...');
-        const response = await fetch(`${API_URL}/admin/${getAdminId()}/grade`, {
+        const response = await fetch(`${API_URL}/admin/${getAdminId()}/periodos`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
