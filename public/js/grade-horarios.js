@@ -1138,19 +1138,7 @@ function getAttrNum(cell, attr) {
     return cell && cell.hasAttribute(attr) ? Number(cell.getAttribute(attr)) : 0;
 } 
 
-// Dentro do initExportDropdown()
-button.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const exportType = button.getAttribute('data-export');
-  
-    if (exportType === 'csv') {
-      exportarParaCSV();
-    } else if (exportType === 'pdf') {
-      exportarParaPDF();  // agora ela está fora e acessível
-    }
-  
-    exportDropdown.classList.remove('active');
-  });
+
 
 // Função global (fora do addEventListener)
 async function exportarParaPDF() {
@@ -1164,8 +1152,8 @@ async function exportarParaPDF() {
       useCORS: true,
       backgroundColor: null
     });
-    const imgData = canvas.toDataURL('image/png');
   
+    const imgData = canvas.toDataURL('image/png');
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'landscape' });
   
@@ -1178,17 +1166,18 @@ async function exportarParaPDF() {
     const scaleW = maxW / canvas.width;
     const scaleH = maxH / canvas.height;
     const scale = Math.min(scaleW, scaleH);
+  
     const imgW = canvas.width * scale;
     const imgH = canvas.height * scale;
-  
     const x = (pageW - imgW) / 2;
     const y = (pageH - imgH) / 2;
   
     pdf.addImage(imgData, 'PNG', x, y, imgW, imgH);
   
-    const curso = document.querySelector('.btn-secondary:nth-child(1)').value;
-    const nivel = document.querySelector('.btn-secondary:nth-child(2)').value;
-    const turno = document.querySelector('.btn-secondary:nth-child(3)').value;
+    const curso = document.querySelector('#filtro-curso')?.value || 'curso';
+    const nivel = document.querySelector('#filtro-nivel')?.value || 'nivel';
+    const turno = document.querySelector('#filtro-turno')?.value || 'turno';
+  
     pdf.save(`grade_${curso}_${nivel}_${turno}.pdf`);
   }
   
