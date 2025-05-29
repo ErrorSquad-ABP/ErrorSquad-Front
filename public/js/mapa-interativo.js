@@ -3,6 +3,24 @@ let currentFloor = 0;
 let selectedRoom = null;
 let roomsData = {};
 let salasAndar = [];
+let salasFiltradas = [{
+    "id": 1,
+    "nome_dia": "Terça",
+    "hr_inicio": {
+        "value": "19:35:00"
+    },
+    "hr_fim": {
+        "value": "20:25:00"
+    },
+    "nome_disciplina": "Topografia e batimetria",
+    "nome_docente": "Prof. adilson",
+    "cor_docente": "#ffffff",
+    "nivel_semestre": 3,
+    "sigla_curso": "Geo",
+    "nome_turno": "Noturno",
+    "nome_ambiente": "Laborátorio de informática 107",
+    "localizacao_ambiente": "sala-02"
+}];
 let searchTimeout = null;
 
 let roomsDataResolve;
@@ -32,11 +50,11 @@ function setupEventListeners() {
     }
 }
 
-async function buscarDadosMapa() {
+async function buscardadosSala() {
     try {
-        const dadosMapa = await getSalasInfo();
-        if (dadosMapa) {
-            roomsData =  dadosMapa;
+        const dadosSala = await getSalasInfo();
+        if (dadosSala) {
+            roomsData =  dadosSala;
             roomsDataResolve();
         } else {
             showErrorToast('Dados não encontrados na resposta da API');
@@ -110,11 +128,11 @@ async function loadFloorMap(floor) {
                 const roomId = el.getAttribute('data-room-id');
                 if (roomId) {
                     // const roomDetails = getRoomDetails(roomId);
-                    abrirModal('modal', {});
+                    abrirModal('modal', tempo[roomId], roomId);
                 }
             });
         });
-        filtrarHorario(filtrarDia(await filtroSalas()));        
+        //salasFiltradas = filtrarHorario(filtrarDia(await filtroSalas()));
     } catch (error) {
         console.error('Erro ao carregar mapa:', error);
     }
@@ -136,28 +154,42 @@ async function getIdAmbiente(room) {
 }   
 
 // Funções para controlar o modal
-function abrirModal(modalId, roomDetails) {
+function abrirModal(modalId, dadosSala, roomId) {
     const modal = document.getElementById(modalId);
     if (!modal) return;
 
     // Preenche os dados da sala no modal
-    if (roomDetails) {
-        modalAtualizarTudo();
+    if (dadosSala) {
+        const extraido = extrairDadosSala(dadosSala)
+        modalAtualizarTudo(extraido);
     }
 
     modal.classList.add('show');
     document.body.style.overflow = 'hidden'; // Previne rolagem
 }
 
-function modalAtualizarTudo(dadosMapa) {
-        if (dadosMapa) {
-        modalAtualizarNumeroSala(roomDetails.numero || '');
-        modalAtualizarNome(roomDetails.name || '');
-        modalAtualizarCurso(roomDetails.curso || '');
-        modalAtualizarProfessor(roomDetails.docente || '');
-        modalAtualizarDisciplina(roomDetails.disciplina || '');
-        modalAtualizarHorario(roomDetails.horario || '');
-        modalAtualizarPericu(roomDetails.periculosidade || '');
+function extrairDadosSala(sala) {
+    let dadosSala = {};
+    dadosSala.numero = sala.localizacao_ambiente.slice(5);
+    dadosSala.name = sala.nome_ambiente;
+    dadosSala.curso = sala.sigla_curso;
+    dadosSala.docente = sala.nome_docente;
+    dadosSala.disciplina = sala.nome_disciplina;
+    dadosSala.horario = `${sala.hr_inicio.value.slice(0,5)} às ${sala.hr_fim.value.slice(0,5)}`;
+
+    dadosSala.cor = sala.cor_docente;
+
+    return dadosSala
+}
+
+function modalAtualizarTudo(dadosSala) {
+        if (dadosSala) {
+        modalAtualizarNumeroSala(dadosSala.numero || '');
+        modalAtualizarNome(dadosSala.name || '');
+        modalAtualizarCurso(dadosSala.curso || '');
+        modalAtualizarProfessor(dadosSala.docente || '');
+        modalAtualizarDisciplina(dadosSala.disciplina || '');
+        modalAtualizarHorario(dadosSala.horario || '');
     }
 }
 
@@ -166,6 +198,7 @@ function fecharModal(modalId) {
     if (!modal) return;
 
     modal.classList.remove('show');
+    modalAtualizarTudo({})
     document.body.style.overflow = ''; // Restaura rolagem
 }
 
@@ -204,12 +237,6 @@ function modalAtualizarHorario(horario) {
     const modal = document.querySelector('#modal');
     const item = modal.querySelector('.modal-horario');
     item.textContent = horario;
-}
-
-function modalAtualizarPericu(pericu) {
-    const modal = document.querySelector('#modal');
-    const item = modal.querySelector('.modal-periculosidade');
-    item.textContent = pericu;
 }
 
 // Exporta o PDF do andar atual em PAISAGEM, com cores fiéis
@@ -308,7 +335,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadFloorMap(0);
     setupEventListeners();
     setupPdfExport();
-    buscarDadosMapa();
+    buscardadosSala();
 }); 
 
 
@@ -371,7 +398,7 @@ function filtrarHorario(salas) {
     const hours = now.getHours();
     const minutes = now.getMinutes();
 
-    let filtradas = [];
+    let filtradas = {};
 
     salas.forEach(sala => {
         if (compararHorarios(sala.hr_inicio.value.slice(0,2),sala.hr_inicio.value.slice(3,5),sala.hr_fim.value.slice(0,2),sala.hr_fim.value.slice(3,5))) {
@@ -382,3 +409,17 @@ function filtrarHorario(salas) {
     console.log(filtradas)
     return filtradas
 }
+
+let tempo = {};
+
+function objetificar(string) {
+    let temp = {};
+    for (let i = 0; i < string.length; i++) {
+        const element = string[i];
+        temp[element.localizacao_ambiente] = element;
+    }
+    tempo = temp;
+    console.log(tempo);
+}
+      
+objetificar(salasFiltradas)
