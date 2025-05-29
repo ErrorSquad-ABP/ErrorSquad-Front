@@ -1141,15 +1141,24 @@ function getAttrNum(cell, attr) {
 
 // Função global (fora do addEventListener)
 async function exportarParaPDF() {
-    const container = document.querySelector('.grade-container');
+    const container = document.querySelector('.pdf-content');
     if (!container) {
       return alert('Container da grade não encontrado!');
     }
   
+    // 2) Zera opacidades e filtros em todo o container
+  const all = container.querySelectorAll('*');
+  container.style.opacity = '1';
+  container.style.filter = 'none';
+  all.forEach(el => {
+    el.style.opacity = '1';
+    el.style.filter = 'none';
+  });
+  
     const canvas = await html2canvas(container, {
       scale: 2,
       useCORS: true,
-      backgroundColor: null
+      backgroundColor: '#ffffff'
     });
   
     const imgData = canvas.toDataURL('image/png');
@@ -1173,11 +1182,131 @@ async function exportarParaPDF() {
   
     pdf.addImage(imgData, 'PNG', x, y, imgW, imgH);
   
-    const curso = document.querySelector('#filtro-curso')?.value || 'curso';
-    const nivel = document.querySelector('#filtro-nivel')?.value || 'nivel';
-    const turno = document.querySelector('#filtro-turno')?.value || 'turno';
-  
-    pdf.save(`grade_${curso}_${nivel}_${turno}.pdf`);
+
+  // 6) Define o nome do arquivo
+  const botoes = document.querySelectorAll('.grade-actions .btn-secondary');
+  const curso = botoes[0]?.value || 'curso';
+  const nivel = botoes[1]?.value || 'nivel';
+  const turno = botoes[2]?.value || 'turno';
+  pdf.save(`grade_${curso}_${nivel}_${turno}.pdf`);
+}
+
+
+/* Função de exportação para PDF via print em nova janela
+function exportarParaPDF() {
+  const container = document.querySelector('.pdf-content');
+  if (!container) {
+    return alert('Container da grade não encontrado!');
   }
-  
+
+  // 1) Abre uma nova janela em branco
+  const w = window.open('', '_blank', 'width=1200,height=800');
+  if (!w) {
+    return alert('Falha ao abrir janela de impressão.');
+  }
+
+  // 2) Escreve o HTML na nova janela
+  w.document.write(`
+    <html>
+      <head>
+        <title>Grade de Horários</title>
+        <!-- Link para o CSS da sua página -->
+        <link rel="stylesheet" href="/public/css/grade-horarios.css">
+        <style>
+   {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    padding: 20px;
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    background-color: white;
+    font-size: 11pt;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  th, td {
+    padding: 8px;
+    text-align: center;
+    border: 1px solid #ccc;
+    vertical-align: middle;
+  }
+
+  th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+  }
+
+  .aula-item {
+    border-radius: 8px;
+    padding: 6px;
+    color: white;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .aula-item small {
+    font-size: 10px;
+    display: block;
+    margin-top: 4px;
+  }
+
+  .legenda {
+    margin-top: 20px;
+  }
+
+  .legenda .docente-item {
+    padding: 6px 12px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 500;
+    margin: 4px 0;
+    display: inline-block;
+  }
+
+  h2 {
+    text-align: left;
+    margin: 0 0 15px 0;
+  }
+</style>
+
+      </head>
+      <body>
+        ${container.outerHTML}
+      </body>
+    </html>
+  `);
+
+  // 3) Fecha o document para carregar os estilos
+  w.document.close();
+
+  // 4) Quando tudo estiver pronto, dispara o print e fecha a janela
+  w.focus();
+  w.onload = () => {
+    w.print();
+    w.close();
+  };
+}
+
+// Ligação ao dropdown de exportação
+document.querySelectorAll('.export-option').forEach(button => {
+  button.addEventListener('click', e => {
+    e.stopPropagation();
+    const type = button.getAttribute('data-export');
+    if (type === 'pdf') {
+      exportarParaPDF();
+    } else if (type === 'csv') {
+      exportarParaCSV();  // sua função existente
+    }
+    // Fecha o dropdown
+    document.querySelector('.export-dropdown').classList.remove('active');
+  });
+});*/
   
