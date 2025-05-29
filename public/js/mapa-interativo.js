@@ -1,27 +1,8 @@
 // Variáveis globais
 let currentFloor = 0;
-let selectedRoom = null;
 let roomsData = {};
 let salasAndar = [];
-let salasFiltradas = [{
-    "id": 1,
-    "nome_dia": "Terça",
-    "hr_inicio": {
-        "value": "19:35:00"
-    },
-    "hr_fim": {
-        "value": "20:25:00"
-    },
-    "nome_disciplina": "Topografia e batimetria",
-    "nome_docente": "Prof. adilson",
-    "cor_docente": "#ffffff",
-    "nivel_semestre": 3,
-    "sigla_curso": "Geo",
-    "nome_turno": "Noturno",
-    "nome_ambiente": "Laborátorio de informática 107",
-    "localizacao_ambiente": "sala-02"
-}];
-let searchTimeout = null;
+let salasFiltradas = [];
 
 let roomsDataResolve;
 const roomsDataReady = new Promise((resolve) => {
@@ -128,11 +109,12 @@ async function loadFloorMap(floor) {
                 const roomId = el.getAttribute('data-room-id');
                 if (roomId) {
                     // const roomDetails = getRoomDetails(roomId);
-                    abrirModal('modal', tempo[roomId], roomId);
+                    abrirModal('modal', salasFiltradas[roomId]);
+                    console.log(salasFiltradas)
                 }
             });
         });
-        //salasFiltradas = filtrarHorario(filtrarDia(await filtroSalas()));
+        salasFiltradas = objetificar(filtrarHorario(filtrarDia(await filtroSalas())));
     } catch (error) {
         console.error('Erro ao carregar mapa:', error);
     }
@@ -154,7 +136,7 @@ async function getIdAmbiente(room) {
 }   
 
 // Funções para controlar o modal
-function abrirModal(modalId, dadosSala, roomId) {
+function abrirModal(modalId, dadosSala) {
     const modal = document.getElementById(modalId);
     if (!modal) return;
 
@@ -354,6 +336,8 @@ async function filtroSalas() {
             }
         }
     }
+
+    console.log('Salas filtradas', filtrado)
     return filtrado; // se quiser retornar as salas filtradas
 }
 
@@ -369,7 +353,7 @@ function filtrarDia(salas) {
         }
     });
 
-    console.log(filtradas)
+    console.log('Salas filtradas por dia: ', filtradas)
     return filtradas
 }
 
@@ -398,19 +382,15 @@ function filtrarHorario(salas) {
     const hours = now.getHours();
     const minutes = now.getMinutes();
 
-    let filtradas = {};
+    let filtradas = [];
 
     salas.forEach(sala => {
         if (compararHorarios(sala.hr_inicio.value.slice(0,2),sala.hr_inicio.value.slice(3,5),sala.hr_fim.value.slice(0,2),sala.hr_fim.value.slice(3,5))) {
             filtradas.push(sala);
         }
     });
-
-    console.log(filtradas)
     return filtradas
 }
-
-let tempo = {};
 
 function objetificar(string) {
     let temp = {};
@@ -418,8 +398,6 @@ function objetificar(string) {
         const element = string[i];
         temp[element.localizacao_ambiente] = element;
     }
-    tempo = temp;
-    console.log(tempo);
+    return temp
 }
       
-objetificar(salasFiltradas)
