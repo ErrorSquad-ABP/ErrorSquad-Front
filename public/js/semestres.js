@@ -563,4 +563,109 @@ function updateSemestresList(disciplinaId, semestres) {
             </div>
         `).join('');
     }
-} 
+}
+
+// Função para exportar para CSV
+async function exportarParaCSV() {
+    try {
+        // Criar cabeçalho do CSV
+        let csv = 'Ano,Nível,Sigla do Curso,Turno\n';
+
+        // Adicionar dados
+        semestres.forEach(semestre => {
+            csv += `${semestre.ano_semestre_cronograma},${semestre.nivel_semestre_cronograma},${semestre.sigla_curso},${semestre.nome_turno}\n`;
+        });
+
+        // Criar blob e link para download
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'semestres.csv');
+        link.style.visibility = 'hidden';
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    } catch (error) {
+        console.error('Erro ao exportar CSV:', error);
+        showToast('Erro ao exportar semestres para CSV', 'error');
+    }
+}
+
+// Função para importar CSV
+async function importarCSV(file) {
+    try {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const response = await fetch('/api/semestres/import', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok) {
+            throw new Error('Erro ao importar CSV');
+        }
+
+        const result = await response.json();
+        if (result.success) {
+            showToast('CSV importado com sucesso!', 'success');
+            // Recarregar os dados dos semestres
+            await carregarDados();
+        } else {
+            throw new Error(result.message || 'Erro ao importar CSV');
+        }
+    } catch (error) {
+        console.error('Erro ao importar CSV:', error);
+        showToast('Erro ao importar CSV', 'error');
+    }
+}
+
+// Inicializar eventos de CSV
+function initCSVEvents() {
+    const importBtn = document.getElementById('btn-importar-csv');
+    const exportBtn = document.getElementById('btn-exportar-csv');
+    const inputCSV = document.getElementById('input-csv');
+    const feedback = document.getElementById('csv-feedback');
+
+    if (exportBtn) {
+        exportBtn.addEventListener('click', exportarParaCSV);
+    }
+
+    if (importBtn && inputCSV) {
+        importBtn.addEventListener('click', () => {
+            inputCSV.value = '';
+            inputCSV.click();
+        });
+
+        inputCSV.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                feedback.innerHTML = '<span class="spinner"></span> Enviando...';
+                feedback.style.color = '#b71c1c';
+                importBtn.disabled = true;
+                try {
+                    await importarCSV(file);
+                    feedback.innerHTML = 'CSV importado com sucesso!';
+                    feedback.style.color = 'green';
+                } catch (err) {
+                    feedback.innerHTML = 'Erro ao importar CSV!';
+                    feedback.style.color = 'red';
+                }
+                setTimeout(() => {
+                    feedback.innerHTML = '';
+                    importBtn.disabled = false;
+                }, 4000);
+            }
+        });
+    }
+}
+
+// Adicionar inicialização dos eventos de CSV ao DOMContentLoaded
+document.addEventListener('DOMContentLoaded', function() {
+    // ... existing code ...
+    initCSVEvents();
+    // ... existing code ...
+}); 

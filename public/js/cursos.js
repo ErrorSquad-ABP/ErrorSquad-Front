@@ -480,4 +480,136 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
     preencherSelectCoordenadores();
+
+    // Função para exportar para CSV
+    async function exportarParaCSV() {
+        try {
+            // Criar cabeçalho do CSV
+            let csv = 'Nome,Sigla,Coordenador,Data Início,Data Fim\n';
+
+            // Adicionar dados
+            cursos.forEach(curso => {
+                csv += `${curso.nome},${curso.sigla},${curso.coordenador},${curso.data_inicio},${curso.data_fim}\n`;
+            });
+
+            // Criar blob e link para download
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'cursos.csv');
+            link.style.visibility = 'hidden';
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (error) {
+            console.error('Erro ao exportar CSV:', error);
+            showToast('Erro ao exportar cursos para CSV', 'error');
+        }
+    }
+
+    // Função para importar CSV
+    async function importarCSV(file) {
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const response = await fetch('/api/cursos/import', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error('Erro ao importar CSV');
+            }
+
+            const result = await response.json();
+            if (result.success) {
+                showToast('CSV importado com sucesso!', 'success');
+                // Recarregar os dados dos cursos
+                await carregarCursos();
+            } else {
+                throw new Error(result.message || 'Erro ao importar CSV');
+            }
+        } catch (error) {
+            console.error('Erro ao importar CSV:', error);
+            showToast('Erro ao importar CSV', 'error');
+        }
+    }
+
+    // Inicializar o dropdown de exportação
+    function initExportDropdown() {
+        const exportDropdown = document.querySelector('.export-dropdown');
+        const exportBtn = exportDropdown.querySelector('.export-btn');
+        const exportOptions = exportDropdown.querySelector('.export-options');
+
+        // Toggle do dropdown
+        exportBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            exportDropdown.classList.toggle('active');
+        });
+
+        // Fechar dropdown ao clicar fora
+        document.addEventListener('click', (e) => {
+            if (!exportDropdown.contains(e.target)) {
+                exportDropdown.classList.remove('active');
+            }
+        });
+
+        // Eventos dos botões de exportação
+        const exportButtons = exportDropdown.querySelectorAll('.export-option');
+        exportButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const exportType = button.getAttribute('data-export');
+                
+                if (exportType === 'csv') {
+                    exportarParaCSV();
+                }
+                
+                exportDropdown.classList.remove('active');
+            });
+        });
+    }
+
+    // Inicializar eventos de CSV
+    function initCSVEvents() {
+        const importBtn = document.getElementById('btn-importar-csv');
+        const inputCSV = document.getElementById('input-csv');
+        const feedback = document.getElementById('csv-feedback');
+
+        if (importBtn && inputCSV) {
+            importBtn.addEventListener('click', () => {
+                inputCSV.value = '';
+                inputCSV.click();
+            });
+
+            inputCSV.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    feedback.innerHTML = '<span class="spinner"></span> Enviando...';
+                    feedback.style.color = '#b71c1c';
+                    importBtn.disabled = true;
+                    try {
+                        await importarCSV(file);
+                        feedback.innerHTML = 'CSV importado com sucesso!';
+                        feedback.style.color = 'green';
+                    } catch (err) {
+                        feedback.innerHTML = 'Erro ao importar CSV!';
+                        feedback.style.color = 'red';
+                    }
+                    setTimeout(() => {
+                        feedback.innerHTML = '';
+                        importBtn.disabled = false;
+                    }, 4000);
+                }
+            });
+        }
+    }
+
+    // Adicionar inicialização dos eventos de CSV ao DOMContentLoaded
+    initExportDropdown();
+    initCSVEvents();
 }); 

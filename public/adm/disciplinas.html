@@ -134,9 +134,21 @@
                         <i class="fas fa-laptop-code"></i>
                         Gerenciar Disciplinas
                     </h2>
-                    <button id="add-disciplina" class="btn btn-add">
-                        <i class="fas fa-plus"></i> Adicionar Disciplina
-                    </button>
+                    <div class="disciplinas-actions">
+                        <button id="btn-exportar-csv" class="btn btn-primary">
+                            <i class="fas fa-file-csv"></i>
+                            Exportar CSV
+                        </button>
+                        <button id="btn-importar-csv" class="btn btn-primary">
+                            <i class="fas fa-file-arrow-up"></i>
+                            Importar CSV
+                        </button>
+                        <input type="file" id="input-csv" accept=".csv" style="display: none;">
+                        <span id="csv-feedback"></span>
+                        <button id="add-disciplina" class="btn btn-add">
+                            <i class="fas fa-plus"></i> Adicionar Disciplina
+                        </button>
+                    </div>
                 </div>
                 
                 <div class="disciplinas-search">
