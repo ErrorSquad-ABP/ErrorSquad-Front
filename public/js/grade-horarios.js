@@ -1124,8 +1124,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (exportType === 'csv') {
                     exportarParaCSV();
                 } else if (exportType === 'pdf') {
-                    // Função para exportar PDF será implementada posteriormente
-                    showErrorToast('Exportação para PDF em desenvolvimento');
+                    exportarParaPDF();
                 }
                 
                 exportDropdown.classList.remove('active');
