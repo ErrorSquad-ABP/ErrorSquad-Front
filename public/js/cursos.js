@@ -539,46 +539,16 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    // Inicializar o dropdown de exportação
-    function initExportDropdown() {
-        const exportDropdown = document.querySelector('.export-dropdown');
-        const exportBtn = exportDropdown.querySelector('.export-btn');
-        const exportOptions = exportDropdown.querySelector('.export-options');
-
-        // Toggle do dropdown
-        exportBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            exportDropdown.classList.toggle('active');
-        });
-
-        // Fechar dropdown ao clicar fora
-        document.addEventListener('click', (e) => {
-            if (!exportDropdown.contains(e.target)) {
-                exportDropdown.classList.remove('active');
-            }
-        });
-
-        // Eventos dos botões de exportação
-        const exportButtons = exportDropdown.querySelectorAll('.export-option');
-        exportButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const exportType = button.getAttribute('data-export');
-                
-                if (exportType === 'csv') {
-                    exportarParaCSV();
-                }
-                
-                exportDropdown.classList.remove('active');
-            });
-        });
-    }
-
     // Inicializar eventos de CSV
     function initCSVEvents() {
         const importBtn = document.getElementById('btn-importar-csv');
+        const exportBtn = document.getElementById('btn-exportar-csv');
         const inputCSV = document.getElementById('input-csv');
         const feedback = document.getElementById('csv-feedback');
+
+        if (exportBtn) {
+            exportBtn.addEventListener('click', exportarParaCSV);
+        }
 
         if (importBtn && inputCSV) {
             importBtn.addEventListener('click', () => {
@@ -610,6 +580,5 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Adicionar inicialização dos eventos de CSV ao DOMContentLoaded
-    initExportDropdown();
     initCSVEvents();
 }); 
