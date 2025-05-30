@@ -6,8 +6,8 @@ if (typeof IRONGATE === 'function') {
 // Importar funções da API
 import { fetchGradeData, getToken, getAdminId, uploadCSV, filtrarDocentes } from './fetchFunctions/fetchGrade.js';
 import { useState } from './useState.js';
-  // URL base da API
-const API_URL = 'https://errorsquad-server.onrender.com';
+// URL base da API
+const API_URL = 'http://localhost:3001';
 const socket = io(API_URL);
 
 
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Verificar o token imediatamente ao carregar a página
     verificarToken();
 
-  
+
 
     // Objeto para armazenar os dados da grade
     let gradeData = useState({
@@ -267,7 +267,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
         try {
-            const response = await fetch(`https://errorsquad-server.onrender.com/admin/${id}/ambientes`, {
+            const response = await fetch(`http://localhost:3001/admin/${id}/ambientes`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -403,7 +403,7 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log('Payload enviado:', payload);
             try {
                 const token = localStorage.getItem('token');
-                const resp = await fetch(`https://errorsquad-server.onrender.com/admin/${userId}/periodos`, {
+                const resp = await fetch(`http://localhost:3001/admin/${userId}/periodos`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -470,7 +470,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function formatarHora(horaStr) {
-        return horaStr?.slice(0,5) || '';
+        return horaStr?.slice(0, 5) || '';
     }
 
     // Função para montar dinamicamente a tabela de horários
@@ -900,24 +900,36 @@ document.addEventListener('DOMContentLoaded', function () {
 
         //webSocket event
         socket.on("grade_updated", (data) => {
-            
-            console.log("Evento grade_updated recebido!", data, data.card1.id, data.card2.id);
-            
+            console.log("Evento grade_updated recebido!", data);
+
             setTimeout(() => {
-            // Seleciona os elementos azul e verde
-            const elemento1 = document.querySelector(`td[data-id-periodo="${data.card1.id}"]`)
-            const elemento2 = document.querySelector(`td[data-id-periodo="${data.card2.id}"]`);
-            console.log('testtt',elemento1)
-            console.log('testtt',elemento2)
+                // Seleciona os elementos baseados nos atributos fornecidos
+                const elemento1 = document.querySelector(`td[data-id-periodo="${data.card1.id}"]`);
+                const elemento2 = document.querySelector(`td[data-id-periodo="${data.card2.id}"]`);
 
-            // Clona os elementos
-            const clone1 = elemento1.cloneNode(true);
-            const clone2 = elemento2.cloneNode(true);
+                if (elemento1 && elemento2) {
+                    // Realiza o swap dos conteúdos internos
+                    const conteudoElemento1 = elemento1.innerHTML; // Salva o conteúdo do primeiro elemento
+                    const conteudoElemento2 = elemento2.innerHTML; // Salva o conteúdo do segundo elemento
 
-            // Troca os elementos no DOM
-            elemento1.replaceWith(clone2);
-            elemento2.replaceWith(clone1);
-            }, 100); 
+                    // Troca os conteúdos
+                    elemento1.innerHTML = conteudoElemento2;
+                    elemento2.innerHTML = conteudoElemento1;
+
+                    // Atualiza os atributos após o swap
+                    elemento1.setAttribute('data-id-dia', data.card2.dia);
+                    elemento1.setAttribute('data-id-periodo', data.card2.id);
+                    elemento1.setAttribute('data-id-horario', data.card2.horario);
+
+                    elemento2.setAttribute('data-id-dia', data.card1.dia);
+                    elemento2.setAttribute('data-id-periodo', data.card1.id);
+                    elemento2.setAttribute('data-id-horario', data.card1.horario);
+
+                    console.log('Swap concluído com sucesso!');
+                } else {
+                    console.error('Um ou ambos os elementos não foram encontrados.');
+                }
+            }, 100);
         });
 
         // Atualizar a lista de docentes
@@ -1124,13 +1136,13 @@ document.addEventListener('DOMContentLoaded', function () {
             button.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const exportType = button.getAttribute('data-export');
-                
+
                 if (exportType === 'csv') {
                     exportarParaCSV();
                 } else if (exportType === 'pdf') {
                     exportarParaPDF();
                 }
-                
+
                 exportDropdown.classList.remove('active');
             });
         });
@@ -1139,6 +1151,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function getAttrNum(cell, attr) {
     return cell && cell.hasAttribute(attr) ? Number(cell.getAttribute(attr)) : 0;
-} 
+}
 
 
