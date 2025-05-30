@@ -1128,8 +1128,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (exportType === 'csv') {
                     exportarParaCSV();
                 } else if (exportType === 'pdf') {
-                    // Função para exportar PDF será implementada posteriormente
-                    showErrorToast('Exportação para PDF em desenvolvimento');
+                    exportarParaPDF();
                 }
                 
                 exportDropdown.classList.remove('active');
@@ -1141,3 +1140,5 @@ document.addEventListener('DOMContentLoaded', function () {
 function getAttrNum(cell, attr) {
     return cell && cell.hasAttribute(attr) ? Number(cell.getAttribute(attr)) : 0;
 } 
+
+

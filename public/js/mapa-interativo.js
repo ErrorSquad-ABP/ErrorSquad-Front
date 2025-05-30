@@ -227,6 +227,9 @@ function modalAtualizarPericu(pericu) {
     item.textContent = pericu;
 }
 
+
+
+
 // Exporta o PDF do andar atual em PAISAGEM, com cores fiéis
 function setupPdfExport() {
     const btn = document.getElementById('exportar-pdf');
@@ -276,6 +279,7 @@ function setupPdfExport() {
         pdf.save(`mapa-andar-${currentFloor}.pdf`);
     });
 }
+
 
 // Configuração dos eventos do modal
 document.addEventListener('DOMContentLoaded', function() {
