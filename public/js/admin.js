@@ -1,3 +1,5 @@
+import { updateUsuario, updateNomeUsuario, updateSenhaUsuario, getUsuarioById } from './fetchFunctions/fetchUsuarios.js';
+
 // Inicializar IRONGATE
 if (typeof IRONGATE === 'function') {
     IRONGATE();
@@ -210,17 +212,32 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Funções
     function loadUserData() {
-        // Aqui você deve implementar a lógica para carregar os dados do usuário do backend
-        // Por enquanto, vamos usar dados mockados
-        const mockUser = {
-            name: 'Administrador',
-            email: 'admin@fatec.sp.gov.br',
-            avatar: '../image/default-avatar.svg'
-        };
+        const userId = localStorage.getItem('userId');
+        if (!userId) return;
 
-        userName.textContent = mockUser.name;
-        userEmail.textContent = mockUser.email;
-        userAvatar.src = mockUser.avatar;
+        getUsuarioById(userId)
+            .then(result => {
+                let user = result.data;
+                if (Array.isArray(user)) {
+                    user = user[0]?.admin;
+                }
+                if (!user || !user.nome) {
+                    showToast('Usuário não encontrado ou dados incompletos!', 'error');
+                    return;
+                }
+                userName.textContent = user.nome;
+                userName.classList.remove('skeleton');
+                userEmail.textContent = user.email || '';
+                if (user.email) {
+                    userEmail.classList.remove('skeleton');
+                }
+                if (user.avatar) {
+                    userAvatar.src = user.avatar;
+                }
+            })
+            .catch(err => {
+                showToast('Erro ao carregar dados do usuário!', 'error');
+            });
     }
 
     function handleAvatarChange() {
@@ -247,11 +264,21 @@ document.addEventListener("DOMContentLoaded", function() {
     function handleNameChange(e) {
         e.preventDefault();
         const newName = document.getElementById('new-name').value;
-        
-        // Aqui você deve implementar a lógica para enviar o novo nome para o backend
-        userName.textContent = newName;
-        showToast('Nome atualizado com sucesso!', 'success');
-        changeNameForm.reset();
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+            showToast('Usuário não identificado!', 'error');
+            return;
+        }
+        updateNomeUsuario(userId, newName)
+            .then(result => {
+                loadUserData();
+                localStorage.setItem('userName', newName);
+                showToast('Nome atualizado com sucesso!', 'success');
+                changeNameForm.reset();
+            })
+            .catch(err => {
+                showToast('Erro ao atualizar nome!', 'error');
+            });
     }
 
     function handlePasswordChange(e) {
@@ -265,9 +292,19 @@ document.addEventListener("DOMContentLoaded", function() {
             return;
         }
 
-        // Aqui você deve implementar a lógica para enviar a nova senha para o backend
-        showToast('Senha atualizada com sucesso!', 'success');
-        changePasswordForm.reset();
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+            showToast('Usuário não identificado!', 'error');
+            return;
+        }
+        updateSenhaUsuario(userId, currentPassword, newPassword)
+            .then(result => {
+                showToast('Senha atualizada com sucesso!', 'success');
+                changePasswordForm.reset();
+            })
+            .catch(err => {
+                showToast('Erro ao atualizar senha!', 'error');
+            });
     }
 
     // Sidebar toggle
