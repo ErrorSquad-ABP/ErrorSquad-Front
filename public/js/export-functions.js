@@ -1,4 +1,4 @@
-// Exporta o PDF do andar atual em PAISAGEM, com cores fiéis
+// Exportação do mapa interativo
 function setupPdfExport() {
     const btn = document.getElementById('exportar-pdf');
     if (!btn) return;
@@ -44,3 +44,50 @@ function setupPdfExport() {
         pdf.save(`mapa-andar-${currentFloor}.pdf`);
     });
 }
+
+// Exportação da grade de horários
+
+document.addEventListener('DOMContentLoaded', () => {
+    const exportBtn = document.querySelector('button[data-export="pdf"]');
+    if (!exportBtn) return;
+  
+    exportBtn.addEventListener('click', async () => {
+      // 1) Captura os <select> de curso, nível e turno
+      const selects = document.querySelectorAll('.grade-actions select.btn-secondary');
+      if (selects.length < 3) {
+        return alert('Filtros não encontrados!');
+      }
+      const curso = selects[0].value.trim();   // ex: "DSM"
+      const nivel = selects[1].value.trim();   // ex: "1"
+      const turno = selects[2].value.trim();   // ex: "noite"
+  
+      // 2) Normaliza para nome de arquivo
+      const safe = str => str.replace(/\s+/g, '_');
+      const filename = `grade_${safe(curso)}_${safe(nivel)}_${safe(turno)}.pdf`;
+  
+      // 3) URL relativa na pasta public/assets
+      const url = `/assets/${filename}`;
+  
+      // 4) HEAD para checar existência
+      try {
+        const res = await fetch(url, { method: 'HEAD' });
+        if (!res.ok) {
+          return alert(
+            `PDF não encontrado para estes filtros:\n` +
+            `Curso: ${curso}\nNível: ${nivel}\nTurno: ${turno}`
+          );
+        }
+      } catch (err) {
+        console.error('Erro ao verificar PDF:', err);
+        return alert('Erro de conexão ao buscar o PDF.');
+      }
+  
+      // 5) Dispara o download
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    });
+  });
