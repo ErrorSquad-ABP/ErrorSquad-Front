@@ -2,12 +2,38 @@
 let currentFloor = 0;
 let roomsData = {};
 let salasAndar = [];
-let salasFiltradas = [];
+let salasFiltradas;
 
 let roomsDataResolve;
 const roomsDataReady = new Promise((resolve) => {
   roomsDataResolve = resolve;
 });
+
+function createGate() {
+    let open, promise;
+    
+    function closeGate() {
+        // Fecha o portão: cria uma nova promise pendente
+        promise = new Promise(resolve => open = resolve);
+    }
+
+    function openGate() {
+        // Abre o portão: resolve a promise
+        open?.();
+    }
+
+    async function waitGate() {
+        // Espera até o portão estar aberto
+        await promise;
+    }
+
+    // Fecha o portão ao iniciar
+    closeGate();
+
+    return { closeGate, openGate, waitGate };
+}
+
+const salasFiltradasGate = createGate();
 
 // Inicializar IRONGATE
 if (typeof IRONGATE === 'function') {
@@ -36,6 +62,8 @@ async function buscardadosSala() {
         const dadosSala = await getSalasInfo();
         if (dadosSala) {
             roomsData =  dadosSala;
+
+            // Resolve indicando que as salas foram carregadas
             roomsDataResolve();
         } else {
             showErrorToast('Dados não encontrados na resposta da API');
@@ -44,11 +72,9 @@ async function buscardadosSala() {
         console.error('Erro ao carregar a grade:', error);
         showErrorToast('Erro ao carregar a grade de horários. Por favor, tente novamente mais tarde.');
     }
-                console.log(roomsData);
-
 }
 
-        // Função para mostrar mensagem de erro
+// Função para mostrar mensagem de erro
 function showErrorToast(message) {
     const toastContainer = document.querySelector('.toast-container');
     if (toastContainer) {
@@ -67,7 +93,6 @@ async function loadFloorMap(floor) {
     currentFloor = floor;
     let displayName;
     salasAndar = [];
-
     switch(floor) {
         case '0':
             displayName = 'Térreo';
@@ -89,49 +114,79 @@ async function loadFloorMap(floor) {
             throw new Error(`Erro ao carregar o mapa do ${displayName}`);
         }
         
-        const svgContent = await response.text();
+        const htmlAndar = await response.text();
         const mapContent = await document.getElementById('map-content');
-        if (!mapContent) {
-            throw new Error('Elemento map-content não encontrado');
-        }
-        
-        mapContent.innerHTML = svgContent;
+        mapContent.innerHTML = htmlAndar;
         
         // Adiciona eventos de clique para abrir o modal
         mapContent.querySelectorAll('.sala').forEach(el => {
-
-            // Pega o ID de todas as salas do andar atual se for 'sala'
             if(el.getAttribute('data-room-id').slice(0,4) === 'sala') {
-                salasAndar.push(el.getAttribute('data-room-id'));
-            }
+
+            const idSala = el.getAttribute('data-room-id');
 
             el.addEventListener('click', (e) => {
-                const roomId = el.getAttribute('data-room-id');
-                if (roomId) {
+                if (idSala) {
                     // const roomDetails = getRoomDetails(roomId);
-                    abrirModal('modal', salasFiltradas[roomId]);
-                    console.log(salasFiltradas)
+                    abrirModal('modal', salasFiltradas[idSala]);
                 }
             });
+            // Pega o ID de todas as salas do andar atual se for 'sala'
+
+                salasAndar.push(idSala);
+                getSalasFiltradas();
+                atualizarSala(idSala);
+            }
         });
-        salasFiltradas = objetificar(filtrarHorario(filtrarDia(await filtroSalas())));
     } catch (error) {
         console.error('Erro ao carregar mapa:', error);
     }
 }
 
-async function getIdAmbiente(room) {
+async function getSalasFiltradas(){
+    await roomsDataReady;
+
+    salasFiltradas = objetificar(filtrarHorario(filtrarDia(await filtroSalas())));
+    console.log('Salas filtradas: ', salasFiltradas)
+
+    salasFiltradasGate.openGate();
+}
+
+async function atualizarSala(idSala){
+    await roomsDataReady;
+    await salasFiltradasGate.waitGate();
+
+    if(salasFiltradas[idSala] != undefined){
+    
+
+
+    const sala = document.querySelector(`[data-room-id="${idSala}"]`);
+
+    sala.style.borderStyle = 'solid';
+    sala.style.borderSize = '2px';
+    sala.style.borderColor = salasFiltradas[idSala].cor_docente;
+    sala.querySelector('.nome-sala').textContent = salasFiltradas[idSala].nome_ambiente.replace(/\d+$/, "");
+    sala.querySelector('.status-badge').classList.remove('status-disponivel');
+    sala.querySelector('.status-badge').classList.add('status-ocupada');
+    sala.querySelector('.status-badge').textContent = 'Ocupado'
+
+
+
+    salasFiltradasGate.closeGate();
+    }
+}
+
+async function getIdAmbiente(sala) {
     await roomsDataReady; // Espera os dados do mapa serem carregados
     try {
-        if (room.nome_ambiente == null) {
-            throw new Error(`Sala ${room} não encontrada nos dados.`);
+        if (sala.nome_ambiente == null) {
+            throw new Error(`Sala ${sala} não encontrada nos dados.`);
         }
     } catch (error) {
         console.error(error.message);
         return 'Ambiente desconhecido';
     }
     // Se a sala existir, retorna o id do ambiente
-    const ambiente = room.nome_ambiente;
+    const ambiente = sala.nome_ambiente;
     return `sala-${ambiente.slice(-3).replace(/\s/g, "")}`;
 }   
 
@@ -318,6 +373,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setupEventListeners();
     setupPdfExport();
     buscardadosSala();
+    getSalasFiltradas();
 }); 
 
 
