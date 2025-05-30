@@ -469,6 +469,10 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    function formatarHora(horaStr) {
+        return horaStr?.slice(0,5) || '';
+    }
+
     // Função para montar dinamicamente a tabela de horários
     function montarTabelaGrade(diasGrade, horariosGrade) {
         const tbody = document.querySelector('.grade-table tbody');
@@ -480,7 +484,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const tdHorario = document.createElement('td');
             const hInicio = horario.hr_inicio?.value || horario.hr_inicio;
             const hFim = horario.hr_fim?.value || horario.hr_fim;
-            tdHorario.textContent = `${hInicio} às ${hFim}`;
+            tdHorario.textContent = `${formatarHora(hInicio)} às ${formatarHora(hFim)}`;
             tr.appendChild(tdHorario);
             // Células dos dias
             diasGrade.forEach((dia, diaIndex) => {
