@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Início - FATEC</title>
+    <link rel="icon" type="image/x-icon" href="image/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="image/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="image/favicon-16x16.png">
+    <link rel="stylesheet" href="css/guest_styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Conteúdo principal -->
+        <main class="main-content">
+            <header class="topbar">
+                <div class="logo-container">
+                    <img src="image/Fatec-removebg-preview.png" alt="FATEC" class="header-logo">
+                </div>
+                
+                <div class="header-actions">
+                    <button id="login-btn" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Login
+                    </button>
+                </div>
+            </header>
+
+            <div class="breadcrumb">
+                <div class="breadcrumb-item active">
+                    <i class="fas fa-home"></i> &nbsp; Início
+                </div>
+            </div>
+
+            <!-- Área de conteúdo para visitantes -->
+            <div class="guest-container">
+                <h2 class="section-title">
+                    <i class="fas fa-university"></i>
+                    Bem-vindo à FATEC
+                </h2>
+                
+                <!-- Cards informativos -->
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Cursos Disponíveis</h3>
+                            <p class="stat-number">12</p>
+                            <p class="stat-change">
+                                <i class="fas fa-info-circle"></i>
+                                Cursos técnicos e tecnólogos
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Alunos Formados</h3>
+                            <p class="stat-number">5.000+</p>
+                            <p class="stat-change">
+                                <i class="fas fa-info-circle"></i>
+                                Profissionais no mercado
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Professores Qualificados</h3>
+                            <p class="stat-number">150+</p>
+                            <p class="stat-change">
+                                <i class="fas fa-info-circle"></i>
+                                Corpo docente especializado
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <!-- Próximos Eventos -->
+                    <div class="upcoming-events">
+                        <h3><i class="fas fa-calendar-alt"></i> Próximos Eventos</h3>
+                        <div class="events-list">
+                            <div class="event-item">
+                                <div class="event-date">
+                                    <span class="day">15</span>
+                                    <span class="month">MAR</span>
+                                </div>
+                                <div class="event-info">
+                                    <h4>Início do Semestre</h4>
+                                    <p>Primeiro dia de aulas do novo semestre</p>
+                                </div>
+                            </div>
+                            <div class="event-item">
+                                <div class="event-date">
+                                    <span class="day">20</span>
+                                    <span class="month">MAR</span>
+                                </div>
+                                <div class="event-info">
+                                    <h4>Reunião de Colegiado</h4>
+                                    <p>Discussão sobre novas diretrizes</p>
+                                </div>
+                            </div>
+                            <div class="event-item">
+                                <div class="event-date">
+                                    <span class="day">25</span>
+                                    <span class="month">MAR</span>
+                                </div>
+                                <div class="event-info">
+                                    <h4>Palestra Técnica</h4>
+                                    <p>Desenvolvimento de Software na Prática</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Informações Institucionais -->
+                    <div class="institutional-info">
+                        <h3><i class="fas fa-info-circle"></i> Informações Institucionais</h3>
+                        <div class="info-content">
+                            <p>A FATEC oferece cursos técnicos e tecnólogos de alta qualidade, preparando profissionais para o mercado de trabalho.</p>
+                            <ul class="info-list">
+                                <li><i class="fas fa-check"></i> Cursos reconhecidos pelo MEC</li>
+                                <li><i class="fas fa-check"></i> Professores qualificados</li>
+                                <li><i class="fas fa-check"></i> Infraestrutura moderna</li>
+                                <li><i class="fas fa-check"></i> Parcerias com empresas</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cursos Oferecidos -->
+                <div class="courses-section">
+                    <h3><i class="fas fa-graduation-cap"></i> Cursos Oferecidos</h3>
+                    <div class="courses-grid">
+                        <div class="course-card">
+                            <div class="course-icon">
+                                <i class="fas fa-laptop-code"></i>
+                            </div>
+                            <h4>Desenvolvimento de Software Multiplataforma</h4>
+                            <p>Formação em desenvolvimento de aplicações para diferentes plataformas.</p>
+                            <a href="#" class="course-link">Saiba mais <i class="fas fa-arrow-right"></i></a>
+                        </div>
+
+                        <div class="course-card">
+                            <div class="course-icon">
+                                <i class="fas fa-map-marked-alt"></i>
+                            </div>
+                            <h4>Geoprocessamento</h4>
+                            <p>Análise e gestão de dados espaciais com tecnologias geoespaciais.</p>
+                            <a href="#" class="course-link">Saiba mais <i class="fas fa-arrow-right"></i></a>
+                        </div>
+
+                        <div class="course-card">
+                            <div class="course-icon">
+                                <i class="fas fa-leaf"></i>
+                            </div>
+                            <h4>Recursos Hídricos e Meio Ambiente</h4>
+                            <p>Gestão sustentável dos recursos hídricos e preservação ambiental.</p>
+                            <a href="#" class="course-link">Saiba mais <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Rodapé -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Contato</h4>
+                    <ul>
+                        <li><i class="fas fa-phone"></i> (11) 1234-5678</li>
+                        <li><i class="fas fa-envelope"></i> contato@fatec.sp.gov.br</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Av. Exemplo, 123 - São Paulo, SP</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Links Úteis</h4>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-map"></i> Mapa Interativo</a></li>
+                        <li><a href="#"><i class="fas fa-calendar-alt"></i> Calendário Acadêmico</a></li>
+                        <li><a href="#"><i class="fas fa-book"></i> Biblioteca</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Redes Sociais</h4>
+                    <div class="social-links">
+                        <a href="#" title="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 FATEC. Todos os direitos reservados.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="js/script.js"></script>
+    <script>
+        document.getElementById('login-btn').addEventListener('click', function() {
+            window.location.href = 'http://localhost:3000/login';
+        });
+    </script>
+</body>
+</html>
