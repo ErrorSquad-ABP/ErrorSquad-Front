@@ -1,5 +1,5 @@
 // Configuração da API
-const API_URL = 'https://errorsquad-server.onrender.com';
+const API_URL = 'http://localhost:3001';
 
 // Função para obter o token
 function getToken() {
@@ -29,7 +29,7 @@ async function fetchGradeData() {
                 'Authorization': `Bearer ${token}`
             }
         });
-        
+        console.log(response)
         if (!response.ok) {
             if (response.status === 401) {
                 localStorage.removeItem('token');
