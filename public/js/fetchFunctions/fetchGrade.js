@@ -1,5 +1,5 @@
 // Configuração da API
-const API_URL = 'http://localhost:3001';
+const API_URL = 'https://errorsquad-server.onrender.com';
 
 // Função para obter o token
 function getToken() {
