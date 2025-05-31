@@ -2,6 +2,8 @@ import { getDisciplinas, createDisciplina, updateDisciplina, deleteDisciplina } 
 import { getDocentes } from './fetchFunctions/fetchDocentes.js';
 import { getCursos } from './fetchFunctions/fetchCursos.js';
 import { showToast } from './toast.js';
+const API_URL = 'http://localhost:3001';
+const socket = io(API_URL);
 
 // Inicializar IRONGATE
 if (typeof IRONGATE === 'function') {
@@ -56,6 +58,27 @@ document.addEventListener("DOMContentLoaded", function() {
         selectCursoEdit.innerHTML = '<option value="">Selecione o curso</option>';
         try {
             const cursos = await getCursos();
+            cursos.forEach(curso => {
+                const optionAdd = document.createElement('option');
+                optionAdd.value = curso.sigla;
+                optionAdd.textContent = curso.sigla;
+                selectCursoAdd.appendChild(optionAdd);
+                const optionEdit = document.createElement('option');
+                optionEdit.value = curso.sigla;
+                optionEdit.textContent = curso.sigla;
+                selectCursoEdit.appendChild(optionEdit);
+            });
+        } catch (error) {
+            console.error('Erro ao carregar cursos:', error);
+        }
+    }
+
+    async function adicionarCurso(curso){
+        const selectCursoAdd = document.getElementById('curso');
+        const selectCursoEdit = document.getElementById('edit-curso');
+        selectCursoAdd.innerHTML = '<option value="">Selecione o curso</option>';
+        selectCursoEdit.innerHTML = '<option value="">Selecione o curso</option>';
+        try {
             cursos.forEach(curso => {
                 const optionAdd = document.createElement('option');
                 optionAdd.value = curso.sigla;
@@ -505,6 +528,13 @@ document.addEventListener("DOMContentLoaded", function() {
         clearError('edit-professor');
         clearError('edit-curso');
     }
+
+    //webSocket event
+        socket.on("disciplina_created", (data) => {
+            console.log("Evento disciplina_created recebido!", data);
+        adicionarCurso(data.curso)
+
+        });
     
     // Inicializar a página
     preencherSelectsDisciplina();
