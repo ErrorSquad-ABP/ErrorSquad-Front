@@ -7,7 +7,7 @@ if (typeof IRONGATE === 'function') {
 import { fetchGradeData, getToken, getAdminId, uploadCSV, filtrarDocentes } from './fetchFunctions/fetchGrade.js';
 import { useState } from './useState.js';
 // URL base da API
-const API_URL = 'http://localhost:3001';
+const API_URL = 'https://errorsquad-server.onrender.com';
 const socket = io(API_URL);
 
 
@@ -267,7 +267,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
         try {
-            const response = await fetch(`http://localhost:3001/admin/${id}/ambientes`, {
+            const response = await fetch(`https://errorsquad-server.onrender.com/admin/${id}/ambientes`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -403,7 +403,7 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log('Payload enviado:', payload);
             try {
                 const token = localStorage.getItem('token');
-                const resp = await fetch(`http://localhost:3001/admin/${userId}/periodos`, {
+                const resp = await fetch(`https://errorsquad-server.onrender.com/admin/${userId}/periodos`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
