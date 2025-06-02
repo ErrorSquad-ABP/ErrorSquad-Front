@@ -151,7 +151,6 @@ async function getSalasFiltradas(){
     await roomsDataReady;
 
     salasFiltradas = objetificar(filtrarHorario(filtrarDia(await filtroSalas())));
-    console.log('Salas filtradas: ', salasFiltradas)
 
     salasFiltradasGate.openGate();
 }
@@ -198,8 +197,6 @@ async function getIdAmbiente(sala) {
 function abrirModal(modalId, dadosSala) {
     const modal = document.getElementById(modalId);
     if (!modal) return;
-
-    console.log('Modal aberto')
 
     // Preenche os dados da sala no modal
     if (dadosSala) {
@@ -399,7 +396,6 @@ async function filtroSalas() {
         }
     }
 
-    console.log('Salas filtradas', filtrado)
     return filtrado; // se quiser retornar as salas filtradas
 }
 
@@ -415,7 +411,6 @@ function filtrarDia(salas) {
         }
     });
 
-    console.log('Salas filtradas por dia: ', filtradas)
     return filtradas
 }
 
