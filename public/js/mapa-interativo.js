@@ -164,7 +164,6 @@ async function atualizarSala(idSala){
     sala.style.borderStyle = 'solid';
     sala.style.borderSize = '2px';
     sala.style.borderColor = salasFiltradas[idSala].cor_docente;
-    sala.querySelector('.nome-sala').textContent = salasFiltradas[idSala].nome_ambiente.replace(/\d+$/, "");
     sala.querySelector('.status-badge').classList.remove('status-disponivel');
     sala.querySelector('.status-badge').classList.add('status-ocupada');
     sala.querySelector('.status-badge').textContent = 'Ocupado'
