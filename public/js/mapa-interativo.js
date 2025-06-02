@@ -124,17 +124,22 @@ async function loadFloorMap(floor) {
 
             const idSala = el.getAttribute('data-room-id');
 
-            el.addEventListener('click', (e) => {
-                if (idSala) {
-                    // const roomDetails = getRoomDetails(roomId);
-                    abrirModal('modal', salasFiltradas[idSala]);
-                }
-            });
+
             // Pega o ID de todas as salas do andar atual se for 'sala'
 
-                salasAndar.push(idSala);
-                getSalasFiltradas();
-                atualizarSala(idSala);
+            salasAndar.push(idSala);
+            getSalasFiltradas();
+            atualizarSala(idSala);
+
+            el.addEventListener('click', (e) => {
+                if (idSala) {
+                    if (salasFiltradas[idSala]){
+                      abrirModal('modal', salasFiltradas[idSala]);
+                    } else {
+                        abrirModal('salaVazia', null);
+                    }
+                }
+            });
             }
         });
     } catch (error) {
@@ -193,6 +198,8 @@ async function getIdAmbiente(sala) {
 function abrirModal(modalId, dadosSala) {
     const modal = document.getElementById(modalId);
     if (!modal) return;
+
+    console.log('Modal aberto')
 
     // Preenche os dados da sala no modal
     if (dadosSala) {

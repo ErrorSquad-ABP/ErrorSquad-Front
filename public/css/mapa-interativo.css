@@ -673,16 +673,6 @@
     margin-bottom: 16px;
 }
 
-.modal-periculosidade {
-    background-color: #dc3545;
-    height: 25px;
-    width: 25px;
-    border-radius: 50%;
-    position: absolute;
-    bottom: 0.2em;
-    right: 1.5em;
-}
-
 .modal-footer {
     padding: 1.5rem;
     border-top: 1px solid #eee;
