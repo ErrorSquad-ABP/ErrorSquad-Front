@@ -116,66 +116,83 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
     
+    renderDisciplinas([]); // Mostra mensagem de "nenhuma disciplina"
     // Função para renderizar os cards de disciplinas
     function renderDisciplinas(disciplinasToRender = []) {
-        disciplinasList.innerHTML = "";
-        
-        if (disciplinasToRender.length === 0) {
-            disciplinasList.innerHTML = `
-                <div class="mensagem-vazia">
-                    <i class="fas fa-info-circle"></i>
-                    <p>Nenhuma disciplina cadastrada no momento.</p>
-                </div>
-            `;
+        const disciplinasList = document.getElementById('disciplinas-list');
+        if (!disciplinasList) {
+            console.error('Elemento disciplinas-list não encontrado');
             return;
         }
-        
-        // Pequeno delay para garantir que a animação seja visível
+    
+        disciplinasList.innerHTML = "";
+    
+        // Mensagem temporária de vazio
+        const mensagemVazia = document.createElement('div');
+        mensagemVazia.className = 'mensagem-vazia';
+        mensagemVazia.innerHTML = `
+            <i class="fas fa-info-circle"></i>
+            <p>Nenhuma disciplina cadastrada no momento.</p>
+        `;
+        disciplinasList.appendChild(mensagemVazia);
+    
+        // Força o navegador a exibir a mensagem antes do delay
         setTimeout(() => {
-            disciplinasToRender.forEach((disciplina, index) => {
-                // Badge de curso
-                let badgeClass = '';
-                let cursoLabel = (disciplina.sigla_curso || '').toUpperCase();
-                switch (cursoLabel) {
-                    case 'DSM': badgeClass = 'badge-dsm'; break;
-                    case 'GEO': badgeClass = 'badge-geo'; break;
-                    case 'MAR': badgeClass = 'badge-mar'; break;
-                    default: badgeClass = 'badge-dsm'; // fallback
+            setTimeout(() => {
+                disciplinasList.innerHTML = ""; // Remove a mensagem temporária
+    
+                if (disciplinasToRender.length === 0) {
+                    // Nenhuma disciplina: mantém a mensagem
+                    disciplinasList.appendChild(mensagemVazia);
+                    return;
                 }
-                const card = document.createElement('div');
-                card.className = 'disciplina-card';
-                card.style.animationDelay = `${(index + 1) * 0.1}s`;
-                card.innerHTML = `
-                    <div class="disciplina-header">
-                        <span class="badge ${badgeClass}">${cursoLabel}</span>
-                        <h3>${disciplina.nome_disciplina}</h3>
-                    </div>
-                    <div class="disciplina-info">
-                        <p><i class="fas fa-user"></i> ${disciplina.nome_docente}</p>
-                        <p><i class="fas fa-hashtag"></i> ID: ${disciplina.id_disciplina}</p>
-                    </div>
-                    <div class="disciplina-actions">
-                        <button class="btn-edit" title="Editar"><i class="fas fa-edit"></i></button>
-                        <button class="btn-delete" title="Excluir"><i class="fas fa-trash"></i></button>
-                    </div>
-                `;
-
-                // Adicionar eventos aos botões
-                const btnEdit = card.querySelector('.btn-edit');
-                const btnDelete = card.querySelector('.btn-delete');
-
-                btnEdit.addEventListener('click', () => {
-                    abrirModalEditarDisciplina(disciplina);
+    
+                // Renderiza as disciplinas
+                disciplinasToRender.forEach((disciplina, index) => {
+                    // Badge de curso
+                    let badgeClass = '';
+                    let cursoLabel = (disciplina.sigla_curso || '').toUpperCase();
+                    switch (cursoLabel) {
+                        case 'DSM': badgeClass = 'badge-dsm'; break;
+                        case 'GEO': badgeClass = 'badge-geo'; break;
+                        case 'MAR': badgeClass = 'badge-mar'; break;
+                        default: badgeClass = 'badge-dsm';
+                    }
+    
+                    const card = document.createElement('div');
+                    card.className = 'disciplina-card';
+                    card.style.animationDelay = `${(index + 1) * 0.1}s`;
+                    card.innerHTML = `
+                        <div class="disciplina-header">
+                            <span class="badge ${badgeClass}">${cursoLabel}</span>
+                            <h3>${disciplina.nome_disciplina}</h3>
+                        </div>
+                        <div class="disciplina-info">
+                            <p><i class="fas fa-user"></i> ${disciplina.nome_docente}</p>
+                            <p><i class="fas fa-hashtag"></i> ID: ${disciplina.id_disciplina}</p>
+                        </div>
+                        <div class="disciplina-actions">
+                            <button class="btn-edit" title="Editar"><i class="fas fa-edit"></i></button>
+                            <button class="btn-delete" title="Excluir"><i class="fas fa-trash"></i></button>
+                        </div>
+                    `;
+    
+                    const btnEdit = card.querySelector('.btn-edit');
+                    const btnDelete = card.querySelector('.btn-delete');
+    
+                    btnEdit.addEventListener('click', () => {
+                        abrirModalEditarDisciplina(disciplina);
+                    });
+    
+                    btnDelete.addEventListener('click', () => {
+                        abrirModalConfirmarDelecao(disciplina);
+                    });
+    
+                    disciplinasList.appendChild(card);
                 });
-
-                btnDelete.addEventListener('click', () => {
-                    abrirModalConfirmarDelecao(disciplina);
-                });
-
-                disciplinasList.appendChild(card);
-            });
-        }, 100);
-    }
+            }, 300); // Delay simulado
+        }, 0); // Força a renderização da mensagem
+    }    
     
     // Função para criar um card de disciplina
     function createDisciplinaCard(disciplina) {
