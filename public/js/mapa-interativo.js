@@ -130,6 +130,7 @@ async function loadFloorMap(floor) {
             salasAndar.push(idSala);
             getSalasFiltradas();
             atualizarSala(idSala);
+            atualizarListaDocentes();
 
             el.addEventListener('click', (e) => {
                 if (idSala) {
@@ -458,3 +459,42 @@ function objetificar(string) {
     return temp
 }
       
+async function atualizarListaDocentes() {
+        await roomsDataReady;
+        await salasFiltradasGate.waitGate();
+
+            try {
+            const docentesTable = document.querySelector('.docentes-table tbody');
+            if (!docentesTable) {
+                console.error('Tabela de docentes não encontrada');
+                return;
+            }
+
+            docentesTable.innerHTML = '';
+
+            document.querySelectorAll('.sala').forEach(el => {
+                if(el.getAttribute('data-room-id').slice(0,4) === 'sala') {
+                    const sala = salasFiltradas[el.getAttribute('data-room-id')];
+                    if(sala){
+                        console.log(el.getAttribute('data-room-id'))
+                    console.log(sala.cor_docente);
+                    const corDocente = (sala.cor_docente && sala.cor_docente.toLowerCase() !== '#ffffff') ? sala.cor_docente : '#ffffff';
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>
+                            <div class="docente-item" style="background-color: ${corDocente}">
+                                ${sala.nome_docente}
+                            </div>
+                        </td>
+                    `;
+                    docentesTable.appendChild(tr);
+                    }
+                }});
+        }catch (error) {
+            console.error('Erro ao atualizar lista de docentes:', error);
+            const docentesTable = document.querySelector('.docentes-table tbody');
+            if (docentesTable) {
+                docentesTable.innerHTML = '<tr><td>Erro ao carregar lista de docentes</td></tr>';
+            }
+        }
+    };

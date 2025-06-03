@@ -836,3 +836,51 @@
 .btn-search {
     display: none;
 } 
+
+/* Estilos dos docentes com cores mais vibrantes */
+.docentes-section {
+    margin-top: 30px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.docentes-section h4 {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 1.2rem;
+}
+
+.docentes-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.docentes-table td {
+    padding: 12px 15px;
+    border: none !important;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.docentes-table td:hover {
+    transform: translateX(5px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Cores dos docentes correspondentes às disciplinas */
+.docentes-table td[style*="background-color: #e6ccff"] { background-color: #b794f4 !important; }
+.docentes-table td[style*="background-color: #ffffcc"] { background-color: #f6e05e !important; }
+.docentes-table td[style*="background-color: #cce6ff"] { background-color: #63b3ed !important; }
+.docentes-table td[style*="background-color: #e6f3ff"] { background-color: #4fd1c5 !important; }
+.docentes-table td[style*="background-color: #ccffff"] { background-color: #38b2ac !important; }
+.docentes-table td[style*="background-color: #ffcccc"] { background-color: #fc8181 !important; }
+
+.docente-item {
+    color: #333 !important;
+    font-weight: 600 !important;
+    padding: 8px 12px !important;
+    border-radius: 6px !important;
+    margin-bottom: 6px !important;
+}
