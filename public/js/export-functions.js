@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const filename = `grade_${safe(curso)}_${safe(nivel)}_${safe(turno)}.pdf`;
   
       // 3) URL relativa na pasta public/assets
-      const url = `/assets/${filename}`;
+      const url = `/pdfs/${filename}`;
   
       // 4) HEAD para checar existência
       try {
