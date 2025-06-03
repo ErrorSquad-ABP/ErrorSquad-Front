@@ -81,6 +81,7 @@ export async function createDisciplina(disciplinaData) {
 export async function updateDisciplina(idDisciplina, disciplinaData) {
     const token = localStorage.getItem('token');
     const id = getAdminId();
+
     if (!token) {
         window.location.href = '/public/login.html';
         return;
@@ -93,6 +94,7 @@ export async function updateDisciplina(idDisciplina, disciplinaData) {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
+
             body: JSON.stringify({ id: idDisciplina, ...disciplinaData })
         });
 

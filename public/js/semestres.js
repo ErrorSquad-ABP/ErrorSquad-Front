@@ -63,12 +63,27 @@ async function carregarDados() {
     }
 }
 
+renderSemestres([]);
 // Give Us This Day Our Daily Bread,
 function renderSemestres() {
     const semestresList = document.getElementById('semestres-list');
-    if (!semestresList) return;
+    if (!semestresList) {
+        console.error('Elemento semestres-list não encontrado');
+        return;
+    }
 
     semestresList.innerHTML = '';
+
+    if (semestres.length === 0) {
+        const mensagemVazia = document.createElement('div');
+        mensagemVazia.className = 'mensagem-vazia';
+        mensagemVazia.innerHTML = `
+            <i class="fas fa-info-circle"></i>
+            <p>Nenhum semestre cadastrado no momento.</p>
+        `;
+        semestresList.appendChild(mensagemVazia);
+        return;
+    }
 
     semestres.forEach(semestre => {
         const card = createSemestreCard(semestre);

@@ -116,104 +116,84 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
     
+    renderDisciplinas([]); // Mostra mensagem de "nenhuma disciplina"
     // Função para renderizar os cards de disciplinas
     function renderDisciplinas(disciplinasToRender = []) {
-        disciplinasList.innerHTML = "";
-        
-        if (disciplinasToRender.length === 0) {
-            disciplinasList.innerHTML = `
-                <div class="mensagem-vazia">
-                    <i class="fas fa-info-circle"></i>
-                    <p>Nenhuma disciplina cadastrada no momento.</p>
-                </div>
-            `;
+        const disciplinasList = document.getElementById('disciplinas-list');
+        if (!disciplinasList) {
+            console.error('Elemento disciplinas-list não encontrado');
             return;
         }
-        
-        // Pequeno delay para garantir que a animação seja visível
-        setTimeout(() => {
-            disciplinasToRender.forEach((disciplina, index) => {
-                // Badge de curso
-                let badgeClass = '';
-                let cursoLabel = (disciplina.sigla_curso || '').toUpperCase();
-                switch (cursoLabel) {
-                    case 'DSM': badgeClass = 'badge-dsm'; break;
-                    case 'GEO': badgeClass = 'badge-geo'; break;
-                    case 'MAR': badgeClass = 'badge-mar'; break;
-                    default: badgeClass = 'badge-dsm'; // fallback
-                }
-                const card = document.createElement('div');
-                card.className = 'disciplina-card';
-                card.style.animationDelay = `${(index + 1) * 0.1}s`;
-                card.innerHTML = `
-                    <div class="disciplina-header">
-                        <span class="badge ${badgeClass}">${cursoLabel}</span>
-                        <h3>${disciplina.nome_disciplina}</h3>
-                    </div>
-                    <div class="disciplina-info">
-                        <p><i class="fas fa-user"></i> ${disciplina.nome_docente}</p>
-                        <p><i class="fas fa-hashtag"></i> ID: ${disciplina.id_disciplina}</p>
-                    </div>
-                    <div class="disciplina-actions">
-                        <button class="btn-edit" title="Editar"><i class="fas fa-edit"></i></button>
-                        <button class="btn-delete" title="Excluir"><i class="fas fa-trash"></i></button>
-                    </div>
-                `;
-
-                // Adicionar eventos aos botões
-                const btnEdit = card.querySelector('.btn-edit');
-                const btnDelete = card.querySelector('.btn-delete');
-
-                btnEdit.addEventListener('click', () => {
-                    abrirModalEditarDisciplina(disciplina);
-                });
-
-                btnDelete.addEventListener('click', () => {
-                    abrirModalConfirmarDelecao(disciplina);
-                });
-
-                disciplinasList.appendChild(card);
-            });
-        }, 100);
-    }
     
-    // Função para criar um card de disciplina
-    function createDisciplinaCard(disciplina) {
-        const card = document.createElement("div");
-        card.className = "disciplina-card";
-        card.dataset.id = disciplina.id;
-        
-        // Definir classe do curso
-        let cursoClass = "";
-        switch(disciplina.curso) {
-            case "DSM": cursoClass = "curso-dsm"; break;
-            case "GEO": cursoClass = "curso-geo"; break;
-            case "MAR": cursoClass = "curso-mar"; break;
-        }
-        
-        card.innerHTML = `
-            <div class="disciplina-header">
-                <div class="disciplina-icon">
-                    <i class="fas fa-book"></i>
-                </div>
-                <div class="disciplina-info">
-                    <h3>${disciplina.nome}</h3>
-                    <p class="professor">${disciplina.professor}</p>
-                    <span class="disciplina-curso ${cursoClass}">${disciplina.curso}</span>
-                </div>
-            </div>
-            <div class="disciplina-actions">
-                <button class="btn-edit" onclick="editDisciplina(${disciplina.id})">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn-delete" onclick="deleteDisciplina(${disciplina.id})">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
+        disciplinasList.innerHTML = "";
+    
+        // Mensagem temporária de vazio
+        const mensagemVazia = document.createElement('div');
+        mensagemVazia.className = 'mensagem-vazia';
+        mensagemVazia.innerHTML = `
+            <i class="fas fa-info-circle"></i>
+            <p>Nenhuma disciplina cadastrada no momento.</p>
         `;
-        
-        return card;
-    }
+        disciplinasList.appendChild(mensagemVazia);
+    
+        // Força o navegador a exibir a mensagem antes do delay
+        setTimeout(() => {
+            setTimeout(() => {
+                disciplinasList.innerHTML = ""; // Remove a mensagem temporária
+    
+                if (disciplinasToRender.length === 0) {
+                    // Nenhuma disciplina: mantém a mensagem
+                    disciplinasList.appendChild(mensagemVazia);
+                    return;
+                }
+    
+                // Renderiza as disciplinas
+                disciplinasToRender.forEach((disciplina, index) => {
+                    // Badge de curso
+                    let badgeClass = '';
+                    let cursoLabel = (disciplina.sigla_curso || '').toUpperCase();
+                    switch (cursoLabel) {
+                        case 'DSM': badgeClass = 'badge-dsm'; break;
+                        case 'GEO': badgeClass = 'badge-geo'; break;
+                        case 'MAR': badgeClass = 'badge-mar'; break;
+                        default: badgeClass = 'badge-dsm';
+                    }
+    
+                    const card = document.createElement('div');
+                    card.className = 'disciplina-card';
+                    card.style.animationDelay = `${(index + 1) * 0.1}s`;
+                    card.innerHTML = `
+                        <div class="disciplina-header">
+                            <span class="badge ${badgeClass}">${cursoLabel}</span>
+                            <h3>${disciplina.nome_disciplina}</h3>
+                        </div>
+                        <div class="disciplina-info">
+                            <p><i class="fas fa-user"></i> ${disciplina.nome_docente}</p>
+                            <p><i class="fas fa-hashtag"></i> ID: ${disciplina.id_disciplina}</p>
+                        </div>
+                        <div class="disciplina-actions">
+                            <button class="btn-edit" title="Editar"><i class="fas fa-edit"></i></button>
+                            <button class="btn-delete" title="Excluir"><i class="fas fa-trash"></i></button>
+                        </div>
+                    `;
+    
+                    const btnEdit = card.querySelector('.btn-edit');
+                    const btnDelete = card.querySelector('.btn-delete');
+    
+                    btnEdit.addEventListener('click', () => {
+                        abrirModalEditarDisciplina(disciplina);
+                    });
+    
+                    btnDelete.addEventListener('click', () => {
+                        abrirModalConfirmarDelecao(disciplina);
+                    });
+    
+                    disciplinasList.appendChild(card);
+                });
+            }, 300); // Delay simulado
+        }, 0); // Força a renderização da mensagem
+    }    
+    
     
     // Função de busca
     function searchDisciplinas(query) {
@@ -226,7 +206,8 @@ document.addEventListener("DOMContentLoaded", function() {
         const filteredDisciplinas = todasDisciplinas.filter(disciplina => 
             disciplina.nome_disciplina.toLowerCase().includes(query) ||
             disciplina.nome_docente.toLowerCase().includes(query) ||
-            disciplina.sigla_curso.toLowerCase().includes(query)
+            disciplina.sigla_curso.toLowerCase().includes(query) ||
+            disciplina.codigo.toLowerCase().includes(query) 
         );
         
         renderDisciplinas(filteredDisciplinas);
@@ -254,6 +235,7 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('edit-nome').value = disciplina.nome_disciplina;
         document.getElementById('edit-professor').value = disciplina.nome_docente;
         document.getElementById('edit-curso').value = disciplina.sigla_curso;
+        document.getElementById('edit-codigo').value = disciplina.codigo;
         modal.classList.add('show');
         document.body.style.overflow = 'hidden';
     }
@@ -327,12 +309,15 @@ document.addEventListener("DOMContentLoaded", function() {
         const nome = document.getElementById('nome').value;
         const professorId = document.getElementById('professor').value;
         const cursoId = document.getElementById('curso').value;
+        const codigo = document.getElementById('codigo').value;
+
 
         try {
             const disciplinaData = {
                 nome: nome,
                 docente: professorId,
-                curso: cursoId
+                curso: cursoId,
+                codigo: codigo
             };
 
             console.log('Dados sendo enviados:', disciplinaData);
@@ -361,13 +346,15 @@ document.addEventListener("DOMContentLoaded", function() {
         const nome = document.getElementById('edit-nome').value;
         const professorNome = document.getElementById('edit-professor').value;
         const cursoSigla = document.getElementById('edit-curso').value;
+        const codigo = document.getElementById('edit-codigo').value;
 
         try {
             const disciplinaData = {
                 id: id,
                 nome: nome,
                 nome_docente: professorNome,
-                nome_curso: cursoSigla
+                nome_curso: cursoSigla,
+                codigo: codigo
             };
 
             const result = await updateDisciplina(id, disciplinaData);
@@ -457,11 +444,15 @@ document.addEventListener("DOMContentLoaded", function() {
         const nome = document.getElementById('nome').value.trim();
         const professor = document.getElementById('professor').value.trim();
         const curso = document.getElementById('curso').value.trim();
+        const codigo = document.getElementById('codigo').value.trim();
+
         
         // Limpar erros anteriores
         clearError('nome');
         clearError('professor');
         clearError('curso');
+        clearError('codigo');
+
         
         if (!nome) {
             showError('nome', 'Por favor, preencha o nome da disciplina');
@@ -477,6 +468,11 @@ document.addEventListener("DOMContentLoaded", function() {
             showError('curso', 'Por favor, selecione um curso');
             isValid = false;
         }
+
+        if (!codigo) {
+            showError('codigo', 'Por favor, selecione um codigo');
+            isValid = false;
+        }
         
         return isValid;
     }
@@ -487,11 +483,15 @@ document.addEventListener("DOMContentLoaded", function() {
         const nome = document.getElementById('edit-nome').value.trim();
         const professor = document.getElementById('edit-professor').value.trim();
         const curso = document.getElementById('edit-curso').value.trim();
+        const codigo = document.getElementById('edit-codigo').value.trim();
+
         
         // Limpar erros anteriores
         clearError('edit-nome');
         clearError('edit-professor');
         clearError('edit-curso');
+        clearError('edit-codigo');
+
         
         if (!nome) {
             showError('edit-nome', 'Por favor, preencha o nome da disciplina');
@@ -507,6 +507,11 @@ document.addEventListener("DOMContentLoaded", function() {
             showError('edit-curso', 'Por favor, selecione um curso');
             isValid = false;
         }
+
+        if (!codigo) {
+            showError('edit-codigo', 'Por favor, selecione um codigo');
+            isValid = false;
+        }
         
         return isValid;
     }
@@ -518,6 +523,8 @@ document.addEventListener("DOMContentLoaded", function() {
         clearError('nome');
         clearError('professor');
         clearError('curso');
+        clearError('codigo');
+
     }
 
     // Função para limpar formulário de edição
@@ -527,6 +534,7 @@ document.addEventListener("DOMContentLoaded", function() {
         clearError('edit-nome');
         clearError('edit-professor');
         clearError('edit-curso');
+        clearError('edit-codigo');
     }
 
     //webSocket event
