@@ -3,21 +3,21 @@ if (typeof IRONGATE === 'function') {
     IRONGATE();
 }
 
-import * as fetchCursos  from './fetchFunctions/fetchCursos.js';
+import * as fetchCursos from './fetchFunctions/fetchCursos.js';
 
 // Script específico para a página de Cursos
 let cursos = [];
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
 
     // Inicializar a página
     initializeCursos();
-    
+
     // Elementos
     const cursosList = document.getElementById("cursos-list");
     const searchInput = document.getElementById("search-curso");
     const addCursoBtn = document.getElementById("add-curso");
-    
+
     // Lista de coordenadores
     const coordenadores = [
         "João Silva",
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const nomeCurso = nomeSelect.value;
         const sigla = cursoParaSigla[nomeCurso] || "";
         siglaSelect.value = sigla;
-        
+
         // Atualizar validação
         if (sigla) {
             showSuccess(siglaSelect);
@@ -50,11 +50,11 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Event listeners para sincronização de siglas
-    document.getElementById('nome').addEventListener('change', function() {
+    document.getElementById('nome').addEventListener('change', function () {
         sincronizarSigla(this, document.getElementById('sigla'));
     });
 
-    document.getElementById('edit-nome').addEventListener('change', function() {
+    document.getElementById('edit-nome').addEventListener('change', function () {
         sincronizarSigla(this, document.getElementById('edit-sigla'));
     });
 
@@ -62,18 +62,18 @@ document.addEventListener("DOMContentLoaded", function() {
     function preencherSelectCoordenadores() {
         const selectAdicionar = document.getElementById('coordenador');
         const selectEditar = document.getElementById('edit-coordenador');
-        
+
         coordenadores.forEach(coordenador => {
             const option = document.createElement('option');
             option.value = coordenador;
             option.textContent = coordenador;
-            
+
             selectAdicionar.appendChild(option.cloneNode(true));
             selectEditar.appendChild(option);
         });
     }
-    
-    async function initializeCursos(){
+
+    async function initializeCursos() {
         let cursosData = await fetchCursos.getCursos();
         console.log('Cursos retornados do backend:', cursosData);
         if (cursosData) {
@@ -116,45 +116,62 @@ document.addEventListener("DOMContentLoaded", function() {
             alunos: 100
         }
     ];*/
-    
+    renderCursos([]);
     // Função para renderizar os cards de cursos
-    function renderCursos(cursosToRender = cursos) {
-        cursosList.innerHTML = "";
-        
-        if (cursosToRender.length === 0) {
-            cursosList.innerHTML = `
-                <div class="mensagem-vazia">
-                    <i class="fas fa-info-circle"></i>
-                    <p>Nenhum curso cadastrado no momento.</p>
-                </div>
-            `;
+    function renderCursos(cursosToRender = []) {
+        const cursosList = document.getElementById('cursos-list');
+        if (!cursosList) {
+            console.error('Elemento cursos-list não encontrado');
             return;
         }
-        
-        // Pequeno delay para garantir que a animação seja visível
-        setTimeout(() => {
-            cursosToRender.forEach((curso, index) => {
-                const card = createCursoCard(curso);
-                card.style.animationDelay = `${(index + 1) * 0.1}s`;
-                cursosList.appendChild(card);
-            });
-        }, 100);
-    }
     
+        // Limpa a lista
+        cursosList.innerHTML = "";
+    
+        // Cria a mensagem temporária
+        const mensagemVazia = document.createElement('div');
+        mensagemVazia.className = 'mensagem-vazia';
+        mensagemVazia.innerHTML = `
+            <i class="fas fa-info-circle"></i>
+            <p>Nenhum curso cadastrado no momento.</p>
+        `;
+        cursosList.appendChild(mensagemVazia);
+    
+        // Permite ao navegador renderizar a mensagem antes do delay
+        setTimeout(() => {
+            setTimeout(() => {
+                cursosList.innerHTML = ""; // Remove a mensagem temporária
+    
+                if (cursosToRender.length === 0) {
+                    // Se não houver cursos, mostra a mensagem final
+                    cursosList.appendChild(mensagemVazia);
+                    return;
+                }
+    
+                // Renderiza os cursos com animação
+                cursosToRender.forEach((curso, index) => {
+                    const card = createCursoCard(curso);
+                    card.style.animationDelay = `${(index + 1) * 0.1}s`;
+                    cursosList.appendChild(card);
+                });
+            }, 100); // Delay simulado para "carregamento"
+        }, 0); // Garante que a mensagem aparece antes do delay
+    }
+
     // Função para criar um card de curso
     function createCursoCard(curso) {
         const card = document.createElement("div");
         card.className = "curso-card";
         card.dataset.id = curso.id;
-        
+
         // Definir classe do curso
         let cursoClass = "";
-        switch(curso.sigla) {
+        switch (curso.sigla) {
             case "Dsm": cursoClass = "curso-dsm"; break;
             case "Geo": cursoClass = "curso-geo"; break;
             case "Mrh": cursoClass = "curso-mrh"; break;
         }
-        
+
         card.innerHTML = `
             <div class="curso-header">
                 <div class="curso-icon">
@@ -163,11 +180,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 <div class="curso-info ${curso.sigla === 'Geo' ? 'geo-title' : ''} ${curso.sigla === 'Dsm' ? 'dsm-title' : ''} ${curso.sigla === 'Mrh' ? 'mrh-title' : ''}">
                     <h3>${curso.nome}</h3>
                     <div class="curso-badges">
-                        <span class="curso-sigla ${
-                            curso.sigla && curso.sigla.toUpperCase() === 'DSM' ? 'curso-dsm' :
-                            curso.sigla && curso.sigla.toUpperCase() === 'GEO' ? 'curso-geo' :
-                            curso.sigla && curso.sigla.toUpperCase() === 'MAR' ? 'curso-mrh' : ''
-                        }">${curso.sigla ? curso.sigla.toUpperCase() : ''}</span>
+                        <span class="curso-sigla ${curso.sigla && curso.sigla.toUpperCase() === 'DSM' ? 'curso-dsm' :
+                curso.sigla && curso.sigla.toUpperCase() === 'GEO' ? 'curso-geo' :
+                    curso.sigla && curso.sigla.toUpperCase() === 'MAR' ? 'curso-mrh' : ''
+            }">${curso.sigla ? curso.sigla.toUpperCase() : ''}</span>
                     </div>
                     <p class="datas">
                         <span class="data-badge">
@@ -189,18 +205,18 @@ document.addEventListener("DOMContentLoaded", function() {
                 </button>
             </div>
         `;
-        
+
         return card;
     }
-    
+
     // Função para buscar cursos
     function searchCursos(query) {
-        const filteredCursos = cursos.filter(curso => 
+        const filteredCursos = cursos.filter(curso =>
             curso.nome.toLowerCase().includes(query.toLowerCase()) ||
             curso.sigla.toLowerCase().includes(query.toLowerCase()) ||
             curso.coordenador.toLowerCase().includes(query.toLowerCase())
         );
-        
+
         renderCursos(filteredCursos);
     }
 
@@ -214,7 +230,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function fecharModalAdicionarCurso() {
         const modal = document.getElementById('modal-adicionar-curso');
         const form = document.getElementById('form-adicionar-curso');
-        
+
         modal.classList.remove('show');
         document.body.style.overflow = 'auto';
         form.reset();
@@ -265,7 +281,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function fecharModalEditarCurso() {
         const modal = document.getElementById('modal-editar-curso');
         const form = document.getElementById('form-editar-curso');
-        
+
         modal.classList.remove('show');
         document.body.style.overflow = 'auto';
         form.reset();
@@ -280,11 +296,11 @@ document.addEventListener("DOMContentLoaded", function() {
     function abrirModalConfirmarDelecao(curso) {
         const modal = document.getElementById('modal-confirmar-delecao');
         const cursoDelete = document.getElementById('curso-delete');
-        
+
         cursoDelete.textContent = `${curso.nome} (${curso.sigla})`;
         modal.classList.add('show');
         document.body.style.overflow = 'hidden';
-        
+
         modal.dataset.cursoId = curso.id;
     }
 
@@ -293,19 +309,19 @@ document.addEventListener("DOMContentLoaded", function() {
         modal.classList.remove('show');
         document.body.style.overflow = 'auto';
     }
-    
+
     // Event Listeners
     searchInput.addEventListener("input", (e) => {
         searchCursos(e.target.value);
     });
-    
+
     addCursoBtn.addEventListener("click", abrirModalAdicionarCurso);
-    
+
     // Funções de validação
     function showError(input, message) {
         const formGroup = input.parentElement;
         const errorDisplay = formGroup.querySelector('.error-message');
-        
+
         formGroup.className = 'form-group error';
         errorDisplay.textContent = message;
     }
@@ -326,7 +342,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function validateForm(form) {
         let isValid = true;
-        
+
         const nome = form.querySelector('[name="nome"]');
         const sigla = form.querySelector('[name="sigla"]');
         const coordenador = form.querySelector('[name="coordenador"]');
@@ -343,7 +359,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if (dataInicio.value && dataFim.value) {
             const inicio = new Date(dataInicio.value);
             const fim = new Date(dataFim.value);
-            
+
             if (inicio >= fim) {
                 showError(dataFim, 'A data de término deve ser posterior à data de início');
                 isValid = false;
@@ -354,25 +370,25 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Event Listeners para o Modal de Adição
-    document.getElementById('salvar-curso').addEventListener('click', async function(e) {
+    document.getElementById('salvar-curso').addEventListener('click', async function (e) {
         e.preventDefault();
         const form = document.getElementById('form-adicionar-curso');
-        
+
         if (validateForm(form)) {
             const formData = new FormData(form);
-            
+
             const nome = formData.get('nome');
             const sigla = formData.get('sigla');
             const coordenador = formData.get('coordenador');
             const dataInicio = formData.get('data-inicio');
             const dataFim = formData.get('data-fim');
-            
+
             const result = await fetchCursos.createCurso(nome, sigla, coordenador, dataInicio, dataFim);
-            
+
             if (result.ok) {
                 // Toast de sucesso
                 showToast('Curso criado com sucesso!', 'success');
-                
+
                 // Atualizar a lista de cursos
                 cursos = await fetchCursos.getCursos();
                 renderCursos();
@@ -389,14 +405,14 @@ document.addEventListener("DOMContentLoaded", function() {
         const toast = document.createElement('div');
         toast.className = `toast ${type}`;
         toast.textContent = message;
-        
+
         document.body.appendChild(toast);
-        
+
         // Animar entrada
         setTimeout(() => {
             toast.classList.add('show');
         }, 100);
-        
+
         // Remover após 3 segundos
         setTimeout(() => {
             toast.classList.remove('show');
@@ -407,14 +423,14 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Event Listeners para o Modal de Edição
-    document.getElementById('salvar-edicao').addEventListener('click', function(e) {
+    document.getElementById('salvar-edicao').addEventListener('click', function (e) {
         e.preventDefault();
         const form = document.getElementById('form-editar-curso');
-        
+
         if (validateForm(form)) {
             const formData = new FormData(form);
             const id = parseInt(formData.get('id'));
-            
+
             const cursoIndex = cursos.findIndex(c => c.id === id);
             if (cursoIndex !== -1) {
                 cursos[cursoIndex] = {
@@ -423,7 +439,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     sigla: formData.get('sigla'),
                     coordenador: formData.get('coordenador')
                 };
-                
+
                 renderCursos();
                 fecharModalEditarCurso();
             }
@@ -433,8 +449,8 @@ document.addEventListener("DOMContentLoaded", function() {
     // Event Listeners para o Modal de Deleção
     document.querySelector('#modal-confirmar-delecao .close-modal').addEventListener('click', fecharModalConfirmarDelecao);
     document.getElementById('cancelar-delecao').addEventListener('click', fecharModalConfirmarDelecao);
-    
-    document.getElementById('confirmar-delecao').addEventListener('click', async function() {
+
+    document.getElementById('confirmar-delecao').addEventListener('click', async function () {
         const modal = document.getElementById('modal-confirmar-delecao');
         const cursoId = parseInt(modal.dataset.cursoId);
         try {
@@ -452,22 +468,22 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         }
     });
-    
+
     // Funções globais para edição e exclusão
-    window.editCurso = function(id) {
+    window.editCurso = function (id) {
         const curso = cursos.find(c => c.id === id);
         if (curso) {
             abrirModalEditarCurso(curso);
         }
     };
-    
-    window.deleteCurso = function(id) {
+
+    window.deleteCurso = function (id) {
         const curso = cursos.find(c => c.id === id);
         if (curso) {
             abrirModalConfirmarDelecao(curso);
         }
     };
-    
+
     // Limpar validações ao fechar os modais
     function limparValidacoes(form) {
         const formGroups = form.querySelectorAll('.form-group');
