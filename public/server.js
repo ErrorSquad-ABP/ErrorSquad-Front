@@ -5,7 +5,6 @@ const path = require("path");
 const app = express();
 const PORT = process.env.PORT;
 
-// Servir arquivos estáticos com MIME types corretos
 app.use(express.static(__dirname, {
   setHeaders: (res, filePath) => {
     if (filePath.endsWith('.css')) {
@@ -20,7 +19,6 @@ app.use(express.static(__dirname, {
   }
 }));
 
-// Rotas para compatibilidade com /public/ no caminho
 app.get('/public/css/:filename', (req, res) => {
   const filePath = path.join(__dirname, 'css', req.params.filename);
   res.setHeader('Content-Type', 'text/css; charset=utf-8');
