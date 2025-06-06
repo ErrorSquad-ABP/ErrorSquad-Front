@@ -6,12 +6,21 @@ if (typeof IRONGATE === 'function') {
 // Importar funções da API
 import { fetchGradeData, getToken, getAdminId, uploadCSV, filtrarDocentes } from './fetchFunctions/fetchGrade.js';
 import { useState } from './useState.js';
+import swapProtection from './swapProtection.js';
+import { CSSLoader } from './utils/cssLoader.js';
+
 // URL base da API
 const API_URL = 'https://errorsquad-server.onrender.com';
 const socket = io(API_URL);
 
+document.addEventListener('DOMContentLoaded', async function () {
+    // 1. Carregar CSS primeiro
+    const cssLoader = new CSSLoader();
+    await cssLoader.loadGradeCSS();
 
-document.addEventListener('DOMContentLoaded', function () {
+    // 2. Inicializar swap protection
+    swapProtection.init();
+
     // Adicionar link para o CSS
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -22,7 +31,6 @@ document.addEventListener('DOMContentLoaded', function () {
     function verificarToken() {
         const token = localStorage.getItem('token');
         if (!token) {
-            console.log('Token não encontrado, redirecionando para login...');
             window.location.href = '/login';
             return;
         }
@@ -36,12 +44,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Se o token expirou ou está prestes a expirar (1 segundo)
             if (agora >= expiracao - 1000) {
-                console.log('Token expirado, redirecionando para login...');
                 localStorage.clear(); // Limpa todo o localStorage
                 window.location.href = '/login';
             }
         } catch (error) {
-            console.error('Erro ao verificar token:', error);
             localStorage.clear(); // Limpa todo o localStorage em caso de erro
             window.location.href = '/login';
         }
@@ -57,8 +63,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Verificar o token imediatamente ao carregar a página
     verificarToken();
-
-
 
     // Objeto para armazenar os dados da grade
     let gradeData = useState({
@@ -141,7 +145,6 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             const dadosGrade = await fetchGradeData();
             if (dadosGrade) {
-                console.log(dadosGrade)
                 // Atualizar o objeto gradeData com os dados recebidos
                 gradeData = useState({
                     dias: dadosGrade.dias || [],
@@ -151,8 +154,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     periodos: dadosGrade.periodos || [],
                     docente: dadosGrade.docente || []
                 })
-
-                console.log('Grade data atualizado:', gradeData);
                 atualizarFiltros();
                 preencherGrade();
                 atualizarListaDocentes();
@@ -190,14 +191,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Função para atualizar os filtros com os dados da API
     function atualizarFiltros() {
-        console.log('Atualizando filtros com dados:', gradeData);
         const cursoSelect = document.querySelector('.btn-secondary:nth-child(1)');
         const nivelSelect = document.querySelector('.btn-secondary:nth-child(2)');
         const turnoSelect = document.querySelector('.btn-secondary:nth-child(3)');
 
         // Limpar e preencher o select de cursos
         cursoSelect.innerHTML = '';
-        console.log('teste cursos', gradeData.value.cursos)
         if (gradeData.value.cursos && gradeData.value.cursos.length > 0) {
             gradeData.value.cursos.forEach(curso => {
                 const option = document.createElement('option');
@@ -591,16 +590,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Função para preencher a grade com as aulas
     function preencherGrade() {
-        console.log('Preenchendo grade com dados:', gradeData);
         const cursoSelecionado = document.querySelector('.btn-secondary:nth-child(1)').value.toUpperCase();
         const nivelSelecionado = document.querySelector('.btn-secondary:nth-child(2)').value;
         const turnoSelecionado = document.querySelector('.btn-secondary:nth-child(3)').value.toLowerCase();
-
-        console.log('Filtros selecionados:', {
-            curso: cursoSelecionado,
-            nivel: nivelSelecionado,
-            turno: turnoSelecionado
-        });
 
         // Usar apenas dias e horários únicos
         const diasGrade = diasUnicos(gradeData.value.dias || []);
@@ -629,29 +621,8 @@ document.addEventListener('DOMContentLoaded', function () {
             const nivelMatch = nivelSemestre === nivelSelecionado;
             const turnoMatch = nomeTurno === turnoSelecionado;
 
-            const match = cursoMatch && nivelMatch && turnoMatch;
-
-            // Log detalhado apenas para períodos que têm pelo menos uma correspondência
-            if (cursoMatch || nivelMatch || turnoMatch) {
-                console.log('Comparando período:', {
-                    periodo: periodo,
-                    siglaCurso,
-                    nivelSemestre,
-                    nomeTurno,
-                    cursoSelecionado,
-                    nivelSelecionado,
-                    turnoSelecionado,
-                    cursoMatch,
-                    nivelMatch,
-                    turnoMatch,
-                    match
-                });
-            }
-
-            return match;
+            return cursoMatch && nivelMatch && turnoMatch;
         });
-
-        console.log('Períodos filtrados:', periodosFiltrados);
 
         // Renderizar todas as células
         horariosGrade.forEach((horario, horarioIndex) => {
@@ -671,9 +642,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
 
                     if (periodo) {
-                        // Log detalhado do período
-                        console.log('Período completo:', JSON.stringify(periodo, null, 2));
-
                         // Encontrar o docente para obter a cor (case-insensitive, trim)
                         const docente = gradeData.value.docente.find(d => d.nome && periodo.nome_docente && d.nome.trim().toLowerCase() === periodo.nome_docente.trim().toLowerCase());
                         const corDocente = docente?.cor || '#ffffff';
@@ -692,26 +660,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         });
                         const horarioId = horarioEncontrado ? horarioEncontrado.id : null;
 
-                        // Log detalhado dos IDs encontrados
-                        console.log('IDs encontrados:', {
-                            periodoId: periodo.id,
-                            diaId,
-                            horarioId,
-                            diaEncontrado,
-                            horarioEncontrado
-                        });
-
                         // Definir os data-attributes
                         cell.setAttribute('data-id-periodo', periodo.id);
                         cell.setAttribute('data-id-dia', diaId || '');
                         cell.setAttribute('data-id-horario', horarioId || '');
-
-                        // Log dos data-attributes após definir
-                        console.log('Data attributes definidos:', {
-                            periodoId: cell.getAttribute('data-id-periodo'),
-                            diaId: cell.getAttribute('data-id-dia'),
-                            horarioId: cell.getAttribute('data-id-horario')
-                        });
 
                         cell.innerHTML = `
                             <div class="aula-item" style="background-color: ${corDocente}">
@@ -735,17 +687,23 @@ document.addEventListener('DOMContentLoaded', function () {
                     // Drag and drop
                     cell.setAttribute('draggable', true);
                     cell.ondragstart = function (e) {
-                        // Verificar se a célula tem todos os IDs necessários
+                        // Verificações de proteção
+                        if (swapProtection.isSwapInProgress()) {
+                            e.preventDefault();
+                            showErrorToast('⚠️ Sistema bloqueado durante troca. Aguarde...');
+                            return;
+                        }
+
+                        if (swapProtection.isCellLocked(cell)) {
+                            e.preventDefault();
+                            showErrorToast('⚠️ Esta célula está temporariamente bloqueada.');
+                            return;
+                        }
+
+                        // Verificações originais
                         const periodoId = cell.getAttribute('data-id-periodo');
                         const diaId = cell.getAttribute('data-id-dia');
                         const horarioId = cell.getAttribute('data-id-horario');
-
-                        console.log('Verificando IDs para drag:', {
-                            periodoId,
-                            diaId,
-                            horarioId,
-                            temTodosIds: periodoId && diaId && horarioId
-                        });
 
                         if (!periodoId || !diaId || !horarioId) {
                             e.preventDefault();
@@ -753,11 +711,10 @@ document.addEventListener('DOMContentLoaded', function () {
                             return;
                         }
 
+                        // Código original continua
                         e.dataTransfer.setData('text/plain', '');
                         window.draggedCell = cell;
                         cell.classList.add('dragging');
-
-                        // Adicionar cursor personalizado
                         document.body.style.cursor = 'grabbing';
                     };
 
@@ -783,115 +740,110 @@ document.addEventListener('DOMContentLoaded', function () {
                         const origem = window.draggedCell;
                         const destino = cell;
 
-                        // Log dos elementos origem e destino
-                        console.log('Elemento origem:', origem);
-                        console.log('Elemento destino:', destino);
-
-                        // Log dos data-attributes
-                        console.log('Data attributes origem:', {
-                            periodoId: origem.getAttribute('data-id-periodo'),
-                            diaSemanaId: origem.getAttribute('data-id-dia'),
-                            horarioId: origem.getAttribute('data-id-horario')
-                        });
-                        console.log('Data attributes destino:', {
-                            periodoId: destino.getAttribute('data-id-periodo'),
-                            diaSemanaId: destino.getAttribute('data-id-dia'),
-                            horarioId: destino.getAttribute('data-id-horario')
-                        });
-
-                        if (origem && destino) {
-                            const origemPeriodoId = origem.getAttribute('data-id-periodo');
-                            const origemDiaSemanaId = origem.getAttribute('data-id-dia');
-                            const origemHorarioId = origem.getAttribute('data-id-horario');
-                            const destinoPeriodoId = destino.getAttribute('data-id-periodo');
-                            const destinoDiaSemanaId = destino.getAttribute('data-id-dia');
-                            const destinoHorarioId = destino.getAttribute('data-id-horario');
-
-                            // Nova verificação: impedir troca para a mesma célula ou IDs inválidos
-                            if (
-                                origemPeriodoId === destinoPeriodoId &&
-                                origemDiaSemanaId === destinoDiaSemanaId &&
-                                origemHorarioId === destinoHorarioId
-                            ) {
-                                showErrorToast('Não é possível trocar uma célula por ela mesma.');
-                                return;
-                            }
-                            if (
-                                (!origemPeriodoId || !origemDiaSemanaId || !origemHorarioId) &&
-                                (!destinoPeriodoId || !destinoDiaSemanaId || !destinoHorarioId)
-                            ) {
-                                showErrorToast('IDs de origem e destino inválidos para troca.');
-                                return;
-                            }
-
-                            const body = {
-                                id_card1: Number(origemPeriodoId),
-                                id_dia_card1: Number(origemDiaSemanaId),
-                                id_horario_card1: Number(origemHorarioId),
-                                id_card2: Number(destinoPeriodoId) || 0,
-                                id_dia_card2: Number(destinoDiaSemanaId) || 0,
-                                id_horario_card2: Number(destinoHorarioId) || 0
-                            };
-
-                            // Log do payload final
-                            console.log('Payload final enviado:', JSON.stringify(body, null, 2));
-
-                            // Mostrar toast de carregamento
-                            const loadingToast = showLoadingToast('Realizando troca...');
-
-                            try {
-                                const resp = await fetch(`${API_URL}/admin/${getAdminId()}/grade`, {
-                                    method: 'PUT',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        'Authorization': `Bearer ${getToken()}`
-                                    },
-                                    body: JSON.stringify(body)
-                                });
-
-                                // Remover toast de carregamento
-                                if (loadingToast) loadingToast.remove();
-
-                                // Log da resposta
-                                console.log('Status da resposta:', resp.status);
-                                const responseData = await resp.json().catch(() => null);
-                                console.log('Dados da resposta:', responseData);
-
-                                if (resp.ok) {
-                                    // Adicionar animação de swap
-                                    origem.classList.add('swap-animation');
-                                    destino.classList.add('swap-animation');
-
-                                    showSuccessToast('Troca realizada com sucesso!');
-
-                                    // Remover animação após 500ms
-                                    setTimeout(async () => {
-                                        origem.classList.remove('swap-animation');
-                                        destino.classList.remove('swap-animation');
-                                        console.log('Buscando dados atualizados após troca...');
-                                        //await buscarDadosGrade();
-                                        console.log('Dados atualizados:', gradeData);
-                                    }, 500);
-                                } else {
-                                    // Tentar obter mais detalhes do erro
-                                    let errorMessage = 'Erro ao trocar células!';
-                                    if (responseData && responseData.mensagem) {
-                                        errorMessage += ` ${responseData.mensagem}`;
-                                    }
-                                    if (responseData && responseData.detalhes) {
-                                        console.error('Detalhes do erro:', responseData.detalhes);
-                                    }
-                                    showErrorToast(errorMessage);
-                                    console.error('Erro detalhado:', responseData);
-                                }
-                            } catch (err) {
-                                // Remover toast de carregamento em caso de erro
-                                if (loadingToast) loadingToast.remove();
-
-                                console.error('Erro completo:', err);
-                                showErrorToast('Erro de conexão ao trocar células!');
-                            }
+                        if (!origem || !destino) {
+                            return;
                         }
+
+                        // *** VERIFICAÇÕES DE PROTEÇÃO ***
+                        if (swapProtection.isSwapInProgress()) {
+                            showErrorToast('⚠️ Operação de troca em andamento. Aguarde...');
+                            return;
+                        }
+
+                        if (swapProtection.isCellLocked(origem) || swapProtection.isCellLocked(destino)) {
+                            showErrorToast('⚠️ Uma das células está bloqueada para troca.');
+                            return;
+                        }
+
+                        // Código original de verificação continua igual...
+                        const origemPeriodoId = origem.getAttribute('data-id-periodo');
+                        const origemDiaSemanaId = origem.getAttribute('data-id-dia');
+                        const origemHorarioId = origem.getAttribute('data-id-horario');
+                        const destinoPeriodoId = destino.getAttribute('data-id-periodo');
+                        const destinoDiaSemanaId = destino.getAttribute('data-id-dia');
+                        const destinoHorarioId = destino.getAttribute('data-id-horario');
+
+                        // Verificações existentes
+                        if (
+                            origemPeriodoId === destinoPeriodoId &&
+                            origemDiaSemanaId === destinoDiaSemanaId &&
+                            origemHorarioId === destinoHorarioId
+                        ) {
+                            showErrorToast('Não é possível trocar uma célula por ela mesma.');
+                            return;
+                        }
+
+                        if (
+                            (!origemPeriodoId || !origemDiaSemanaId || !origemHorarioId) &&
+                            (!destinoPeriodoId || !destinoDiaSemanaId || !destinoHorarioId)
+                        ) {
+                            showErrorToast('IDs de origem e destino inválidos para troca.');
+                            return;
+                        }
+
+                        // *** INICIAR PROTEÇÃO DE SWAP ***
+                        if (!swapProtection.startSwap(origem, destino)) {
+                            showErrorToast('❌ Não foi possível iniciar a troca.');
+                            return;
+                        }
+
+                        // Timeout de segurança
+                        swapProtection.setSwapTimeout(15000);
+
+                        const body = {
+                            id_card1: Number(origemPeriodoId),
+                            id_dia_card1: Number(origemDiaSemanaId),
+                            id_horario_card1: Number(origemHorarioId),
+                            id_card2: Number(destinoPeriodoId) || 0,
+                            id_dia_card2: Number(destinoDiaSemanaId) || 0,
+                            id_horario_card2: Number(destinoHorarioId) || 0
+                        };
+
+                        const loadingToast = showLoadingToast('🔄 Realizando troca...');
+
+                        try {
+                            const resp = await fetch(`${API_URL}/admin/${getAdminId()}/grade`, {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${getToken()}`
+                                },
+                                body: JSON.stringify(body)
+                            });
+
+                            if (loadingToast) loadingToast.remove();
+
+                            if (resp.ok) {
+                                origem.classList.add('swap-animation');
+                                destino.classList.add('swap-animation');
+                                showSuccessToast('✅ Troca realizada com sucesso!');
+
+                                setTimeout(() => {
+                                    origem.classList.remove('swap-animation');
+                                    destino.classList.remove('swap-animation');
+                                }, 500);
+
+                                // *** FINALIZAR SWAP COM SUCESSO ***
+                                swapProtection.finishSwap(true);
+                            } else {
+                                let errorMessage = 'Erro ao trocar células!';
+                                const responseData = await resp.json().catch(() => null);
+                                if (responseData && responseData.mensagem) {
+                                    errorMessage += ` ${responseData.mensagem}`;
+                                }
+                                showErrorToast(errorMessage);
+                                
+                                // *** FINALIZAR SWAP COM ERRO ***
+                                swapProtection.finishSwap(false);
+                            }
+                        } catch (err) {
+                            if (loadingToast) loadingToast.remove();
+                            showErrorToast('❌ Erro de conexão ao trocar células!');
+                            
+                            // *** FINALIZAR SWAP COM ERRO ***
+                            swapProtection.finishSwap(false);
+                        }
+
                         window.draggedCell = null;
                     };
                 }
@@ -900,23 +852,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
         //webSocket event
         socket.on("grade_updated", (data) => {
-            console.log("Evento grade_updated recebido!", data);
-
             setTimeout(() => {
-                // Seleciona os elementos baseados nos atributos fornecidos
                 const elemento1 = document.querySelector(`td[data-id-periodo="${data.card1.id}"]`);
                 const elemento2 = document.querySelector(`td[data-id-periodo="${data.card2.id}"]`);
 
                 if (elemento1 && elemento2) {
-                    // Realiza o swap dos conteúdos internos
-                    const conteudoElemento1 = elemento1.innerHTML; // Salva o conteúdo do primeiro elemento
-                    const conteudoElemento2 = elemento2.innerHTML; // Salva o conteúdo do segundo elemento
+                    // Código original continua igual
+                    const conteudoElemento1 = elemento1.innerHTML;
+                    const conteudoElemento2 = elemento2.innerHTML;
 
-                    // Troca os conteúdos
                     elemento1.innerHTML = conteudoElemento2;
                     elemento2.innerHTML = conteudoElemento1;
 
-                    // Atualiza os atributos após o swap
                     elemento1.setAttribute('data-id-dia', data.card2.dia);
                     elemento1.setAttribute('data-id-periodo', data.card2.id);
                     elemento1.setAttribute('data-id-horario', data.card2.horario);
@@ -924,10 +871,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     elemento2.setAttribute('data-id-dia', data.card1.dia);
                     elemento2.setAttribute('data-id-periodo', data.card1.id);
                     elemento2.setAttribute('data-id-horario', data.card1.horario);
-
-                    console.log('Swap concluído com sucesso!');
-                } else {
-                    console.error('Um ou ambos os elementos não foram encontrados.');
                 }
             }, 100);
         });
@@ -938,7 +881,6 @@ document.addEventListener('DOMContentLoaded', function () {
         // Salvar o estado após preencher a grade
         salvarEstadoGrade();
     }
-
 
     // Função para exportar grade para CSV
     async function exportarParaCSV() {

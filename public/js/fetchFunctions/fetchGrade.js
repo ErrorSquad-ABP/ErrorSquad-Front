@@ -20,7 +20,6 @@ async function fetchGradeData() {
             return null;
         }
 
-        console.log('Buscando dados da grade...');
         const response = await fetch(`${API_URL}/admin/${getAdminId()}/grade`, {
             method: 'GET',
             headers: {
@@ -29,7 +28,7 @@ async function fetchGradeData() {
                 'Authorization': `Bearer ${token}`
             }
         });
-        console.log(response)
+
         if (!response.ok) {
             if (response.status === 401) {
                 localStorage.removeItem('token');
@@ -45,7 +44,6 @@ async function fetchGradeData() {
         }
 
         const result = await response.json();
-        console.log('Resposta da API:', result);
         
         if (result.data && Array.isArray(result.data) && result.data.length > 0) {
             return result.data[0];
@@ -71,7 +69,6 @@ async function uploadCSV(file) {
         const formData = new FormData();
         formData.append('file', file);
 
-        console.log('Enviando arquivo CSV...');
         const response = await fetch(`${API_URL}/admin/${getAdminId()}/grade/import`, {
             method: 'POST',
             headers: {
@@ -90,7 +87,6 @@ async function uploadCSV(file) {
         }
 
         const result = await response.json();
-        console.log('Resposta do upload:', result);
         return result;
     } catch (error) {
         console.error('Erro ao fazer upload do CSV:', error);

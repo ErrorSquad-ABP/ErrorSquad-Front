@@ -9,15 +9,15 @@ const API_URL = 'https://errorsquad-server.onrender.com';
 document.addEventListener("DOMContentLoaded", function () {
 
     function initializeWebSocket() {
-        const socket = io(API_URL); // Substitua pela URL do seu backend
+        const socket = io(API_URL);
 
         // Listeners para eventos de conexão/erro
         socket.on("connect", () => {
-            console.log("Conectado ao Socket.IO! ID:", socket.id);
+            // Conexão estabelecida
         });
 
         socket.on("disconnect", () => {
-            console.log("Desconectado do Socket.IO");
+            // Desconectado
         });
 
         socket.on("connect_error", (err) => {
@@ -155,7 +155,6 @@ document.addEventListener("DOMContentLoaded", function () {
             if (entity) {
                 DOM.formContainer.classList.add('active');
                 createEntityForm(true);
-                console.error('Erro ao editar:', utils.sanitizeHTML(entity.nome));
             }
         },
 
@@ -169,7 +168,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     try {
                         if (DataManager.deleteEntity(state.currentEntity, entityId)) {
                             showEntityList(state.currentEntity);
-                            console.warn('Item excluído com sucesso');
                         }
                     } catch (error) {
                         console.error('Erro ao excluir item');
@@ -1007,7 +1005,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Atualizar a lista
             showEntityList('docentes');
-            console.warn('Docentes importados com sucesso');
 
         } catch (error) {
             console.error('Erro ao processar arquivo CSV');
