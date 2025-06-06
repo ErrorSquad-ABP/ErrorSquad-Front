@@ -29,7 +29,7 @@ async function fetchGradeData() {
                 'Authorization': `Bearer ${token}`
             }
         });
-        
+        console.log(response)
         if (!response.ok) {
             if (response.status === 401) {
                 localStorage.removeItem('token');

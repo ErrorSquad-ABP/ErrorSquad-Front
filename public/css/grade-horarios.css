@@ -109,6 +109,7 @@
     background: #fff;
     border-radius: 12px;
     overflow: visible !important;
+    table-layout: fixed;
 }
 
 .grade-table th, .grade-table td {
@@ -202,13 +203,22 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    display: block;
+}
+
+.aula-item strong,
+.aula-item p,
+.aula-item small {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
 }
 
 .aula-item strong {
     color: #b71c1c;
     font-size: 1rem;
     font-weight: 600;
-    display: block;
     margin-bottom: 4px;
 }
 
@@ -223,8 +233,8 @@
 .aula-item small {
     color: #888;
     font-size: 0.85rem;
-    display: block;
 }
+
 
 @keyframes fadeInAula {
     from { opacity: 0; transform: scale(0.95) translateY(5px); }
@@ -500,7 +510,6 @@
         font-size: 0.78rem;
     }
 }
-
 /* Estilos do Modal */
 .modal {
     display: none;
@@ -1167,3 +1176,16 @@
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
 } 
+/* --------------------------------------------------
+   Força cores sólidas nos cards e desativa efeitos
+   para quando for capturado via html2canvas ou print
+   -------------------------------------------------- */
+.grade-table td[class^="aula-cell"] .aula-item,
+.grade-table td[class*=" aula-cell"] .aula-item {
+  /* herdando a cor do td (que tem background-color definido) */
+  background-color: inherit !important;
+  /* remove sombras/transições que possam interferir */
+  box-shadow: none       !important;
+  filter:     none       !important;
+  opacity:    1          !important;
+}

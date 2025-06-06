@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="../css/notifications.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 </head>
 <body>
@@ -62,7 +64,7 @@
 
                 <div class="sidebar-item">
                     <a data-protected-link data-page="/disciplinas" class="sidebar-link">
-                        <i class="fas fa-laptop-code"></i>
+                        <i class="fas fa-book-open-reader"></i>
                         <span>Disciplinas</span>
                     </a>
                 </div>
@@ -168,35 +170,36 @@
                     </div>
                 </div>
 
-                <div class="grade-content">
-                    <table class="grade-table">
-                        <thead>
-                            <tr>
-                                <th>
-                                    Horário
-                                </th>
-                                <th>Segunda</th>
-                                <th>Terça</th>
-                                <th>Quarta</th>
-                                <th>Quinta</th>
-                                <th>Sexta</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Será preenchido via JavaScript -->
-                        </tbody>
-                    </table>
+                <div class = "pdf-content">
+                    <div class="grade-content">
+                        <table class="grade-table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Horário
+                                    </th>
+                                    <th>Segunda</th>
+                                    <th>Terça</th>
+                                    <th>Quarta</th>
+                                    <th>Quinta</th>
+                                    <th>Sexta</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Será preenchido via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="docentes-section">
+                        <h4>Docentes</h4>
+                        <table class="docentes-table">
+                            <tbody>
+                                <!-- Será preenchido via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                                </div>
                 </div>
-
-                <div class="docentes-section">
-                    <h4>Docentes</h4>
-                    <table class="docentes-table">
-                        <tbody>
-                            <!-- Será preenchido via JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
 
             <!-- Container para os toasts -->
             <div class="toast-container"></div>
@@ -209,6 +212,7 @@
     <script src="../js/horario-modal.js"></script>
     <script src="../js/auth-guard.js"></script>
     <script src="../js/navigation.js"></script>
+    <script src="../js/export-functions.js"></script>
 
     <!-- Modal de Detalhes da Matéria -->
     <div id="materiaModal" class="modal">

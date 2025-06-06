@@ -1,3 +1,5 @@
+export { getUsuarios, createUsuario, updateUsuario, deleteUsuario };
+
 async function getUsuarios() {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -72,7 +74,7 @@ async function updateUsuario(id, usuarioData) {
     }
 
     try {
-        const response = await fetch(`https://errorsquad-server.onrender.com/usuarios/${id}`, {
+        const response = await fetch(`https://errorsquad-server.onrender.com/admin/${id}/user`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -126,6 +128,73 @@ async function deleteUsuario(id) {
         return result;
     } catch (error) {
         console.error('Erro ao deletar usuário:', error);
+        throw error;
+    }
+}
+
+export async function updateNomeUsuario(id, nome) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = '/public/login.html';
+        return;
+    }
+    try {
+        const response = await fetch(`https://errorsquad-server.onrender.com/admin/${id}/user/alterName`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ id: Number(id), nome })
+        });
+        if (!response.ok) throw new Error(`Erro ao atualizar nome: ${response.status}`);
+        return await response.json();
+    } catch (error) {
+        console.error('Erro ao atualizar nome:', error);
+        throw error;
+    }
+}
+
+export async function updateSenhaUsuario(id, senhaAtual, senhaNova) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = '/public/login.html';
+        return;
+    }
+    try {
+        const response = await fetch(`https://errorsquad-server.onrender.com/admin/${id}/user/alterPassword`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ id: Number(id), senhaAtual, senhaNova })
+        });
+        if (!response.ok) throw new Error(`Erro ao atualizar senha: ${response.status}`);
+        return await response.json();
+    } catch (error) {
+        console.error('Erro ao atualizar senha:', error);
+        throw error;
+    }
+}
+
+export async function getUsuarioById(id) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = '/public/login.html';
+        return;
+    }
+    try {
+        const response = await fetch(`https://errorsquad-server.onrender.com/admin/${id}/user/${id}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        if (!response.ok) throw new Error(`Erro ao buscar usuário: ${response.status}`);
+        return await response.json();
+    } catch (error) {
+        console.error('Erro ao buscar usuário:', error);
         throw error;
     }
 } 
