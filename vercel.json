@@ -1,0 +1,35 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "public/server.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/css/(.*)",
+      "dest": "/public/css/$1"
+    },
+    {
+      "src": "/js/(.*)",
+      "dest": "/public/js/$1"
+    },
+    {
+      "src": "/image/(.*)",
+      "dest": "/public/image/$1"
+    },
+    {
+      "src": "/pdfs/(.*)",
+      "dest": "/public/pdfs/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/server.js"
+    }
+  ]
+}
