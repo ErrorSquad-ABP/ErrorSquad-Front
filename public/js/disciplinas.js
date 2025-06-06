@@ -170,6 +170,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         <div class="disciplina-info">
                             <p><i class="fas fa-user"></i> ${disciplina.nome_docente}</p>
                             <p><i class="fas fa-hashtag"></i> ID: ${disciplina.id_disciplina}</p>
+                            <p><i class="fas fa-code-branch"></i> Código: ${disciplina.codigo}</p> 
                         </div>
                         <div class="disciplina-actions">
                             <button class="btn-edit" title="Editar"><i class="fas fa-edit"></i></button>
