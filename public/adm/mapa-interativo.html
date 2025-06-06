@@ -151,11 +151,7 @@
                 Exportar PDF
               </button>
               <div class="floor-selector">
-                <select
-                  id="floor-selector"
-                  class="btn btn-floor"
-                  onchange="loadFloorMap(this.value)"
-                >
+                <select id="floor-selector" class="btn btn-floor" onchange="loadFloorMap(this.value)">
                   <option value="0">TÉRREO</option>
                   <option value="1">1º ANDAR</option>
                   <option value="2">2º ANDAR</option>
@@ -169,23 +165,39 @@
             <div class="map-content" id="map-content"></div>
           </div>
         </div>
+
+        <div class="docentes-section">
+          <h4>Docentes</h4>
+          <table class="docentes-table">
+          <tbody>
+            <!-- Será preenchido via JavaScript -->
+          </tbody>
+          </table>
+        </div>
       </main>
+    </div>
+
+    <div id="salaVazia" class="modal">
+      <div class="modal-content">
+       <div class="modal-header" style="border: none !important">
+          <h3>Sala vazia!</h3>
+          <button class="close-modal">×</button>
+       </div>
+      </div>
     </div>
 
     <div id="modal" class="modal">
       <div class="modal-content">
         <div class="modal-header">
-            <span class="modal-numero-sala">103</span>
-            <h3 class="modal-nome-sala">Laboratório de Desenho e Topografia</h3>
-            <span class="modal-curso">DSM - Noturno</span>
+            <span class="modal-numero-sala"></span>
+            <h3 class="modal-nome-sala"></h3>
+            <span class="modal-curso"></span>
             <button class="close-modal">×</button>
         </div>
         <div class="modal-body">
-            <h3 class="modal-professor">Sudo</h3>
-            <h4 class="modal-disciplina">Disciplina</h4>
-            <span class="modal-horario">18:45 - 19:35</span>
-
-            <div class="modal-periculosidade"></div>
+            <h3 class="modal-professor"></h3>
+            <h4 class="modal-disciplina"></h4>
+            <span class="modal-horario"></span>
         </div>
         <div class="modal-footer">
             <button id="modal-cancelar" class="btn btn-secondary">Cancelar</button>
@@ -195,10 +207,11 @@
     </div>
 
     <script type="module" src="../js/script.js"></script>
-    <script src="../js/mapa-interativo.js"></script>
+    <script type="module" src="../js/mapa-interativo.js"></script>
     <script src="../js/notifications.js"></script>
     <script src="../js/auth-guard.js"></script>
     <script src="../js/navigation.js"></script>
     <script src="../js/export-functions.js"></script>
+    <script src='../js/toast.js'></script>
   </body>
 </html> 

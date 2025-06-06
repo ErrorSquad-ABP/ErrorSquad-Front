@@ -1,9 +1,51 @@
 // Variáveis globais
 let currentFloor = 0;
-let selectedRoom = null;
 let roomsData = {};
-let searchTimeout = null;
-let popupGlobalContainer = null;
+let salasAndar = [];
+let salasFiltradas;
+
+let roomsDataResolve;
+const roomsDataReady = new Promise((resolve) => {
+  roomsDataResolve = resolve;
+});
+
+function createGate() {
+    let open, promise;
+    
+    function closeGate() {
+        // Fecha o portão: cria uma nova promise pendente
+        promise = new Promise(resolve => open = resolve);
+    }
+
+    function openGate() {
+        // Abre o portão: resolve a promise
+        open?.();
+    }
+
+    async function waitGate() {
+        // Espera até o portão estar aberto
+        await promise;
+    }
+
+    // Fecha o portão ao iniciar
+    closeGate();
+
+    return { closeGate, openGate, waitGate };
+}
+
+const salasFiltradasGate = createGate();
+
+// Inicializar IRONGATE
+if (typeof IRONGATE === 'function') {
+    IRONGATE();
+}
+
+import {getSalasInfo} from './fetchFunctions/fetchMapa.js';
+import { showToast } from './toast.js';
+
+  // URL base da API
+const API_URL = 'https://errorsquad-server.onrender.com';
+const socket = io(API_URL);
 
 function setupEventListeners() {
     // Seletor de andar
@@ -13,66 +55,44 @@ function setupEventListeners() {
             loadFloorMap(e.target.value);
         });
     }
+}
 
-    // Botão de busca
-    const searchBtn = document.querySelector('.btn-search');
-    if (searchBtn) {
-        searchBtn.addEventListener('click', () => {
-            const searchInput = document.createElement('input');
-            searchInput.type = 'text';
-            searchInput.placeholder = 'Buscar sala...';
-            searchInput.className = 'search-input';
-            
-            const searchContainer = document.createElement('div');
-            searchContainer.className = 'search-container';
-            searchContainer.appendChild(searchInput);
-            
-            const existingSearch = document.querySelector('.search-container');
-            if (existingSearch) {
-                existingSearch.remove();
-            } else {
-                document.querySelector('.mapa-actions').appendChild(searchContainer);
-                searchInput.focus();
-            }
-        });
+async function buscardadosSala() {
+    try {
+        const dadosSala = await getSalasInfo();
+        if (dadosSala) {
+            roomsData =  dadosSala;
+
+            // Resolve indicando que as salas foram carregadas
+            roomsDataResolve();
+        } else {
+            showErrorToast('Dados não encontrados na resposta da API');
+        }
+    } catch (error) {
+        console.error('Erro ao carregar a grade:', error);
+        showErrorToast('Erro ao carregar a grade de horários. Por favor, tente novamente mais tarde.');
     }
 }
 
-function initializeSearch() {
-    document.addEventListener('input', (e) => {
-        if (e.target.classList.contains('search-input')) {
-            if (searchTimeout) {
-                clearTimeout(searchTimeout);
-            }
-            
-            searchTimeout = setTimeout(() => {
-                const searchTerm = e.target.value.toLowerCase();
-                highlightRooms(searchTerm);
-            }, 300);
-        }
-    });
+// Função para mostrar mensagem de erro
+function showErrorToast(message) {
+    const toastContainer = document.querySelector('.toast-container');
+    if (toastContainer) {
+        const toast = document.createElement('div');
+        toast.className = 'toast error';
+        toast.innerHTML = `
+            <i class="fas fa-exclamation-circle"></i>
+            <span>${message}</span>
+        `;
+        toastContainer.appendChild(toast);
+        setTimeout(() => toast.remove(), 5000);
+    }
 }
-
-function highlightRooms(searchTerm) {
-    const rooms = document.querySelectorAll('.sala');
-    rooms.forEach(room => {
-        const roomName = room.querySelector('.nome-sala').textContent.toLowerCase();
-        const roomNumber = room.querySelector('.numero-sala').textContent.toLowerCase();
-        
-        if (roomName.includes(searchTerm) || roomNumber.includes(searchTerm)) {
-            room.classList.add('highlight');
-            room.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        } else {
-            room.classList.remove('highlight');
-        }
-    });
-}
-
 // CARREGAR ANDAR
 async function loadFloorMap(floor) {
     currentFloor = floor;
     let displayName;
-
+    salasAndar = [];
     switch(floor) {
         case '0':
             displayName = 'Térreo';
@@ -94,86 +114,124 @@ async function loadFloorMap(floor) {
             throw new Error(`Erro ao carregar o mapa do ${displayName}`);
         }
         
-        const svgContent = await response.text();
-        const mapContent = document.getElementById('map-content');
-        if (!mapContent) {
-            throw new Error('Elemento map-content não encontrado');
-        }
-        
-        mapContent.innerHTML = svgContent;
-        
-        // Oculta todos os popups ao carregar o mapa
-        mapContent.querySelectorAll('.pop-up').forEach(p => {
-            p.style.display = 'none';
-        });
+        const htmlAndar = await response.text();
+        const mapContent = await document.getElementById('map-content');
+        mapContent.innerHTML = htmlAndar;
         
         // Adiciona eventos de clique para abrir o modal
-        mapContent.querySelectorAll('.sala, .biblioteca').forEach(el => {
+        mapContent.querySelectorAll('.sala').forEach(el => {
+            if(el.getAttribute('data-room-id').slice(0,4) === 'sala') {
+
+            const idSala = el.getAttribute('data-room-id');
+
+
+            // Pega o ID de todas as salas do andar atual se for 'sala'
+
+            salasAndar.push(idSala);
+            getSalasFiltradas();
+            atualizarSala(idSala);
+            atualizarListaDocentes();
+
             el.addEventListener('click', (e) => {
-                const roomId = el.getAttribute('data-room-id');
-                if (roomId) {
-                    const roomDetails = getRoomDetails(roomId);
-                    abrirModal('modal', roomDetails);
+                if (idSala) {
+                    if (salasFiltradas[idSala]){
+                      abrirModal('modal', salasFiltradas[idSala]);
+                    } else {
+                        abrirModal('salaVazia', null);
+                    }
                 }
             });
+            }
         });
-        
     } catch (error) {
         console.error('Erro ao carregar mapa:', error);
     }
 }
 
-function selectRoomOnMap(roomElement) {
-    if (!roomElement) return;
-    
-    // Remove seleção anterior
-    const previousSelected = document.querySelector('.sala.selected');
-    if (previousSelected) {
-        previousSelected.classList.remove('selected');
-    }
-    
-    // Seleciona nova sala
-    roomElement.classList.add('selected');
-    selectedRoom = roomElement.getAttribute('data-room-id');
-    
-    // Atualiza informações da sala
-    updateRoomDetails(selectedRoom);
+async function getSalasFiltradas(){
+    await roomsDataReady;
+
+    salasFiltradas = objetificar(filtrarHorario(filtrarDia(await filtroSalas())));
+
+    salasFiltradasGate.openGate();
 }
 
-// Dados Mock para Teste
-function getRoomDetails(roomId) {
-    const mockData = {
-        // ... (mantenha todo o objeto mockData existente)
-    };
+async function atualizarSala(idSala){
+    await roomsDataReady;
+    await salasFiltradasGate.waitGate();
+
+    if(salasFiltradas[idSala] != undefined){
     
-    return mockData[roomId] || {
-        name: roomId ? roomId.replace(/-/g, ' ').toUpperCase() : 'Sala Desconhecida',
-        disciplina: '-',
-        docente: '-',
-        curso: '-',
-        nivel: '-',
-        status: 'Disponível'
-    };
+
+
+    const sala = document.querySelector(`[data-room-id="${idSala}"]`);
+
+    sala.style.borderStyle = 'solid';
+    sala.style.borderSize = '2px';
+    sala.style.borderColor = salasFiltradas[idSala].cor_docente;
+    sala.querySelector('.status-badge').classList.remove('status-disponivel');
+    sala.querySelector('.status-badge').classList.add('status-ocupada');
+    sala.querySelector('.status-badge').textContent = 'Ocupado'
+
+
+
+    salasFiltradasGate.closeGate();
+    }
 }
+
+async function getIdAmbiente(sala) {
+    await roomsDataReady; // Espera os dados do mapa serem carregados
+    try {
+        if (sala.nome_ambiente == null) {
+            throw new Error(`Sala ${sala} não encontrada nos dados.`);
+        }
+    } catch (error) {
+        console.error(error.message);
+        return 'Ambiente desconhecido';
+    }
+    // Se a sala existir, retorna o id do ambiente
+    const ambiente = sala.nome_ambiente;
+    return `sala-${ambiente.slice(-3).replace(/\s/g, "")}`;
+}   
 
 // Funções para controlar o modal
-function abrirModal(modalId, roomDetails) {
+function abrirModal(modalId, dadosSala) {
     const modal = document.getElementById(modalId);
     if (!modal) return;
 
     // Preenche os dados da sala no modal
-    if (roomDetails) {
-        modalAtualizarNumeroSala(roomDetails.numero || '');
-        modalAtualizarNome(roomDetails.name || '');
-        modalAtualizarCurso(roomDetails.curso || '');
-        modalAtualizarProfessor(roomDetails.docente || '');
-        modalAtualizarDisciplina(roomDetails.disciplina || '');
-        modalAtualizarHorario(roomDetails.horario || '');
-        modalAtualizarPericu(roomDetails.periculosidade || '');
+    if (dadosSala) {
+        const extraido = extrairDadosSala(dadosSala)
+        modalAtualizarTudo(extraido);
     }
 
     modal.classList.add('show');
     document.body.style.overflow = 'hidden'; // Previne rolagem
+}
+
+function extrairDadosSala(sala) {
+    let dadosSala = {};
+    dadosSala.numero = sala.localizacao_ambiente.slice(5);
+    dadosSala.name = sala.nome_ambiente;
+    dadosSala.curso = sala.sigla_curso;
+    dadosSala.docente = sala.nome_docente;
+    dadosSala.disciplina = sala.nome_disciplina;
+    dadosSala.horario = `${sala.hr_inicio.value.slice(0,5)} às ${sala.hr_fim.value.slice(0,5)}`;
+
+    dadosSala.cor = sala.cor_docente;
+
+    return dadosSala
+}
+
+function modalAtualizarTudo(dadosSala) {
+        if (dadosSala) {
+        modalAtualizarNumeroSala(dadosSala.numero || '');
+        modalAtualizarNome(dadosSala.name || '');
+        modalAtualizarCurso(dadosSala.curso || '');
+        modalAtualizarProfessor(dadosSala.docente || '');
+        modalAtualizarDisciplina(dadosSala.disciplina || '');
+        modalAtualizarHorario(dadosSala.horario || '');
+    }
 }
 
 function fecharModal(modalId) {
@@ -181,6 +239,7 @@ function fecharModal(modalId) {
     if (!modal) return;
 
     modal.classList.remove('show');
+    modalAtualizarTudo({})
     document.body.style.overflow = ''; // Restaura rolagem
 }
 
@@ -220,16 +279,6 @@ function modalAtualizarHorario(horario) {
     const item = modal.querySelector('.modal-horario');
     item.textContent = horario;
 }
-
-function modalAtualizarPericu(pericu) {
-    const modal = document.querySelector('#modal');
-    const item = modal.querySelector('.modal-periculosidade');
-    item.textContent = pericu;
-}
-
-
-
-
 // Exporta o PDF do andar atual em PAISAGEM, com cores fiéis
 function setupPdfExport() {
     const btn = document.getElementById('exportar-pdf');
@@ -324,8 +373,131 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+
+
     // Inicialização
     loadFloorMap(0);
     setupEventListeners();
     setupPdfExport();
+    buscardadosSala();
+    getSalasFiltradas();
 }); 
+
+
+async function filtroSalas() {
+    await roomsDataReady; // Espera os dados do mapa serem carregados
+
+    let filtrado = [];
+
+    for (const id of salasAndar) {
+        for (const room of roomsData) {
+            if (room.nome_ambiente != null) {
+                const roomId = await getIdAmbiente(room);
+                if (roomId == id) {
+                    filtrado.push(room);
+                }
+            }
+        }
+    }
+
+    return filtrado; // se quiser retornar as salas filtradas
+}
+
+function filtrarDia(salas) {
+    const diaAtual = new Date().getDay();
+    const diasDaSemana = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+
+    let filtradas = [];
+
+    salas.forEach(sala => {
+        if (sala.nome_dia == diasDaSemana[diaAtual]) {
+            filtradas.push(sala);
+        }
+    });
+
+    return filtradas
+}
+
+function converterParaMinutos(hora, minuto){
+    return hora * 60 + minuto
+}
+
+function compararHorarios(horasInicio,minutosInicio,horasFim,minutosFim) {
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+
+    const toMinuto = converterParaMinutos(hours, minutes);
+
+    const inicioToMinuto = converterParaMinutos(parseInt(horasInicio), parseInt(minutosInicio));
+
+    const fimToMinuto = converterParaMinutos(parseInt(horasFim), parseInt(minutosFim));
+
+    if (toMinuto >= inicioToMinuto && toMinuto <= fimToMinuto){
+        return true
+    }
+}
+
+function filtrarHorario(salas) {
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+
+    let filtradas = [];
+
+    salas.forEach(sala => {
+        if (compararHorarios(sala.hr_inicio.value.slice(0,2),sala.hr_inicio.value.slice(3,5),sala.hr_fim.value.slice(0,2),sala.hr_fim.value.slice(3,5))) {
+            filtradas.push(sala);
+        }
+    });
+    return filtradas
+}
+
+function objetificar(string) {
+    let temp = {};
+    for (let i = 0; i < string.length; i++) {
+        const element = string[i];
+        temp[element.localizacao_ambiente] = element;
+    }
+    return temp
+}
+      
+async function atualizarListaDocentes() {
+        await roomsDataReady;
+        await salasFiltradasGate.waitGate();
+
+            try {
+            const docentesTable = document.querySelector('.docentes-table tbody');
+            if (!docentesTable) {
+                console.error('Tabela de docentes não encontrada');
+                return;
+            }
+
+            docentesTable.innerHTML = '';
+
+            document.querySelectorAll('.sala').forEach(el => {
+                if(el.getAttribute('data-room-id').slice(0,4) === 'sala') {
+                    const sala = salasFiltradas[el.getAttribute('data-room-id')];
+                    if(sala){
+                        console.log(el.getAttribute('data-room-id'))
+                    console.log(sala.cor_docente);
+                    const corDocente = (sala.cor_docente && sala.cor_docente.toLowerCase() !== '#ffffff') ? sala.cor_docente : '#ffffff';
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>
+                            <div class="docente-item" style="background-color: ${corDocente}">
+                                ${sala.nome_docente}
+                            </div>
+                        </td>
+                    `;
+                    docentesTable.appendChild(tr);
+                    }
+                }});
+        }catch (error) {
+            console.error('Erro ao atualizar lista de docentes:', error);
+            const docentesTable = document.querySelector('.docentes-table tbody');
+            if (docentesTable) {
+                docentesTable.innerHTML = '<tr><td>Erro ao carregar lista de docentes</td></tr>';
+            }
+        }
+    };
