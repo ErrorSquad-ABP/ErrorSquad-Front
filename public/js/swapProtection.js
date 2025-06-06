@@ -1,7 +1,3 @@
-// ============================================================================
-// ARQUIVO: /public/js/swapProtection.js
-// ============================================================================
-
 class SwapProtectionManager {
     constructor() {
         this.swapInProgress = false;
