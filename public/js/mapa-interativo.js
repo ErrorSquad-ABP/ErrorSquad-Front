@@ -109,7 +109,7 @@ async function loadFloorMap(floor) {
     }
 
     try {
-        const response = await fetch(`../adm/mapas/andar-${floor}.html`);
+        const response = await fetch(`../mapas/andar-${floor}.html`);
         if (!response.ok) {
             throw new Error(`Erro ao carregar o mapa do ${displayName}`);
         }
