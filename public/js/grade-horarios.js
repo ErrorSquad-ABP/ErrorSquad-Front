@@ -10,7 +10,7 @@ import swapProtection from './swapProtection.js';
 import { CSSLoader } from './utils/cssLoader.js';
 
 // URL base da API
-const API_URL = 'https://errorsquad-server.onrender.com';
+const API_URL = 'https://gerenciamento-pedagogico-server.koyeb.app';
 const socket = io(API_URL);
 
 document.addEventListener('DOMContentLoaded', async function () {
