@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mapa Interativo - FATEC</title>
+    <link rel="stylesheet" href="../css/styles-guest.css" />
+    <link rel="stylesheet" href="../css/mapa-interativo-guest.css" />
+    <link rel="stylesheet" href="../css/salas.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Conteúdo principal -->
+      <main class="main-content">
+        <header class="topbar">
+          <div class="logo-container">
+            <img
+              src="../image/Fatec-removebg-preview.png"
+              alt="FATEC"
+              class="header-logo"
+            />
+          </div>
+        </header>
+
+        <div class="breadcrumb">
+          <div class="breadcrumb-item">
+            <a data-protected-link data-page="/home">
+              <i class="fas fa-home"></i> Início
+            </a>
+          </div>
+          <div class="breadcrumb-item active">Mapa Interativo</div>
+        </div>
+
+        <!-- Área do Mapa Interativo -->
+        <div class="mapa-container">
+          <div class="mapa-header">
+            <h2>MAPA INTERATIVO</h2>
+            <div class="mapa-actions">
+              <button class="btn btn-primary" id="exportar-pdf">
+                <i class="fas fa-file-pdf"></i>
+                Exportar PDF
+              </button>
+              <div class="floor-selector">
+                <select id="floor-selector" class="btn btn-floor" onchange="loadFloorMap(this.value)">
+                  <option value="0">TÉRREO</option>
+                  <option value="1">1º ANDAR</option>
+                  <option value="2">2º ANDAR</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="mapa-content">
+            <!--Limitar width dessa div-->
+            <div class="map-content" id="map-content"></div>
+          </div>
+        </div>
+
+        <div class="docentes-section">
+          <h4>Docentes</h4>
+          <table class="docentes-table">
+          <tbody>
+            <!-- Será preenchido via JavaScript -->
+          </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+
+    <div id="salaVazia" class="modal">
+      <div class="modal-content">
+       <div class="modal-header" style="border: none !important">
+          <h3>Sala vazia!</h3>
+          <button class="close-modal">×</button>
+       </div>
+      </div>
+    </div>
+
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+            <span class="modal-numero-sala"></span>
+            <h3 class="modal-nome-sala"></h3>
+            <span class="modal-curso"></span>
+            <button class="close-modal">×</button>
+        </div>
+        <div class="modal-body">
+            <h3 class="modal-professor"></h3>
+            <h4 class="modal-disciplina"></h4>
+            <span class="modal-horario"></span>
+        </div>
+        <div class="modal-footer">
+            <button id="modal-confirmar" class="btn btn-primary">Confirmar</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="../js/mapa-interativo-guest.js"></script>
+    <script src="../js/export-functions.js"></script>
+    <script src='../js/toast.js'></script>
+  </body>
+</html> 
