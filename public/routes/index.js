@@ -54,4 +54,12 @@ router.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, '../adm/admin.html'));
 });
 
+router.get('/mapa-guest', (req, res) => {
+  res.sendFile(path.join(__dirname, '../guest/mapa-interativo-guest.html'));
+});
+
+router.get('/grade-guest', (req, res) => {
+  res.sendFile(path.join(__dirname, '../guest/grade-guest.html'));
+});
+
 module.exports = router;
