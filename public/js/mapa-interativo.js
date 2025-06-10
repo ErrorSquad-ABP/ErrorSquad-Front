@@ -340,18 +340,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    document.querySelectorAll('#modal-cancelar').forEach(button => {
+        document.querySelectorAll('#modal-confirmar').forEach(button => {
         button.addEventListener('click', function() {
             const modal = this.closest('.modal');
             fecharModal(modal.id);
-        });
-    });
-
-    //BOTÃO DE CONFIRMAR LÓGICA AQUI
-    document.querySelectorAll('#modal-confirmar').forEach(button => {
-        button.addEventListener('click', function() {
-            const modal = this.closest('.modal');
-            // Aqui você pode adicionar a lógica para confirmar a ação
         });
     });
 
