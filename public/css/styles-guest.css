@@ -311,23 +311,6 @@ ul {
     display: none;
 }
 
-@media (min-width: 992px) {
-    .user-info {
-        display: block;
-    }
-    
-    .user-name {
-        font-weight: 500;
-        color: var(--secondary);
-        font-size: 0.95rem;
-    }
-    
-    .user-role {
-        font-size: 0.8rem;
-        color: var(--text-light);
-    }
-}
-
 .menu-toggle {
     display: none;
     background: transparent;
@@ -881,72 +864,6 @@ ul {
 
 .badge-info {
     background-color: var(--info);
-}
-
-/* Media Queries para responsividade */
-@media (max-width: 992px) {
-    :root {
-        --sidebar-width: 240px;
-    }
-    
-    .main-content {
-        margin-left: var(--sidebar-width);
-    }
-    
-    .collapsed .main-content {
-        margin-left: var(--sidebar-collapsed-width);
-    }
-    
-    .sidebar-header .collapse-btn {
-        display: flex;
-    }
-}
-
-@media (max-width: 768px) {
-    :root {
-        --sidebar-width: 240px;
-    }
-    
-    .menu-toggle {
-        display: block;
-    }
-    
-    .sidebar {
-        transform: translateX(-100%);
-        box-shadow: var(--shadow-lg);
-    }
-    
-    .sidebar.active {
-        transform: translateX(0);
-    }
-    
-    .main-content {
-        margin-left: 0 !important;
-    }
-    
-    .editor-content {
-        flex-direction: column;
-        height: auto;
-    }
-    
-    .editor-sidebar {
-        width: 100%;
-        margin-bottom: 15px;
-    }
-    
-    .map-canvas {
-        height: 400px;
-    }
-    
-    .entity-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
-    }
-    
-    .entity-list {
-        grid-template-columns: 1fr;
-    }
 }
 
 @media (max-width: 576px) {

@@ -25,7 +25,7 @@
 /* Mapa interativo em si */
 .map-content {
     height: 500px;
-    max-width: var(--map-content-width);
+    width: var(--map-content-width);
     border-radius: 8px;
     background-color: var(--conteiner-background-color);
 }
@@ -414,30 +414,6 @@
     to { opacity: 0; transform: translateY(20px); }
 }
 
-/* Responsividade */
-@media (max-width: 768px) {
-    .mapa-actions {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .floor-selector {
-        flex-direction: column;
-    }
-
-    .btn-floor:first-child,
-    .btn-floor:last-child {
-        border-radius: 4px;
-    }
-
-    .room:focus {
-        outline: none;
-    }
-
-    .room:active {
-        background-color: #ffebee;
-    }
-}
 
 /* Adicionando suporte a modo escuro */
 @media (prefers-color-scheme: dark) {
