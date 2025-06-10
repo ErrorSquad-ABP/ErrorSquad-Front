@@ -298,7 +298,7 @@
     <script>
     document.querySelectorAll('a[data-protected-link]').forEach(link => {
         const page = link.getAttribute('data-page');
-        link.href = `/public/adm/${page}`;
+        link.href = `/public/adm${page}`;
     });
     </script>
 </body>
