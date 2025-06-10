@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade de Horários - FATEC</title>
+    <link rel="icon" type="image/x-icon" href="../image/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="../image/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../image/favicon-16x16.png">
+    <link rel="stylesheet" href="../css/styles-guest.css">
+    <link rel="stylesheet" href="../css/grade-horarios-guest.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Conteúdo principal -->
+        <main class="main-content">
+            <header class="topbar">
+                <div class="logo-container">
+                    <img src="../image/Fatec-removebg-preview.png" alt="FATEC" class="header-logo">
+                </div>
+            </header>
+
+            <div class="breadcrumb">
+                <div class="breadcrumb-item">
+                    <a data-protected-link data-page="/">
+                        <i class="fas fa-home"></i> Início
+                    </a>
+                </div>
+                <div class="breadcrumb-item active">
+                    Grade de Horários
+                </div>
+            </div>
+
+            <!-- Área da Grade de Horários -->
+            <div class="grade-container">
+                <div class="grade-header">
+                    <h2>
+                        <i class="fas fa-calendar-alt"></i>
+                        Grade de Horários
+                    </h2>
+                    <div class="grade-actions">
+                        <select class="btn btn-secondary" value="DSM">
+                            <option value="DSM">DSM</option>
+                            <option value="GEO">GEO</option>
+                            <option value="MAR">MAR</option>
+                        </select>
+                        <select class="btn btn-secondary" value="1">
+                            <option value="1">1º Nível</option>
+                            <option value="2">2º Nível</option>
+                            <option value="3">3º Nível</option>
+                        </select>
+                        <select class="btn btn-secondary" value="noite">
+                            <option value="noite">Período Noturno</option>
+                            <option value="manha">Período Matutino</option>
+                            <option value="tarde">Período Vespertino</option>
+                        </select>
+                        <div class="export-dropdown">
+                            <button class="btn btn-primary export-btn" data-export="pdf">
+                                <i class="fas fa-file-export"></i>
+                                Exportar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class = "pdf-content">
+                    <div class="grade-content">
+                        <table class="grade-table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Horário
+                                    </th>
+                                    <th>Segunda</th>
+                                    <th>Terça</th>
+                                    <th>Quarta</th>
+                                    <th>Quinta</th>
+                                    <th>Sexta</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Será preenchido via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="docentes-section">
+                        <h4>Docentes</h4>
+                        <table class="docentes-table">
+                            <tbody>
+                                <!-- Será preenchido via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    </div>
+                </div>
+
+            <!-- Container para os toasts -->
+            <div class="toast-container"></div>
+        </main>
+    </div>
+
+    <script src="../js/grade-horarios-guest.js" type="module"></script>
+    <script src="../js/export-functions.js"></script>
+
+    <script>
+    document.querySelectorAll('a[data-protected-link]').forEach(link => {
+        const page = link.getAttribute('data-page');
+        link.href = `${page}`;
+    });
+    </script>
+</body>
+</html> 

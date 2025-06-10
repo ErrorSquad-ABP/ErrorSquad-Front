@@ -1,0 +1,862 @@
+/* Estilos para o Mapa Interativo */
+:root {
+    --conteiner-background-color: #cccbcb;
+    --map-content-width: 1177px;
+} 
+
+.mapa-container {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 0;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.mapa-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+/* Mapa interativo em si */
+.map-content {
+    height: 500px;
+    width: var(--map-content-width);
+    border-radius: 8px;
+    background-color: var(--conteiner-background-color);
+}
+
+.grid-container {
+    height: 100%; /* Altura máxima */
+    max-width: 100%; /* Largura máxima */
+    display: grid;
+    grid-template-columns: repeat(18, 1fr);
+    grid-template-rows: repeat(10, 1fr); /* Altura das linhas */
+    margin: 0;
+    padding: 4px;
+}
+
+/* Estilo das salas */
+.sala {
+    background-color: #f8f9fa;
+    padding: 10px;
+    margin: 0 2px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+    overflow: hidden;     /* esconde o conteúdo que ultrapassa */
+    min-width: 0;
+    min-height: 0;
+}
+
+.sala:hover {
+    transform: scale(1.02);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sala-comum {
+    grid-column: span 2; /* Ocupa 2 colunas */
+    grid-row: span 4; /* Ocupa 4 linhas */
+}
+
+.sala-grande {
+    grid-column: span 3; /* Ocupa 3 colunas */
+    grid-row: span 4; /* Ocupa 4 linhas */
+}
+
+/* Estilo do conteúdo das salas */
+.sala .nome-sala {
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-align: center;
+    color: #333;
+    align-self: center;
+    box-sizing: border-box;
+}
+
+.sala .conteudo-sala {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    flex: 1;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.sala .numero-sala {
+    color: #555;
+    margin-top: 5px;
+}
+
+/* Estilo das bibliotecas */
+.biblioteca {
+    background-color: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-align: center;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.biblioteca-parte-1 {
+    grid-column: span 3;
+    grid-row: span 2;
+    border-radius: 4px 4px 0 0;
+    margin-top: 2px;
+}
+
+.biblioteca-parte-2 {
+    grid-column: span 3;
+    grid-row: span 4;
+    border-radius: 4px 0 0 4px;
+}
+
+.biblioteca-parte-3 {
+    grid-column: span 3;
+    grid-row: span 4;
+    border-radius: 0 0 4px 0;
+}
+
+.biblioteca:hover {
+    transform: scale(1.02);
+}
+
+.grid-container:has(.biblioteca:hover) .biblioteca {
+    transform: scale(1.02); 
+}
+
+/* Estilo de preenchimento */
+.preenchimento {
+    background-color: var(--conteiner-background-color);
+}
+
+#vazio-superior {
+    grid-column: span 3;
+    grid-row: span 4;
+}
+
+#vazio-inferior {
+    grid-column: span 2;
+    grid-row: span 4;
+}
+
+#vazio-inferior-terreo {
+    grid-column: span 3;
+    grid-row: span 4;
+}
+
+#vazio-meio {
+    grid-column: span 15;
+    grid-row: span 2;
+}
+
+#vazio-meio-andar-2 {
+    grid-column: span 18;
+    grid-row: span 2;
+}
+
+/* Estilo das escadas */
+.escada {
+    grid-column: span 1;
+    grid-row: span 4;
+}
+
+/* Estilo dos banheiros */
+.banheiro {
+    grid-column: span 2;
+    grid-row: span 4;
+    background-color: #f8f9fa;
+    padding: 10px;
+    margin: 0 2px;
+    border-radius: 4px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+}
+
+/*Estilos pagina*/
+.mapa-header {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: var(--map-content-width);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.mapa-header h2 {
+    margin: 0;
+    color: #333;
+    font-size: 24px;
+}
+
+.mapa-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-right: -30px;
+}
+
+.btn-export,
+.btn-floor,
+.dropdown-item {
+    position: relative;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+    background-color: #1976d2;
+    border: none;
+    outline: none;
+}
+
+.btn-export:focus,
+.btn-floor:focus,
+.dropdown-item:focus {
+    outline: 2px solid #1976d2;
+    outline-offset: 2px;
+}
+
+.btn-export:hover {
+    background-color: #1565c0;
+}
+
+.floor-selector {
+    position: relative;
+}
+
+.floor-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-top: 5px;
+    display: none;
+    z-index: 1000;
+}
+
+.floor-dropdown.show {
+    display: block;
+}
+
+.dropdown-item {
+    width: 100%;
+    padding: 10px 20px;
+    border: none;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    color: var(--text-primary);
+}
+
+.dropdown-item:hover {
+    background-color: rgba(227, 6, 19, 0.1);
+}
+
+.dropdown-item:first-child {
+    border-radius: 8px 8px 0 0;
+}
+
+.dropdown-item:last-child {
+    border-radius: 0 0 8px 8px;
+}
+
+.mapa-content {
+    position: relative;
+    width: 100%;
+    flex: 1;
+    min-height: 500px;
+}
+
+/* Status badges */
+.status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #fff;
+    align-self: center;
+}
+
+.status-disponivel {
+    background-color: #2e7d32;
+}
+
+.status-ocupada {
+    background-color: #1565c0;
+}
+
+.status-manutencao {
+    background-color: #f57c00;
+}
+
+.status-reservada {
+    background-color: #7b1fa2;
+}
+
+.status-restrita {
+    background-color: #757575;
+}
+
+/* Estilos para recursos e botões */
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.resources-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+}
+
+.resources-list label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: normal;
+}
+
+.btn-primary,
+.btn-secondary {
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-primary {
+    background-color: #1976d2;
+    color: white;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #1565c0;
+}
+
+.btn-secondary {
+    background-color: #f5f5f5;
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+.btn-secondary:hover {
+    background-color: #e0e0e0;
+}
+
+/* Toast Notifications */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 24px;
+    border-radius: 4px;
+    color: #fff;
+    z-index: 1100;
+    background-color: #333;
+    outline: none;
+    animation: fadeIn 0.3s ease-in;
+}
+
+.toast:focus {
+    outline: 2px solid #1976d2;
+    outline-offset: 2px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(20px); }
+}
+
+
+/* Adicionando suporte a modo escuro */
+@media (prefers-color-scheme: dark) {
+    .mapa-container {
+        color: #fff;
+    }
+
+    .mapa-svg {
+        background-color: #2d2d2d;
+    }
+
+    .room {
+        fill: #3d3d3d;
+    }
+
+    .room:hover {
+        fill: #4d4d4d;
+    }
+
+    .room.selected {
+        fill: #5d5d5d;
+    }
+
+    .corridor {
+        fill: #2d2d2d;
+        stroke: #3d3d3d;
+    }
+
+    .stairs {
+        fill: #2d2d2d;
+        stroke: #3d3d3d;
+    }
+}
+
+.btn-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+    color: #666;
+}
+
+.btn-icon:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #333;
+}
+
+.btn-import {
+    color: #1976d2;
+}
+
+.btn-add {
+    color: #4caf50;
+}
+
+.btn-edit {
+    color: #ff9800;
+}
+
+.btn-delete {
+    color: #f44336;
+}
+
+.btn-icon:hover.btn-import {
+    background-color: rgba(25, 118, 210, 0.1);
+}
+
+.btn-icon:hover.btn-add {
+    background-color: rgba(76, 175, 80, 0.1);
+}
+
+.btn-icon:hover.btn-edit {
+    background-color: rgba(255, 152, 0, 0.1);
+}
+
+.btn-icon:hover.btn-delete {
+    background-color: rgba(244, 67, 54, 0.1);
+}
+
+/* Estilos para o botão de exportar CSV */
+.btn-export-csv {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: none;
+    background-color: #1976d2;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.btn-export-csv:hover {
+    background-color: #1565c0;
+}
+
+.btn-export-csv i {
+    font-size: 16px;
+}
+
+/* Pop-up */
+.pop-up {
+    position: absolute;
+    height: 225px;
+    width: var(--map-content-width);
+    transform: translateY(-250px);
+    z-index: 10000;
+    background-color: brown;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.pop-up-nome-sala {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+}
+
+.pop-up-nome-sala h1 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #333;
+    text-align: left !important;
+    margin: 0 !important;
+    padding: 0;
+}
+
+.pop-up:hover {
+    transform: scale(none) !important;
+}
+
+.pop-up-geral-container {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+}
+
+.pop-up-info-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1em;
+    height: 100%;
+}
+
+.pop-up-logo-container {
+    max-height: 100%;
+}
+
+.pop-up-logo {
+    background-color: aqua;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    margin: 0;
+}
+
+.pop-up-nome-prof {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+    text-align: left !important;
+    margin: 0 !important;
+    padding: 0;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal.show {
+    display: flex;
+    opacity: 1;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: #fff;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transform: translateY(-20px);
+    transition: transform 0.3s ease;
+}
+
+.modal.show .modal-content {
+    transform: translateY(0);
+}
+
+.modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.modal-body {
+    position: relative;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.modal-disciplina {
+    margin-bottom: 16px;
+}
+
+.modal-footer {
+    padding: 1.5rem;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+
+}
+
+.close-modal {
+    position: absolute;
+    top: 0.1em;
+    right: 0.7em;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #666;
+    cursor: pointer;
+    padding: 0.5rem;
+    line-height: 1;
+    transition: color 0.3s ease;
+}
+
+.close-modal:hover {
+    color: #333;
+}
+
+.modal-numero-sala {
+    position: absolute;
+    transform: translateY(-1.3em);
+}
+
+.modal-curso {
+    position: absolute;
+    transform: translateY(2.4em);
+    background-color: white;
+    padding: 5px;
+}
+
+/*FIM MODAL*/
+
+.text-danger {
+    color: var(--danger);
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+.adm-subitem.text-danger { 
+    color: #dc3545; 
+}
+
+.adm-subitem i { 
+    width: 20px; 
+    text-align: center; 
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    color: #f8f9fa;
+    background: none;
+    border: none;
+    text-decoration: none;
+    font-size: 1rem;
+    width: 100%;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.sidebar-link:hover,
+.sidebar-link.active {
+    color: #fff;
+    background: rgba(255,255,255,0.08);
+}
+
+.sidebar-link i {
+    width: 20px;
+    text-align: center;
+}
+
+.sidebar-link.text-danger {
+    color: #ffb3b3;
+}
+
+.sidebar-link.text-danger:hover {
+    color: #fff;
+    background: rgba(255,0,0,0.08);
+}
+
+/* Estilos para o dropdown de exportação */
+.export-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.export-dropdown .btn-primary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 14px;
+    font-weight: 500;
+    min-width: 120px;
+    height: 40px;
+}
+
+.export-dropdown .btn-primary:hover {
+    background-color: #1565c0;
+}
+
+.export-dropdown .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 1000;
+    display: none;
+    min-width: 160px;
+    padding: 8px 0;
+    margin: 4px 0 0;
+    background-color: white;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,.2);
+}
+
+.export-dropdown .dropdown-menu.show {
+    display: block;
+}
+
+.export-dropdown .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    color: #212529;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.export-dropdown .dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
+.export-dropdown .dropdown-item i {
+    width: 16px;
+    text-align: center;
+}
+
+/* Removendo estilos do botão de busca */
+.btn-search {
+    display: none;
+} 
+
+/* Estilos dos docentes com cores mais vibrantes */
+.docentes-section {
+    margin-top: 30px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.docentes-section h4 {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 1.2rem;
+}
+
+.docentes-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.docentes-table td {
+    padding: 12px 15px;
+    border: none !important;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.docentes-table td:hover {
+    transform: translateX(5px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Cores dos docentes correspondentes às disciplinas */
+.docentes-table td[style*="background-color: #e6ccff"] { background-color: #b794f4 !important; }
+.docentes-table td[style*="background-color: #ffffcc"] { background-color: #f6e05e !important; }
+.docentes-table td[style*="background-color: #cce6ff"] { background-color: #63b3ed !important; }
+.docentes-table td[style*="background-color: #e6f3ff"] { background-color: #4fd1c5 !important; }
+.docentes-table td[style*="background-color: #ccffff"] { background-color: #38b2ac !important; }
+.docentes-table td[style*="background-color: #ffcccc"] { background-color: #fc8181 !important; }
+
+.docente-item {
+    color: #333 !important;
+    font-weight: 600 !important;
+    padding: 8px 12px !important;
+    border-radius: 6px !important;
+    margin-bottom: 6px !important;
+}

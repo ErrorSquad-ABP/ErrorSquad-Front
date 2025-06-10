@@ -35,17 +35,12 @@ function createGate() {
 
 const salasFiltradasGate = createGate();
 
-// Inicializar IRONGATE
-if (typeof IRONGATE === 'function') {
-    IRONGATE();
-}
 
-import {getSalasInfo} from './fetchFunctions/fetchMapa.js';
+import {getSalasInfo} from './fetchFunctions/fetchMapaGuest.js';
 import { showToast } from './toast.js';
 
   // URL base da API
 const API_URL = 'https://errorsquad-server.onrender.com';
-const socket = io(API_URL);
 
 function setupEventListeners() {
     // Seletor de andar
@@ -340,10 +335,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-        document.querySelectorAll('#modal-confirmar').forEach(button => {
+    //BOTÃO DE CONFIRMAR LÓGICA AQUI
+    document.querySelectorAll('#modal-confirmar').forEach(button => {
         button.addEventListener('click', function() {
             const modal = this.closest('.modal');
             fecharModal(modal.id);
+            // Aqui você pode adicionar a lógica para confirmar a ação
         });
     });
 

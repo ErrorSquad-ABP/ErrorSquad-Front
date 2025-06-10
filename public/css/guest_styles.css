@@ -254,10 +254,62 @@ ul {
 
 /* Grid do Dashboard */
 .dashboard-grid {
+    margin-top: 40px;
+    padding: 20px;
+}
+
+.dashboard-grid-content {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
     margin-top: 30px;
+}
+
+.dashboard-grid h3 {
+    color: var(--secondary);
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.dashboard-grid h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background-color: var(--primary);
+}
+
+.dashboard-grid h3 i {
+    color: var(--primary);
+}
+
+.redirecting-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.redirecting-item-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.redirecting-item {
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--light-gray);
 }
 
 /* Próximos Eventos */
@@ -393,6 +445,7 @@ ul {
     width: 40px;
     height: 2px;
     background-color: var(--primary);
+    transition: var(--transition);
 }
 
 .institutional-info h3 i {
@@ -499,6 +552,33 @@ ul {
 
 .footer-section a:hover {
     color: var(--primary);
+}
+
+.big {
+    width: 180px;
+    height: 180px;
+}
+
+.big i {
+    scale: 3;
+}
+
+.gray {
+        background-color: var(--lighter-gray);
+        padding-bottom: 61px;
+        transition: var(--transition);
+
+}
+
+
+.gray:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-light);
+    background-color: var(--white);
+}
+
+.gray:hover h3::after {
+        width: 100px;
 }
 
 .social-links {
