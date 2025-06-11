@@ -1,6 +1,6 @@
 export async function login(email, senha) {
     try {
-        const response = await fetch('https://errorsquad-server.onrender.com/login', {
+        const response = await fetch('https://gerenciamento-pedagogico-server.koyeb.app/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -1,4 +1,4 @@
-const API_URL = 'https://errorsquad-server.onrender.com';
+const API_URL = 'https://gerenciamento-pedagogico-server.koyeb.app';
 
 function getAdminId() {
     return localStorage.getItem('userId');
@@ -42,7 +42,16 @@ export async function getSalasInfo() {
         }
 
         const result = await response.json();
-        
+
+        console.log(result)
+
+
+        if(!result){
+            console.log('UE KD OS DADOS kkakkakaka')
+        } else {
+            console.log(result)
+        }
+         
         if (result.data && Array.isArray(result.data) && result.data.length > 0) {
             return result.data[0].periodos || 'Períodos não encontrados';
         } else {

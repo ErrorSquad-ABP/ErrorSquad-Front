@@ -8,7 +8,7 @@ async function getUsuarios() {
     }
 
     try {
-        const response = await fetch('https://errorsquad-server.onrender.com/usuarios', {
+        const response = await fetch('https://gerenciamento-pedagogico-server.koyeb.app/usuarios', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -40,7 +40,7 @@ async function createUsuario(usuarioData) {
     }
 
     try {
-        const response = await fetch('https://errorsquad-server.onrender.com/usuarios', {
+        const response = await fetch('https://gerenciamento-pedagogico-server.koyeb.app/usuarios', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -74,7 +74,7 @@ async function updateUsuario(id, usuarioData) {
     }
 
     try {
-        const response = await fetch(`https://errorsquad-server.onrender.com/admin/${id}/user`, {
+        const response = await fetch(`https://gerenciamento-pedagogico-server.koyeb.app/admin/${id}/user`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -108,7 +108,7 @@ async function deleteUsuario(id) {
     }
 
     try {
-        const response = await fetch(`https://errorsquad-server.onrender.com/usuarios/${id}`, {
+        const response = await fetch(`https://gerenciamento-pedagogico-server.koyeb.app/usuarios/${id}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -139,7 +139,7 @@ export async function updateNomeUsuario(id, nome) {
         return;
     }
     try {
-        const response = await fetch(`https://errorsquad-server.onrender.com/admin/${id}/user/alterName`, {
+        const response = await fetch(`https://gerenciamento-pedagogico-server.koyeb.app/admin/${id}/user/alterName`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -162,7 +162,7 @@ export async function updateSenhaUsuario(id, senhaAtual, senhaNova) {
         return;
     }
     try {
-        const response = await fetch(`https://errorsquad-server.onrender.com/admin/${id}/user/alterPassword`, {
+        const response = await fetch(`https://gerenciamento-pedagogico-server.koyeb.app/admin/${id}/user/alterPassword`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -185,7 +185,7 @@ export async function getUsuarioById(id) {
         return;
     }
     try {
-        const response = await fetch(`https://errorsquad-server.onrender.com/admin/${id}/user/${id}`, {
+        const response = await fetch(`https://gerenciamento-pedagogico-server.koyeb.app/admin/${id}/user/${id}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
