@@ -6,7 +6,7 @@ async function getTurmas() {
     }
 
     try {
-        const response = await fetch('https://errorsquad-server.onrender.com/turmas', {
+        const response = await fetch('https://gerenciamento-pedagogico-server.koyeb.app/turmas', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -38,7 +38,7 @@ async function createTurma(turmaData) {
     }
 
     try {
-        const response = await fetch('https://errorsquad-server.onrender.com/turmas', {
+        const response = await fetch('https://gerenciamento-pedagogico-server.koyeb.app/turmas', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ async function updateTurma(id, turmaData) {
     }
 
     try {
-        const response = await fetch(`https://errorsquad-server.onrender.com/turmas/${id}`, {
+        const response = await fetch(`https://gerenciamento-pedagogico-server.koyeb.app/turmas/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -106,7 +106,7 @@ async function deleteTurma(id) {
     }
 
     try {
-        const response = await fetch(`https://errorsquad-server.onrender.com/turmas/${id}`, {
+        const response = await fetch(`https://gerenciamento-pedagogico-server.koyeb.app/turmas/${id}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`

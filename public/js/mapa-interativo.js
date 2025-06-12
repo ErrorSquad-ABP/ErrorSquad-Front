@@ -44,7 +44,7 @@ import {getSalasInfo} from './fetchFunctions/fetchMapa.js';
 import { showToast } from './toast.js';
 
   // URL base da API
-const API_URL = 'https://errorsquad-server.onrender.com';
+const API_URL = 'https://gerenciamento-pedagogico-server.koyeb.app';
 const socket = io(API_URL);
 
 function setupEventListeners() {

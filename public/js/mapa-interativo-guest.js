@@ -40,7 +40,7 @@ import {getSalasInfo} from './fetchFunctions/fetchMapaGuest.js';
 import { showToast } from './toast.js';
 
   // URL base da API
-const API_URL = 'https://errorsquad-server.onrender.com';
+const API_URL = 'https://gerenciamento-pedagogico-server.koyeb.app';
 
 function setupEventListeners() {
     // Seletor de andar
