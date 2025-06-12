@@ -1,7 +1,7 @@
 // Thy Kingdom Come, Thy Will Be Done, On Earth as It Is in Heaven.
 import { getToken, getUserData } from './fetchAuth.js';
 
-const API_URL = 'https://errorsquad-server.onrender.com';
+const API_URL = 'https://gerenciamento-pedagogico-server.koyeb.app';
 
 function getAdminId() {
     return getUserData().id;

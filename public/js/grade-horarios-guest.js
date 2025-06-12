@@ -219,7 +219,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             return;
         }
         try {
-            const response = await fetch(`https://errorsquad-server.onrender.com/admin/${id}/ambientes`, {
+            const response = await fetch(`https://gerenciamento-pedagogico-server.koyeb.app/admin/${id}/ambientes`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`

@@ -2,7 +2,7 @@ import { getDisciplinas, createDisciplina, updateDisciplina, deleteDisciplina } 
 import { getDocentes } from './fetchFunctions/fetchDocentes.js';
 import { getCursos } from './fetchFunctions/fetchCursos.js';
 import { showToast } from './toast.js';
-const API_URL = 'https://errorsquad-server.onrender.com';
+const API_URL = 'https://gerenciamento-pedagogico-server.koyeb.app';
 const socket = io(API_URL);
 
 // Inicializar IRONGATE

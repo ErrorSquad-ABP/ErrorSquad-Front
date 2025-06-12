@@ -1,5 +1,5 @@
 // Configuração da API
-const API_URL = 'https://errorsquad-server.onrender.com';
+const API_URL = 'https://gerenciamento-pedagogico-server.koyeb.app';
 
 // Função para obter o token
 function getToken() {

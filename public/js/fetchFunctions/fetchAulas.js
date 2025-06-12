@@ -6,7 +6,7 @@ async function getAulas() {
     }
 
     try {
-        const response = await fetch('https://errorsquad-server.onrender.com/aulas', {
+        const response = await fetch('https://gerenciamento-pedagogico-server.koyeb.app/aulas', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -38,7 +38,7 @@ async function createAula(aulaData) {
     }
 
     try {
-        const response = await fetch('https://errorsquad-server.onrender.com/aulas', {
+        const response = await fetch('https://gerenciamento-pedagogico-server.koyeb.app/aulas', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ async function updateAula(id, aulaData) {
     }
 
     try {
-        const response = await fetch(`https://errorsquad-server.onrender.com/aulas/${id}`, {
+        const response = await fetch(`https://gerenciamento-pedagogico-server.koyeb.app/aulas/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -106,7 +106,7 @@ async function deleteAula(id) {
     }
 
     try {
-        const response = await fetch(`https://errorsquad-server.onrender.com/aulas/${id}`, {
+        const response = await fetch(`https://gerenciamento-pedagogico-server.koyeb.app/aulas/${id}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`

@@ -205,9 +205,18 @@
 }
 
 .mapa-header h2 {
+    display: flex;
     margin: 0;
     color: #333;
     font-size: 24px;
+    gap: 12px;
+    align-items: center;
+}
+
+.mapa-header h2 i {
+    margin: 0;
+    color: var(--primary);
+    font-size: 1.4rem;
 }
 
 .mapa-actions {

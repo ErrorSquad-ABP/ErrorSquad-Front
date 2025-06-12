@@ -2,7 +2,7 @@
 if (typeof IRONGATE === 'function') {
     IRONGATE();
 }
-const API_URL = 'https://errorsquad-server.onrender.com';
+const API_URL = 'https://gerenciamento-pedagogico-server.koyeb.app';
 /**
  * Script para o Painel Administrativo da FATEC
  */

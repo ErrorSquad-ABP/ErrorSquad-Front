@@ -29,7 +29,7 @@
 }
 
 .grade-header h2 i {
-    color: #b71c1c;
+    color: var(--primary);
     font-size: 1.4rem;
 }
 
