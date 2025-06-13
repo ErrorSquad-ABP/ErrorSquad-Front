@@ -198,7 +198,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const niveisPorCurso = {
         noturno: {
             GEO: [1, 2, 3, 4],
-            MAR: [1, 2, 3, 4, 5, 6],
+            MAR: [1, 2, 3, 4],
             DSM: [1, 2, 3, 4, 5, 6]
         },
         matutino: {
