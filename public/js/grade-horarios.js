@@ -191,115 +191,145 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Função para atualizar os filtros com os dados da API
     function atualizarFiltros() {
-    const cursoSelect = document.querySelector('.btn-secondary:nth-child(1)');
-    const nivelSelect = document.querySelector('.btn-secondary:nth-child(2)');
-    const turnoSelect = document.querySelector('.btn-secondary:nth-child(3)');
+        const cursoSelect = document.querySelector('.btn-secondary:nth-child(1)');
+        const nivelSelect = document.querySelector('.btn-secondary:nth-child(2)');
+        const turnoSelect = document.querySelector('.btn-secondary:nth-child(3)');
 
-    const niveisPorCurso = {
-        noturno: {
-            GEO: [1, 2, 3, 4],
-            MAR: [1, 2, 3, 4],
-            DSM: [1, 2, 3, 4, 5, 6]
-        },
-        matutino: {
-            GEO: [],
-            MAR: [5, 6],
-            DSM: []
-        }
-    };
+        const niveisPorCurso = {
+            noturno: {
+                GEO: [1, 3, 5, 6],
+                MAR: [1, 2, 3],
+                DSM: [1, 2, 3, 4, 5]
+            },
+            matutino: {
+                GEO: [],
+                MAR: [5, 6],
+                DSM: []
+            }
+        };
 
-    // Preencher select de cursos
-    cursoSelect.innerHTML = '';
-    if (gradeData.value.cursos && gradeData.value.cursos.length > 0) {
-        gradeData.value.cursos.forEach(curso => {
-            const option = document.createElement('option');
-            option.value = curso.sigla.toUpperCase();
-            option.textContent = curso.nome;
-            cursoSelect.appendChild(option);
-        });
-    } else {
-        console.warn('Nenhum curso encontrado nos dados');
-        cursoSelect.innerHTML = `
-            <option value="DSM">DSM</option>
-            <option value="GEO">GEO</option>
-            <option value="MAR">MAR</option>
-        `;
-    }
-
-    // Função para atualizar turnos, filtrando os que têm níveis para o curso selecionado
-    function atualizarTurnos() {
-        const curso = cursoSelect.value;
-        turnoSelect.innerHTML = '';
-
-        if (gradeData.value.turnos && gradeData.value.turnos.length > 0) {
-            gradeData.value.turnos.forEach(turno => {
-                const nomeTurno = turno.nome.toLowerCase();
-
-                // Verifica se existe nível para o curso nesse turno
-                const niveis = niveisPorCurso[nomeTurno]?.[curso];
-
-                if (niveis && niveis.length > 0) {
-                    const option = document.createElement('option');
-                    option.value = nomeTurno;
-                    option.textContent = `Período ${turno.nome}`;
-                    turnoSelect.appendChild(option);
-                }
-            });
-        }
-    }
-
-    // Função para atualizar níveis conforme curso e turno selecionados
-    function atualizarNiveis() {
-        nivelSelect.innerHTML = '';
-
-        const curso = cursoSelect.value;
-        const turno = turnoSelect.value;
-
-        const niveis = niveisPorCurso[turno]?.[curso];
-
-        if (niveis && niveis.length > 0) {
-            niveis.forEach(nivel => {
+        // Preencher select de cursos
+        cursoSelect.innerHTML = '';
+        if (gradeData.value.cursos && gradeData.value.cursos.length > 0) {
+            gradeData.value.cursos.forEach(curso => {
                 const option = document.createElement('option');
-                option.value = nivel;
-                option.textContent = `${nivel}º Nível`;
-                nivelSelect.appendChild(option);
+                option.value = curso.sigla.toUpperCase();
+                option.textContent = curso.nome;
+                cursoSelect.appendChild(option);
             });
         } else {
-            const option = document.createElement('option');
-            option.value = '';
-            option.textContent = 'Nenhum nível disponível';
-            nivelSelect.appendChild(option);
+            console.warn('Nenhum curso encontrado nos dados');
+            cursoSelect.innerHTML = `
+                <option value="DSM">DSM</option>
+                <option value="GEO">GEO</option>
+                <option value="MAR">MAR</option>
+            `;
         }
-    }
 
-    // Atualiza turnos e níveis quando o curso mudar
-    cursoSelect.addEventListener('change', () => {
-        atualizarTurnos();
+        function atualizarTurnos(cursoAtual) {
+            turnoSelect.innerHTML = '';
 
-        // Seleciona o primeiro turno válido ou limpa o valor se não existir
-        if (turnoSelect.options.length > 0) {
-            turnoSelect.value = turnoSelect.options[0].value;
+            if (gradeData.value.turnos && gradeData.value.turnos.length > 0) {
+                gradeData.value.turnos.forEach(turno => {
+                    const nomeTurno = turno.nome.toLowerCase();
+                    const niveis = niveisPorCurso[nomeTurno]?.[cursoAtual];
+                    if (niveis && niveis.length > 0) {
+                        const option = document.createElement('option');
+                        option.value = nomeTurno;
+                        option.textContent = `Período ${turno.nome}`;
+                        turnoSelect.appendChild(option);
+                    }
+                });
+            }
+        }
+
+        function atualizarNiveis(cursoAtual, turnoAtual) {
+            nivelSelect.innerHTML = '';
+
+            const niveis = niveisPorCurso[turnoAtual]?.[cursoAtual];
+            if (niveis && niveis.length > 0) {
+                niveis.forEach(nivel => {
+                    const option = document.createElement('option');
+                    option.value = nivel;
+                    option.textContent = `${nivel}º Nível`;
+                    nivelSelect.appendChild(option);
+                });
+            } else {
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = 'Nenhum nível disponível';
+                nivelSelect.appendChild(option);
+            }
+        }
+
+        cursoSelect.addEventListener('change', () => {
+            const cursoAtual = cursoSelect.value;
+
+            atualizarTurnos(cursoAtual);
+
+            // Seleciona primeiro turno disponível, evitando matutino para MAR
+            let turnoSelecionado = '';
+            for (let option of turnoSelect.options) {
+                if (cursoAtual === 'MAR' && option.value === 'matutino') continue;
+                turnoSelecionado = option.value;
+                break;
+            }
+
+            turnoSelect.value = turnoSelecionado || turnoSelect.options[0]?.value || '';
+
+            const turnoAtual = turnoSelect.value;
+            atualizarNiveis(cursoAtual, turnoAtual);
+            nivelSelect.value = nivelSelect.options[0]?.value || '';
+
+            // ✅ Atualizar grade automaticamente
+            salvarFiltrosNoLocalStorage(cursoSelect.value, nivelSelect.value, turnoSelect.value);
+            preencherGrade();
+            atualizarListaDocentes();
+            salvarEstadoGrade();
+        });
+
+        turnoSelect.addEventListener('change', () => {
+            const cursoAtual = cursoSelect.value;
+            const turnoAtual = turnoSelect.value;
+        
+            atualizarNiveis(cursoAtual, turnoAtual);
+            nivelSelect.value = nivelSelect.options[0]?.value || '';
+        
+            // ✅ Atualizar grade após trocar o turno
+            salvarFiltrosNoLocalStorage(cursoSelect.value, nivelSelect.value, turnoSelect.value);
+            preencherGrade();
+            atualizarListaDocentes();
+            salvarEstadoGrade();
+        });
+
+        // Inicialização com filtros salvos
+        const filtros = recuperarFiltrosDoLocalStorage();
+
+        cursoSelect.value = filtros.curso || cursoSelect.options[0]?.value;
+        const cursoAtual = cursoSelect.value;
+
+        atualizarTurnos(cursoAtual);
+
+        // Se o turno salvo for inválido, seleciona o primeiro compatível (evita matutino para MAR)
+        const turnoSalvoEhValido = [...turnoSelect.options].some(opt => opt.value === filtros.turno);
+        let turnoAtual = '';
+        if (turnoSalvoEhValido) {
+            turnoAtual = filtros.turno;
         } else {
-            turnoSelect.value = '';
+            for (let opt of turnoSelect.options) {
+                if (cursoAtual === 'MAR' && opt.value === 'matutino') continue;
+                turnoAtual = opt.value;
+                break;
+            }
         }
+        turnoSelect.value = turnoAtual;
 
-        atualizarNiveis();
-    });
+        atualizarNiveis(cursoAtual, turnoAtual);
 
-    // Atualiza níveis quando o turno mudar
-    turnoSelect.addEventListener('change', atualizarNiveis);
-
-    // Inicializa selects com filtros salvos ou padrões
-    const filtros = recuperarFiltrosDoLocalStorage();
-    cursoSelect.value = filtros.curso || cursoSelect.options[0]?.value;
-
-    atualizarTurnos();
-
-    turnoSelect.value = filtros.turno || (turnoSelect.options[0]?.value || '');
-    atualizarNiveis();
-
-    nivelSelect.value = filtros.nivel || (nivelSelect.options[0]?.value || '');
-}
+        const nivelSalvoEhValido = [...nivelSelect.options].some(opt => opt.value === filtros.nivel);
+        nivelSelect.value = nivelSalvoEhValido ? filtros.nivel : nivelSelect.options[0]?.value || '';
+    }
+    
 
 
     // Função para buscar ambientes
