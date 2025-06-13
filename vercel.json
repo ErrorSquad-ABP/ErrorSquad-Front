@@ -27,6 +27,10 @@
       "src": "/pdfs/(.*)",
       "dest": "/public/pdfs/$1"
     },
+     {
+      "src": "/mapas/(.*)",
+      "dest": "/public/mapas/$1"
+    },
     {
       "src": "/(.*)",
       "dest": "/public/server.js"
