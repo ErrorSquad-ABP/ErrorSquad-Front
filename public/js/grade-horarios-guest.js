@@ -155,8 +155,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             DSM: [1, 2, 3, 4, 5, 6]
         },
         matutino: {
-            GEO: [5, 6],
-            MAR: [],
+            GEO: [],
+            MAR: [5, 6],
             DSM: []
         }
     };
