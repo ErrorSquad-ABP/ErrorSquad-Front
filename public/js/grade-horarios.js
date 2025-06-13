@@ -402,7 +402,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             console.log('Payload enviado:', payload);
             try {
                 const token = localStorage.getItem('token');
-                const resp = await fetch(`https://gerenciamento-pedagogico-server.koyeb.app/${userId}/periodos`, {
+                const resp = await fetch(`https://gerenciamento-pedagogico-server.koyeb.app/admin/${userId}/periodos`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
