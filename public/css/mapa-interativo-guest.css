@@ -202,7 +202,6 @@
     flex-wrap: wrap;
     margin-bottom: 20px;
     width: 100%;
-    max-width: var(--map-content-width);
     margin-left: auto;
     margin-right: auto;
 }
