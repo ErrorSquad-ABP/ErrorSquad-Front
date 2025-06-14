@@ -5,6 +5,7 @@ import { CSSLoader } from './utils/cssLoader.js';
 
 // URL base da API
 const API_URL = 'https://gerenciamento-pedagogico-server.koyeb.app';
+const socket = io(API_URL);
 
 document.addEventListener('DOMContentLoaded', async function () {
     // 1. Carregar CSS primeiro
@@ -107,6 +108,32 @@ document.addEventListener('DOMContentLoaded', async function () {
                     periodos: dadosGrade.periodos || [],
                     docente: dadosGrade.docente || []
                 })
+
+        //webSocket event
+        socket.on("grade_updated", (data) => {
+            setTimeout(() => {
+                const elemento1 = document.querySelector(`td[data-id-periodo="${data.card1.id}"]`);
+                const elemento2 = document.querySelector(`td[data-id-periodo="${data.card2.id}"]`);
+
+                if (elemento1 && elemento2) {
+                    // Código original continua igual
+                    const conteudoElemento1 = elemento1.innerHTML;
+                    const conteudoElemento2 = elemento2.innerHTML;
+
+                    elemento1.innerHTML = conteudoElemento2;
+                    elemento2.innerHTML = conteudoElemento1;
+
+                    elemento1.setAttribute('data-id-dia', data.card2.dia);
+                    elemento1.setAttribute('data-id-periodo', data.card2.id);
+                    elemento1.setAttribute('data-id-horario', data.card2.horario);
+
+                    elemento2.setAttribute('data-id-dia', data.card1.dia);
+                    elemento2.setAttribute('data-id-periodo', data.card1.id);
+                    elemento2.setAttribute('data-id-horario', data.card1.horario);
+                }
+            }, 100);
+        });
+
                 atualizarFiltros();
                 preencherGrade();
                 atualizarListaDocentes();
