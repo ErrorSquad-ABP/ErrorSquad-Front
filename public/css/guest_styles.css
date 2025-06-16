@@ -301,7 +301,6 @@ ul {
     display: flex;
     align-items: center;
     justify-content: center;
-
 }
 
 .redirecting-item {
@@ -564,12 +563,10 @@ ul {
 }
 
 .gray {
-        background-color: var(--lighter-gray);
-        padding-bottom: 61px;
-        transition: var(--transition);
-
+    background-color: var(--lighter-gray);
+    padding-bottom: 61px;
+    transition: var(--transition);
 }
-
 
 .gray:hover {
     transform: translateY(-5px);
@@ -578,23 +575,7 @@ ul {
 }
 
 .gray:hover h3::after {
-        width: 100px;
-}
-
-.social-links {
-    display: flex;
-    gap: 15px;
-}
-
-.social-links a {
-    color: var(--light-gray);
-    font-size: 1.5em;
-    transition: var(--transition);
-}
-
-.social-links a:hover {
-    color: var(--primary);
-    transform: translateY(-3px);
+    width: 100px;
 }
 
 .footer-bottom {
@@ -639,10 +620,6 @@ ul {
     }
 
     .footer-section ul li {
-        justify-content: center;
-    }
-
-    .social-links {
         justify-content: center;
     }
 }
@@ -782,4 +759,4 @@ ul {
     .course-card {
         padding: 20px;
     }
-} 
+}
