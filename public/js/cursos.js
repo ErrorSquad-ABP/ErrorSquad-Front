@@ -159,14 +159,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     <p class="coordenador">${curso.coordenador}</p>
                 </div>
             </div>
-            <div class="curso-actions">
-                <button class="btn-edit" onclick="editCurso(${curso.id})">
-                    <i class="fas fa-edit"></i> Editar
-                </button>
-                <button class="btn-delete" onclick="deleteCurso(${curso.id})">
-                    <i class="fas fa-trash"></i> Excluir
-                </button>
-            </div>
         `;
 
         return card;
