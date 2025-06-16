@@ -129,9 +129,6 @@
                             <i class="fas fa-graduation-cap"></i>
                             Gerenciar Cursos
                         </h2>
-                        <button id="add-curso" class="btn btn-add">
-                            <i class="fas fa-plus"></i> Adicionar Curso
-                        </button>
                     </div>
 
                     <div class="cursos-search">
@@ -146,58 +143,6 @@
                     </div>
                 </div>
             </main>
-        </div>
-
-        <!-- Modal Adicionar Curso -->
-        <div id="modal-adicionar-curso" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3><i class="fas fa-plus-circle"></i> Adicionar Novo
-                        Curso</h3>
-                    <button class="close-modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <form id="form-adicionar-curso">
-                        <div class="form-group">
-                            <label for="nome">Nome do Curso</label>
-                            <input id="nome" name="nome" type="text"
-                                maxlength="50" required>
-                            <span class="error-message" id="nome-error"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="sigla">Sigla</label>
-                            <input id="sigla" name="sigla" type="text"
-                                maxlength="4" required>
-                            <span class="error-message" id="sigla-error"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="coordenador">Coordenador</label>
-                            <input id="coordenador" name="coordenador"
-                                maxlength="30" required>
-                            <span class="error-message"
-                                id="coordenador-error"></span>
-                        </div>
-                        <div class="flex-column">
-                            <div class="form-group">
-                                <label for="data-inicio">Data de Início</label>
-                                <input type="date" id="data-inicio"
-                                    name="data-inicio" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="data-fim">Data de Término</label>
-                                <input type="date" id="data-fim"
-                                    name="data-fim" required>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary"
-                        id="cancelar-adicionar">Cancelar</button>
-                    <button class="btn btn-primary"
-                        id="salvar-curso">Salvar</button>
-                </div>
-            </div>
         </div>
 
         <!-- Modal Editar Curso -->
@@ -285,4 +230,3 @@
     </script>
     </body>
 </html>
-

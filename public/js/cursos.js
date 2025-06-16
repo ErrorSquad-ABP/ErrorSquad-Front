@@ -16,7 +16,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // Elementos
     const cursosList = document.getElementById("cursos-list");
     const searchInput = document.getElementById("search-curso");
-    const addCursoBtn = document.getElementById("add-curso");
 
     // Lista de coordenadores
     const coordenadores = [
@@ -50,25 +49,18 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Event listeners para sincronização de siglas
-    document.getElementById('nome').addEventListener('change', function () {
-        sincronizarSigla(this, document.getElementById('sigla'));
-    });
-
     document.getElementById('edit-nome').addEventListener('change', function () {
         sincronizarSigla(this, document.getElementById('edit-sigla'));
     });
 
     // Função para preencher os selects de coordenadores
     function preencherSelectCoordenadores() {
-        const selectAdicionar = document.getElementById('coordenador');
         const selectEditar = document.getElementById('edit-coordenador');
 
         coordenadores.forEach(coordenador => {
             const option = document.createElement('option');
             option.value = coordenador;
             option.textContent = coordenador;
-
-            selectAdicionar.appendChild(option.cloneNode(true));
             selectEditar.appendChild(option);
         });
     }
@@ -86,37 +78,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Dados simulados para demonstração
-    /*[
-        { 
-            id: 1, 
-            nome: "Desenvolvimento de&nbsp;Software&nbsp;Multiplataforma",
-            sigla: "DSM",
-            tipo: "Nível Superior",
-            semestres: 6,
-            coordenador: "João Silva",
-            alunos: 150
-        },
-        { 
-            id: 2, 
-            nome: "Geoprocessamento",
-            sigla: "GEO",
-            tipo: "Nível Superior",
-            semestres: 6,
-            coordenador: "Maria Santos",
-            alunos: 120
-        },
-        { 
-            id: 3, 
-            nome: "Meio Ambiente e Recursos Hídricos",
-            sigla: "MAR",
-            tipo: "Nível Superior",
-            semestres: 6,
-            coordenador: "Pedro Oliveira",
-            alunos: 100
-        }
-    ];*/
     renderCursos([]);
+    
     // Função para renderizar os cards de cursos
     function renderCursos(cursosToRender = []) {
         const cursosList = document.getElementById('cursos-list');
@@ -220,27 +183,6 @@ document.addEventListener("DOMContentLoaded", function () {
         renderCursos(filteredCursos);
     }
 
-    // Funções para controle do Modal de Adição
-    function abrirModalAdicionarCurso() {
-        const modal = document.getElementById('modal-adicionar-curso');
-        modal.classList.add('show');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function fecharModalAdicionarCurso() {
-        const modal = document.getElementById('modal-adicionar-curso');
-        const form = document.getElementById('form-adicionar-curso');
-
-        modal.classList.remove('show');
-        document.body.style.overflow = 'auto';
-        form.reset();
-        limparValidacoes(form);
-    }
-
-    // Event Listeners para o modal de adicionar
-    document.querySelector('#modal-adicionar-curso .close-modal').addEventListener('click', fecharModalAdicionarCurso);
-    document.getElementById('cancelar-adicionar').addEventListener('click', fecharModalAdicionarCurso);
-
     // Funções para controle do Modal de Edição
     function abrirModalEditarCurso(curso) {
         const modal = document.getElementById('modal-editar-curso');
@@ -315,8 +257,6 @@ document.addEventListener("DOMContentLoaded", function () {
         searchCursos(e.target.value);
     });
 
-    addCursoBtn.addEventListener("click", abrirModalAdicionarCurso);
-
     // Funções de validação
     function showError(input, message) {
         const formGroup = input.parentElement;
@@ -368,37 +308,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         return isValid;
     }
-
-    // Event Listeners para o Modal de Adição
-    document.getElementById('salvar-curso').addEventListener('click', async function (e) {
-        e.preventDefault();
-        const form = document.getElementById('form-adicionar-curso');
-
-        if (validateForm(form)) {
-            const formData = new FormData(form);
-
-            const nome = formData.get('nome');
-            const sigla = formData.get('sigla');
-            const coordenador = formData.get('coordenador');
-            const dataInicio = formData.get('data-inicio');
-            const dataFim = formData.get('data-fim');
-
-            const result = await fetchCursos.createCurso(nome, sigla, coordenador, dataInicio, dataFim);
-
-            if (result.ok) {
-                // Toast de sucesso
-                showToast('Curso criado com sucesso!', 'success');
-
-                // Atualizar a lista de cursos
-                cursos = await fetchCursos.getCursos();
-                renderCursos();
-                fecharModalAdicionarCurso();
-            } else {
-                // Toast de erro
-                showToast(result.error, 'error');
-            }
-        }
-    });
 
     // Função para mostrar toast
     function showToast(message, type = 'success') {
@@ -496,4 +405,4 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
     preencherSelectCoordenadores();
-}); 
+});
